@@ -473,7 +473,7 @@ MonoBehaviour:
   HasSourceProject: 0
   HasPlatforms: 0
   sourceProjectPath: 
-  sourceBankPath: ../sggjrpg/Assets/Sound/fmodbanks/Desktop
+  sourceBankPath: Assets/Sound/fmodbanks/Desktop
   SourceBankPathUnformatted: 
   BankRefreshCooldown: 5
   ShowBankRefreshWindow: 1
