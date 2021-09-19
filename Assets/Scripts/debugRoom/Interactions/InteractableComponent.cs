@@ -2,15 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractableComponent : MonoBehaviour
+    [RequireComponent(typeof(CircleCollider2D))]
+public abstract class InteractableComponent : MonoBehaviour
 {
     [SerializeField]
-    private CircleCollider2D theInteractableArea;
-    [SerializeField]
-    public TypeOfInteraction InteractionType;
+    protected CircleCollider2D theInteractableArea;
 
-    [SerializeField] public Dialog Dialog;
+    public TypeOfInteraction InteractionType { get; protected set; }
 
+    void Awake()
+    {
+        theInteractableArea.isTrigger = true;
+    }
 
     void OnTriggerEnter2D(Collider2D collider)
     {
@@ -20,6 +23,7 @@ public class InteractableComponent : MonoBehaviour
         playerInteractionComponent.UpdateInteraction(this);
 
     }
+
     void OnTriggerExit2D(Collider2D collider)
     {
         var playerInteractionComponent = collider.gameObject.GetComponent<PlayerInteractionComponent>();
@@ -29,5 +33,6 @@ public class InteractableComponent : MonoBehaviour
 public enum TypeOfInteraction
 {
     Dialog,
-    Pickup,
+    Pickup
 }
+

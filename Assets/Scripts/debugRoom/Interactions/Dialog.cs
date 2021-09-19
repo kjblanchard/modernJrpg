@@ -9,6 +9,7 @@ public class Dialog : ScriptableObject
     public class DialogParams
     {
         [SerializeField] public string Dialog;
+        [SerializeField] public string Name;
     }
     [SerializeField] public DialogParams[] LinesOfDialog;
 }

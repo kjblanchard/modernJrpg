@@ -5,6 +5,7 @@ public class PlayerInteractionComponent : MonoBehaviour
 {
     public bool CurrentlyInteracting { get; private set; }
     [SerializeField] private DialogController _dialogController;
+    [SerializeField] private PlayerPickupController _playerPickupController;
     [SerializeField] private GameObject canInteractSprite;
     private InteractableComponent thingToIntaractWith;
 
@@ -31,18 +32,26 @@ public class PlayerInteractionComponent : MonoBehaviour
         switch (thingToIntaractWith.InteractionType)
         {
             case TypeOfInteraction.Dialog:
-                HandleDialogInteraction();
+                var dialogCasted = (DialogInteractionComponent) thingToIntaractWith;
+                HandleDialogInteraction(dialogCasted.DialogToDisplay);
                 break;
             case TypeOfInteraction.Pickup:
+                var pickupCasted = (PickupInteractionComponent) thingToIntaractWith;
+                HandlePickupInteraction(pickupCasted);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    private void HandleDialogInteraction()
+    private void HandleDialogInteraction(Dialog dialogToDisplay)
     {
-        CurrentlyInteracting = _dialogController.TriggerInteractionDialog(thingToIntaractWith.Dialog);
+        CurrentlyInteracting = _dialogController.TriggerInteractionDialog(dialogToDisplay);
+    }
+
+    private void HandlePickupInteraction(PickupInteractionComponent pickupComponent)
+    {
+        _playerPickupController.PickupItem(pickupComponent);
     }
 
 
