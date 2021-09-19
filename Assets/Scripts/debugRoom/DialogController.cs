@@ -5,26 +5,52 @@ using UnityEngine;
 
 public class DialogController : MonoBehaviour
 {
-    public TMP_Text textBoxToUpdate;
+    [SerializeField] private TMP_Text _textBoxToUpdate;
+    public bool inDialog;
+    private int _currentLocationInDialog;
 
-    public string currentText { get; set; }
 
-    // Start is called before the first frame update
-    void Start()
+
+    /// <summary>
+    /// Triggers the interaction dialog for interacting with dialogs
+    /// </summary>
+    /// <param name="dialogToGoThrough">The Scriptable object dialog that will be gone though</param>
+    /// <returns>Returns true if the dialog should continue, and false if the dialog is ending</returns>
+    public bool TriggerInteractionDialog(Dialog dialogToGoThrough)
     {
-        
+        if (inDialog)
+        {
+            return AdvanceDialog(dialogToGoThrough);
+        }
+        inDialog = true;
+        _currentLocationInDialog = 0;
+        DisplayDialog(dialogToGoThrough);
+        return true;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public bool AdvanceDialog(Dialog dialogToGoThrough)
     {
-        
+        if (_currentLocationInDialog + 1 >= dialogToGoThrough.LinesOfDialog.Length)
+        {
+            EndDialog();
+            return false;
+        }
+        _currentLocationInDialog++;
+        DisplayDialog(dialogToGoThrough);
+        return true;
     }
 
-
-
-    public void UpdateDialog()
+    private void EndDialog()
     {
-        textBoxToUpdate.text = currentText;
+        _textBoxToUpdate.text = "";
+        inDialog = false;
+        _currentLocationInDialog = 0;
     }
+
+    private void DisplayDialog(Dialog dialogToGoThrough)
+    {
+        _textBoxToUpdate.text = dialogToGoThrough.LinesOfDialog[_currentLocationInDialog].Dialog;
+    }
+
 }
