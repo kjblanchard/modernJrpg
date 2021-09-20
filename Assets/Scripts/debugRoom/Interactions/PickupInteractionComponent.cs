@@ -31,7 +31,7 @@ public class PickupInteractionComponent : InteractableComponent
     {
         //Send notification to questlog that the item was picked up for saving
         _hasBeenPickedUp = true;
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
 
     }
 }

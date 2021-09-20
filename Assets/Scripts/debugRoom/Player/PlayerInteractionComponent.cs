@@ -32,11 +32,11 @@ public class PlayerInteractionComponent : MonoBehaviour
         switch (thingToIntaractWith.InteractionType)
         {
             case TypeOfInteraction.Dialog:
-                var dialogCasted = (DialogInteractionComponent) thingToIntaractWith;
+                var dialogCasted = (DialogInteractionComponent)thingToIntaractWith;
                 HandleDialogInteraction(dialogCasted.DialogToDisplay);
                 break;
             case TypeOfInteraction.Pickup:
-                var pickupCasted = (PickupInteractionComponent) thingToIntaractWith;
+                var pickupCasted = (PickupInteractionComponent)thingToIntaractWith;
                 HandlePickupInteraction(pickupCasted);
                 break;
             default:
@@ -51,7 +51,7 @@ public class PlayerInteractionComponent : MonoBehaviour
 
     private void HandlePickupInteraction(PickupInteractionComponent pickupComponent)
     {
-        _playerPickupController.PickupItem(pickupComponent);
+        CurrentlyInteracting = _playerPickupController.PickupItem(pickupComponent);
     }
 
 
