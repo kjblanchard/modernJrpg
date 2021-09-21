@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class PickupInteractionComponent : InteractableComponent
 {
-    [SerializeField] public int ItemNum;
-    [SerializeField] public int QuestLogId;
-    private bool _hasBeenPickedUp;
+    [SerializeField] public ItemForPickup ItemForPickup;
 
-    void Awake()
+    public void Awake()
     {
         InteractionType = TypeOfInteraction.Pickup;
     }
@@ -17,21 +15,9 @@ public class PickupInteractionComponent : InteractableComponent
         LoadItem();
 
     }
-    public int PickupItem()
-    {
-        return ItemNum;
-    }
 
-    private void LoadItem()
+    public void LoadItem()
     {
-        //If this item is inside the quest log as picked up, turn the item off and mark it picked up.
-    }
-
-    public void DisableItem()
-    {
-        //Send notification to questlog that the item was picked up for saving
-        _hasBeenPickedUp = true;
-        //this.gameObject.SetActive(false);
-
+        //Check quest log, destroy if it is picked up.
     }
 }

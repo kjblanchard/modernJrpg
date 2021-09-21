@@ -3,40 +3,41 @@ using UnityEngine;
 
 public class PlayerInteractionComponent : MonoBehaviour
 {
+    /// <summary>
+    /// If the interaction component is currently within an interaction.
+    /// </summary>
     public bool CurrentlyInteracting { get; private set; }
     [SerializeField] private DialogController _dialogController;
     [SerializeField] private PlayerPickupController _playerPickupController;
-    [SerializeField] private GameObject canInteractSprite;
-    private InteractableComponent thingToIntaractWith;
+    [SerializeField] private GameObject _interactionSprite;
+    private InteractableComponent _currentInteractableComponent;
 
-    void Start()
+
+    /// <summary>
+    /// This is called by a Remote interactable component.  It will turn on the interaction sprite, and also update your current interactable
+    /// </summary>
+    /// <param name="newInteractable"></param>
+    public void UpdateInteraction(InteractableComponent newInteractable, bool isInteractable)
     {
+        _interactionSprite.SetActive(isInteractable);
+        _currentInteractableComponent = newInteractable;
     }
 
-    public void UpdateInteraction(InteractableComponent newInteractable)
-    {
-        canInteractSprite.SetActive(true);
-        thingToIntaractWith = newInteractable;
-    }
-
-    public void RemoveInteraction()
-    {
-        canInteractSprite.SetActive(false);
-        thingToIntaractWith = null;
-    }
-
+    /// <summary>
+    /// This is called by the player to actually handle the interaction
+    /// </summary>
     public void PerformInteraction()
     {
-        if (!thingToIntaractWith)
+        if (!_currentInteractableComponent)
             return;
-        switch (thingToIntaractWith.InteractionType)
+        switch (_currentInteractableComponent.InteractionType)
         {
             case TypeOfInteraction.Dialog:
-                var dialogCasted = (DialogInteractionComponent)thingToIntaractWith;
+                var dialogCasted = (DialogInteractionComponent)_currentInteractableComponent;
                 HandleDialogInteraction(dialogCasted.DialogToDisplay);
                 break;
             case TypeOfInteraction.Pickup:
-                var pickupCasted = (PickupInteractionComponent)thingToIntaractWith;
+                var pickupCasted = (PickupInteractionComponent)_currentInteractableComponent;
                 HandlePickupInteraction(pickupCasted);
                 break;
             default:

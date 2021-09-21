@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Require circle collider for overlapping
+/// </summary>
     [RequireComponent(typeof(CircleCollider2D))]
 public abstract class InteractableComponent : MonoBehaviour
 {
@@ -10,24 +13,19 @@ public abstract class InteractableComponent : MonoBehaviour
 
     public TypeOfInteraction InteractionType { get; protected set; }
 
-    void Awake()
-    {
-        theInteractableArea.isTrigger = true;
-    }
-
     void OnTriggerEnter2D(Collider2D collider)
     {
         if (!collider.gameObject.CompareTag("Player"))
             return;
         var playerInteractionComponent = collider.gameObject.GetComponent<PlayerInteractionComponent>();
-        playerInteractionComponent.UpdateInteraction(this);
+        playerInteractionComponent.UpdateInteraction(this, true);
 
     }
 
     void OnTriggerExit2D(Collider2D collider)
     {
         var playerInteractionComponent = collider.gameObject.GetComponent<PlayerInteractionComponent>();
-        playerInteractionComponent.RemoveInteraction();
+        playerInteractionComponent.UpdateInteraction(null, false);
     }
 }
 public enum TypeOfInteraction

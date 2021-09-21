@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class DialogController : MonoBehaviour
 {
+    [SerializeField] private GameObject _dialogTextbox;
     [SerializeField] private TMP_Text _textBoxToUpdate;
-    public bool inDialog;
+    private bool _inDialog;
     private int _currentLocationInDialog;
 
 
@@ -18,12 +19,19 @@ public class DialogController : MonoBehaviour
     /// <returns>Returns true if the dialog should continue, and false if the dialog is ending</returns>
     public bool TriggerInteractionDialog(Dialog dialogToGoThrough)
     {
-        if (inDialog)
+        if (_inDialog)
         {
             return AdvanceDialog(dialogToGoThrough);
         }
-        inDialog = true;
+
+        return InitializeDialog(dialogToGoThrough);
+    }
+
+    private bool InitializeDialog(Dialog dialogToGoThrough)
+    {
+        _inDialog = true;
         _currentLocationInDialog = 0;
+        _dialogTextbox.SetActive(true);
         DisplayDialog(dialogToGoThrough);
         return true;
     }
@@ -44,8 +52,9 @@ public class DialogController : MonoBehaviour
     private void EndDialog()
     {
         _textBoxToUpdate.text = "";
-        inDialog = false;
+        _inDialog = false;
         _currentLocationInDialog = 0;
+        _dialogTextbox.SetActive(false);
     }
 
     private void DisplayDialog(Dialog dialogToGoThrough)

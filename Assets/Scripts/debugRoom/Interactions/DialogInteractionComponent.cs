@@ -6,11 +6,8 @@ public class DialogInteractionComponent : InteractableComponent
 {
     [SerializeField] public Dialog DialogToDisplay;
 
-    void Awake()
+    public void Awake()
     {
         InteractionType = TypeOfInteraction.Dialog;
     }
-
-
-
 }

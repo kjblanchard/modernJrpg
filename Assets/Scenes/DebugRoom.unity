@@ -5382,7 +5382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &364915266
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5632,8 +5632,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc2694c4963226540ae92e572324f632, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dialogTextbox: {fileID: 1424684213}
   _textBoxToUpdate: {fileID: 30663527}
-  inDialog: 0
 --- !u!114 &416202377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5648,7 +5648,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dialogTextbox: {fileID: 364915265}
   _textBoxToUpdate: {fileID: 2128644577}
-  inDialog: 0
 --- !u!1 &417817211
 GameObject:
   m_ObjectHideFlags: 0
@@ -6106,7 +6105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dialogController: {fileID: 416202376}
   _playerPickupController: {fileID: 830763488}
-  canInteractSprite: {fileID: 1982853777}
+  _interactionSprite: {fileID: 1982853777}
 --- !u!114 &830763488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6119,7 +6118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10478fb6390427742ad0af70644888d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pickupItemController: {fileID: 416202377}
+  _pickupController: {fileID: 416202377}
 --- !u!1 &980282130
 GameObject:
   m_ObjectHideFlags: 0
@@ -6167,8 +6166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theInteractableArea: {fileID: 980282133}
-  ItemNum: 0
-  QuestLogId: 0
+  ItemForPickup: {fileID: 11400000, guid: 9f097fce389b46f47bd6367526320e62, type: 2}
 --- !u!58 &980282133
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -6202,7 +6200,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1424684214
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6273,7 +6271,7 @@ GameObject:
   - component: {fileID: 1982853778}
   - component: {fileID: 1982853780}
   m_Layer: 0
-  m_Name: InteractionAlert
+  m_Name: InteractionAlertSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PickupItemController : MonoBehaviour
+public class PickupController : MonoBehaviour
 {
     [SerializeField] private GameObject _dialogTextbox;
     [SerializeField] private TMP_Text _textBoxToUpdate;
-    public bool inDialog;
+    private bool _inDialog;
     private int _currentLocationInDialog;
 
 
@@ -15,19 +15,13 @@ public class PickupItemController : MonoBehaviour
     /// <summary>
     /// Triggers the interaction dialog for pickups
     /// </summary>
-    /// <param name="dialogToGoThrough">The Scriptable object dialog that will be gone though</param>
+    /// <param name="pickupItem">The Scriptable object dialog that will be gone though</param>
     /// <returns>Returns true if the dialog should continue, and false if the dialog is ending</returns>
     public bool TriggerInteractionDialog(PickupInteractionComponent pickupItem)
     {
-        if (inDialog)
-        {
-            return AdvanceDialog(pickupItem);
-        }
-        inDialog = true;
-        _currentLocationInDialog = 0;
-        DisplayDialog(pickupItem);
-        return true;
+        return _inDialog ? AdvanceDialog(pickupItem) : InitializePickupDialog(pickupItem);
     }
+
 
 
     public bool AdvanceDialog(PickupInteractionComponent dialogToGoThrough)
@@ -45,19 +39,28 @@ public class PickupItemController : MonoBehaviour
     private void EndDialog(PickupInteractionComponent dialog)
     {
         _textBoxToUpdate.text = "";
-        inDialog = false;
         _currentLocationInDialog = 0;
         dialog.gameObject.SetActive(false);
-        
+        _inDialog = false;
+        _dialogTextbox.SetActive(false);
+
 
     }
-
+    private bool InitializePickupDialog(PickupInteractionComponent pickupItem)
+    {
+        _inDialog = true;
+        _dialogTextbox.SetActive(true);
+        _currentLocationInDialog = 0;
+        DisplayDialog(pickupItem);
+        return true;
+    }
     private void DisplayDialog(PickupInteractionComponent dialogToGoThrough)
     {
-        var whattoSay = "You Just found " + ItemLookupDictionary[dialogToGoThrough.ItemNum] + "!!";
-        _textBoxToUpdate.text = whattoSay;
+        var whatToSay = "You Just found " + ItemLookupDictionary[dialogToGoThrough.ItemForPickup.ItemNumber] + "!!";
+        _textBoxToUpdate.text = whatToSay;
     }
 
+    //TODO This should be removed and an actual Item database should be made that can be looked up
     private Dictionary<int, string> ItemLookupDictionary = new Dictionary<int, string>
     {
         {0, "Big Sword"},
