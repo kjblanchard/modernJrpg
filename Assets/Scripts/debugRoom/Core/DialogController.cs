@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -7,9 +9,16 @@ public class DialogController : MonoBehaviour
 {
     [SerializeField] private GameObject _dialogTextbox;
     [SerializeField] private TMP_Text _textBoxToUpdate;
+    [SerializeField] private DotweenBroadcasterComponent dialogBoxTween;
     private bool _inDialog;
     private int _currentLocationInDialog;
+    private Dialog _dialogToDisplay;
 
+    private void Start()
+    {
+        dialogBoxTween.DotweenCompleteEvent += OnDotweenCompletedEvent;
+        dialogBoxTween.DotweenRewindEvent += OnDotweenRewindEvent;
+    }
 
 
     /// <summary>
@@ -24,15 +33,12 @@ public class DialogController : MonoBehaviour
             return AdvanceDialog(dialogToGoThrough);
         }
 
-        return InitializeDialog(dialogToGoThrough);
-    }
-
-    private bool InitializeDialog(Dialog dialogToGoThrough)
-    {
         _inDialog = true;
         _currentLocationInDialog = 0;
         _dialogTextbox.SetActive(true);
-        DisplayDialog(dialogToGoThrough);
+        _textBoxToUpdate.gameObject.SetActive(false);
+        _textBoxToUpdate.text = dialogToGoThrough.LinesOfDialog[_currentLocationInDialog].Dialog;
+        _dialogToDisplay = dialogToGoThrough;
         return true;
     }
 
@@ -41,7 +47,9 @@ public class DialogController : MonoBehaviour
     {
         if (_currentLocationInDialog + 1 >= dialogToGoThrough.LinesOfDialog.Length)
         {
-            EndDialog();
+            //dialogBoxTween.AnimationToControl.DORewind();
+            dialogBoxTween.AnimationToControl.DOPlayBackwards();
+            //EndDialog();
             return false;
         }
         _currentLocationInDialog++;
@@ -51,7 +59,6 @@ public class DialogController : MonoBehaviour
 
     private void EndDialog()
     {
-        _textBoxToUpdate.text = "";
         _inDialog = false;
         _currentLocationInDialog = 0;
         _dialogTextbox.SetActive(false);
@@ -59,7 +66,18 @@ public class DialogController : MonoBehaviour
 
     private void DisplayDialog(Dialog dialogToGoThrough)
     {
-        _textBoxToUpdate.text = dialogToGoThrough.LinesOfDialog[_currentLocationInDialog].Dialog;
+        _textBoxToUpdate.gameObject.SetActive(true);
+    }
+
+    public void OnDotweenCompletedEvent(object thing, EventArgs e)
+    {
+        DisplayDialog(_dialogToDisplay);
+    }
+
+    public void OnDotweenRewindEvent(object thing, EventArgs e)
+    {
+
+        EndDialog();
     }
 
 }
