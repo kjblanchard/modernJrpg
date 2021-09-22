@@ -5,19 +5,31 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// The Controller that handles updating the gui from player events.
+/// </summary>
 public class DialogController : MonoBehaviour
 {
+    public bool InDialog { get; private set; }
+
     [SerializeField] private GameObject _dialogTextbox;
     [SerializeField] private TMP_Text _textBoxToUpdate;
-    [SerializeField] private DotweenBroadcasterComponent dialogBoxTween;
-    private bool _inDialog;
+    [SerializeField] private DotweenBroadcasterComponent dialogBoxOpenTween;
+    [SerializeField] private DotweenBroadcasterComponent dialogBoxCloseTween;
+
+    private bool _dialogBoxLoading;
     private int _currentLocationInDialog;
     private Dialog _dialogToDisplay;
+    private const string dialogBoxOpen = "dialogBoxOpen";
+    private const string dialogBoxClosed = "dialogBoxClose";
 
+    /// <summary>
+    /// Register to watch for dialogBox animation completion events. On startup
+    /// </summary>
     private void Start()
     {
-        dialogBoxTween.DotweenCompleteEvent += OnDotweenCompletedEvent;
-        dialogBoxTween.DotweenRewindEvent += OnDotweenRewindEvent;
+        dialogBoxOpenTween.DotweenCompleteEvent += OnDialogBoxOpenCompletedEvent;
+        dialogBoxCloseTween.DotweenCompleteEvent += OnDialogBoxClosedCompletedEvent;
     }
 
 
@@ -26,57 +38,64 @@ public class DialogController : MonoBehaviour
     /// </summary>
     /// <param name="dialogToGoThrough">The Scriptable object dialog that will be gone though</param>
     /// <returns>Returns true if the dialog should continue, and false if the dialog is ending</returns>
-    public bool TriggerInteractionDialog(Dialog dialogToGoThrough)
+    public void HandlePlayerRightClick(Dialog dialogToGoThrough)
     {
-        if (_inDialog)
+        if (_dialogBoxLoading)
+            return;
+        if (InDialog)
         {
-            return AdvanceDialog(dialogToGoThrough);
+            AdvanceDialog();
+            return;
         }
+        InitializeDialogInteraction(dialogToGoThrough);
+    }
 
-        _inDialog = true;
+    private void InitializeDialogInteraction(Dialog dialogToGoThrough)
+    {
+        InDialog = true;
+        _dialogBoxLoading = true;
         _currentLocationInDialog = 0;
-        _dialogTextbox.SetActive(true);
         _textBoxToUpdate.gameObject.SetActive(false);
         _textBoxToUpdate.text = dialogToGoThrough.LinesOfDialog[_currentLocationInDialog].Dialog;
         _dialogToDisplay = dialogToGoThrough;
-        return true;
+        DOTween.Play(dialogBoxOpen);
     }
 
 
-    public bool AdvanceDialog(Dialog dialogToGoThrough)
+    private void AdvanceDialog()
     {
-        if (_currentLocationInDialog + 1 >= dialogToGoThrough.LinesOfDialog.Length)
+        if (_currentLocationInDialog + 1 >= _dialogToDisplay.LinesOfDialog.Length)
         {
-            //dialogBoxTween.AnimationToControl.DORewind();
-            dialogBoxTween.AnimationToControl.DOPlayBackwards();
-            //EndDialog();
-            return false;
+            DOTween.Play(dialogBoxClosed);
+            return;
         }
         _currentLocationInDialog++;
-        DisplayDialog(dialogToGoThrough);
-        return true;
+        _textBoxToUpdate.text = _dialogToDisplay.LinesOfDialog[_currentLocationInDialog].Dialog;
+        StartDialogPlayerInteraction(_dialogToDisplay);
     }
 
     private void EndDialog()
     {
-        _inDialog = false;
+        InDialog = false;
         _currentLocationInDialog = 0;
-        _dialogTextbox.SetActive(false);
+        DOTween.Rewind(dialogBoxClosed);
+        DOTween.Rewind(dialogBoxOpen);
     }
 
-    private void DisplayDialog(Dialog dialogToGoThrough)
+    private void StartDialogPlayerInteraction(Dialog dialogToGoThrough)
     {
+        _dialogBoxLoading = false;
         _textBoxToUpdate.gameObject.SetActive(true);
     }
 
-    public void OnDotweenCompletedEvent(object thing, EventArgs e)
+
+    public void OnDialogBoxOpenCompletedEvent(object thing, EventArgs e)
     {
-        DisplayDialog(_dialogToDisplay);
+
+        StartDialogPlayerInteraction(_dialogToDisplay);
     }
-
-    public void OnDotweenRewindEvent(object thing, EventArgs e)
+    public void OnDialogBoxClosedCompletedEvent(object thing, EventArgs e)
     {
-
         EndDialog();
     }
 

@@ -5,13 +5,19 @@ public class PlayerInteractionComponent : MonoBehaviour
 {
     /// <summary>
     /// If the interaction component is currently within an interaction.
+    /// looks at the other controllers status each frame and updates itself
     /// </summary>
     public bool CurrentlyInteracting { get; private set; }
     [SerializeField] private DialogController _dialogController;
-    [SerializeField] private PlayerPickupController _playerPickupController;
+    [SerializeField] private PickupController _playerPickupController;
     [SerializeField] private GameObject _interactionSprite;
     private InteractableComponent _currentInteractableComponent;
 
+    private void Update()
+    {
+        var interacting = _dialogController.InDialog || _playerPickupController.InDialog;
+        CurrentlyInteracting = interacting;
+    }
 
     /// <summary>
     /// This is called by a Remote interactable component.  It will turn on the interaction sprite, and also update your current interactable
@@ -32,6 +38,7 @@ public class PlayerInteractionComponent : MonoBehaviour
             return;
         switch (_currentInteractableComponent.InteractionType)
         {
+            //TODO think of a way to make this not have to cast on every interaction check.
             case TypeOfInteraction.Dialog:
                 var dialogCasted = (DialogInteractionComponent)_currentInteractableComponent;
                 HandleDialogInteraction(dialogCasted.DialogToDisplay);
@@ -47,12 +54,12 @@ public class PlayerInteractionComponent : MonoBehaviour
 
     private void HandleDialogInteraction(Dialog dialogToDisplay)
     {
-        CurrentlyInteracting = _dialogController.TriggerInteractionDialog(dialogToDisplay);
+         _dialogController.HandlePlayerRightClick(dialogToDisplay);
     }
 
     private void HandlePickupInteraction(PickupInteractionComponent pickupComponent)
     {
-        CurrentlyInteracting = _playerPickupController.PickupItem(pickupComponent);
+        CurrentlyInteracting = _playerPickupController.TriggerInteractionDialog(pickupComponent);
     }
 
 

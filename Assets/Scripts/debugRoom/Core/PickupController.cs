@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// The controller used for handling pickups, it is referenced by the player interaction handler
+/// </summary>
 public class PickupController : MonoBehaviour
 {
     [SerializeField] private GameObject _dialogTextbox;
     [SerializeField] private TMP_Text _textBoxToUpdate;
-    private bool _inDialog;
+    public bool InDialog { get; private set; }
     private int _currentLocationInDialog;
 
 
@@ -19,7 +22,7 @@ public class PickupController : MonoBehaviour
     /// <returns>Returns true if the dialog should continue, and false if the dialog is ending</returns>
     public bool TriggerInteractionDialog(PickupInteractionComponent pickupItem)
     {
-        return _inDialog ? AdvanceDialog(pickupItem) : InitializePickupDialog(pickupItem);
+        return InDialog ? AdvanceDialog(pickupItem) : InitializePickupDialog(pickupItem);
     }
 
 
@@ -41,14 +44,14 @@ public class PickupController : MonoBehaviour
         _textBoxToUpdate.text = "";
         _currentLocationInDialog = 0;
         dialog.gameObject.SetActive(false);
-        _inDialog = false;
+        InDialog = false;
         _dialogTextbox.SetActive(false);
 
 
     }
     private bool InitializePickupDialog(PickupInteractionComponent pickupItem)
     {
-        _inDialog = true;
+        InDialog = true;
         _dialogTextbox.SetActive(true);
         _currentLocationInDialog = 0;
         DisplayDialog(pickupItem);

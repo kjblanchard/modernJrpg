@@ -6,23 +6,22 @@ using UnityEngine;
 
 public class DotweenBroadcasterComponent : MonoBehaviour
 {
-    [SerializeField] public DOTweenAnimation AnimationToControl;
+    [SerializeField] public DOTweenAnimation DotweenAnimation;
+
     public event DotweenCompleteEventHandler DotweenCompleteEvent;
-    public event DotweenRewindEventHandler DotweenRewindEvent;
 
     public delegate void DotweenCompleteEventHandler(object sender, EventArgs e);
-    public delegate void DotweenRewindEventHandler(object sender, EventArgs e);
+
+    public void Start()
+    {
+        DotweenAnimation.autoPlay = false;
+        DotweenAnimation.autoGenerate = false;
+    }
 
     public void OnDotweenCompleteEvent()
     {
-        DotweenCompleteEvent?.Invoke(this,EventArgs.Empty);
+        DotweenCompleteEvent?.Invoke(this, EventArgs.Empty);
     }
-    public void OnDotweenRewindEvent()
-    {
-        DotweenRewindEvent?.Invoke(this,EventArgs.Empty);
-    }
-
-
 
 }
 
