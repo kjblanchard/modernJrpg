@@ -59,7 +59,7 @@ public class PlayerInteractionComponent : MonoBehaviour
 
     private void HandlePickupInteraction(PickupInteractionComponent pickupComponent)
     {
-        CurrentlyInteracting = _playerPickupController.TriggerInteractionDialog(pickupComponent);
+        _playerPickupController.TriggerInteractionDialog(pickupComponent);
     }
 
 

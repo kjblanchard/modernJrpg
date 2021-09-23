@@ -12,7 +12,6 @@ public class DialogController : MonoBehaviour
 {
     public bool InDialog { get; private set; }
 
-    [SerializeField] private GameObject _dialogTextbox;
     [SerializeField] private TMP_Text _textBoxToUpdate;
     [SerializeField] private DotweenBroadcasterComponent dialogBoxOpenTween;
     [SerializeField] private DotweenBroadcasterComponent dialogBoxCloseTween;
@@ -22,6 +21,8 @@ public class DialogController : MonoBehaviour
     private Dialog _dialogToDisplay;
     private const string dialogBoxOpen = "dialogBoxOpen";
     private const string dialogBoxClosed = "dialogBoxClose";
+
+    private bool _typewriterTyping;
 
     /// <summary>
     /// Register to watch for dialogBox animation completion events. On startup
@@ -97,6 +98,11 @@ public class DialogController : MonoBehaviour
     public void OnDialogBoxClosedCompletedEvent(object thing, EventArgs e)
     {
         EndDialog();
+    }
+
+    private void TypewriterEffect()
+    {
+
     }
 
 }
