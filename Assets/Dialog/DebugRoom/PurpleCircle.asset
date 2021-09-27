@@ -13,8 +13,25 @@ MonoBehaviour:
   m_Name: PurpleCircle
   m_EditorClassIdentifier: 
   LinesOfDialog:
-  - Dialog: Hey loser
-  - Dialog: Welcome to the noob area
-  - Dialog: Does it still work
-  - Dialog: Who knows
-  - Dialog: Go to bed you chewb
+  - Dialog: Welcome to the Debug Room!
+    Name: Ringleader
+    IsChoice: 0
+    ChoiceOptions: []
+    SelectionChoice: 0
+  - Dialog: How are you liking it here?
+    Name: Ringleader
+    IsChoice: 1
+    ChoiceOptions:
+    - It's great!
+    - It's..... "nice"
+    SelectionChoice: 0
+  - Dialog: Thanks!  It takes a lot of work to do this
+    Name: Ringleader
+    IsChoice: 0
+    ChoiceOptions: []
+    SelectionChoice: 1
+  - Dialog: Why don't you try making it then?
+    Name: Ringleader
+    IsChoice: 0
+    ChoiceOptions: []
+    SelectionChoice: 2

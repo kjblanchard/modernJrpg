@@ -14,10 +14,12 @@ public class DialogController : MonoBehaviour
 {
     public bool InDialog { get; private set; }
 
-    [SerializeField] private TMP_Text _textBoxToUpdate;
+    [SerializeField] private TMP_Text _fullTmpTextToUpdate;
     [SerializeField] private DotweenBroadcasterComponent _dialogBoxOpenTween;
     [SerializeField] private DotweenBroadcasterComponent _dialogBoxCloseTween;
     [SerializeField] private float _timeBetweenTypewriterTyping = 0.1f;
+    [SerializeField] private DialogButton _choice1TmpText;
+    [SerializeField] private DialogButton _choice2TmpText;
 
     private bool _dialogBoxLoading;
     private int _currentLocationInDialog;
@@ -27,6 +29,8 @@ public class DialogController : MonoBehaviour
     private bool _typewriterTyping;
     private Coroutine _currentTypewriterCoroutine;
     private WaitForSeconds _timeBetweenTypewriterTypingWait;
+    private int currentDialogSelection;
+    private bool choiceMade = false;
 
     /// <summary>
     /// Register to watch for dialogBox animation completion events. On startup
@@ -66,23 +70,39 @@ public class DialogController : MonoBehaviour
         InDialog = true;
         _dialogBoxLoading = true;
         _currentLocationInDialog = 0;
-        _textBoxToUpdate.gameObject.SetActive(false);
-        _textBoxToUpdate.text = dialogToGoThrough.LinesOfDialog[_currentLocationInDialog].Dialog;
+        _fullTmpTextToUpdate.gameObject.SetActive(false);
+        _fullTmpTextToUpdate.text = dialogToGoThrough.LinesOfDialog[_currentLocationInDialog].Dialog;
         _dialogToDisplay = dialogToGoThrough;
+        choiceMade = false;
         DOTween.Play(_dialogBoxOpen);
     }
 
 
     private void AdvanceDialog()
     {
+        if (_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].IsChoice && !choiceMade)
+        {
+            _choice1TmpText.UpdateButtonText(_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].ChoiceOptions[0]);
+            _choice2TmpText.UpdateButtonText(_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].ChoiceOptions[1]);
+            _choice1TmpText.gameObject.SetActive(true);
+            _choice2TmpText.gameObject.SetActive(true);
+            return;
+        }
         if (_currentLocationInDialog + 1 >= _dialogToDisplay.LinesOfDialog.Length)
         {
             DOTween.Play(_dialogBoxClosed);
             return;
         }
         _currentLocationInDialog++;
-        _textBoxToUpdate.text = _dialogToDisplay.LinesOfDialog[_currentLocationInDialog].Dialog;
-        StartDialogPlayerInteraction(_dialogToDisplay);
+        if (_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].SelectionChoice == 0 || _dialogToDisplay.LinesOfDialog[_currentLocationInDialog].SelectionChoice == currentDialogSelection)
+        {
+            _fullTmpTextToUpdate.text = _dialogToDisplay.LinesOfDialog[_currentLocationInDialog].Dialog;
+            StartDialogPlayerInteraction(_dialogToDisplay);
+        }
+        else
+        {
+            AdvanceDialog();
+        }
     }
 
     private void EndDialog()
@@ -96,7 +116,7 @@ public class DialogController : MonoBehaviour
     private void StartDialogPlayerInteraction(Dialog dialogToGoThrough)
     {
         _dialogBoxLoading = false;
-        _textBoxToUpdate.gameObject.SetActive(true);
+        _fullTmpTextToUpdate.gameObject.SetActive(true);
         InitializeTypewriterEffect();
     }
 
@@ -114,7 +134,7 @@ public class DialogController : MonoBehaviour
     private void InitializeTypewriterEffect()
     {
         _typewriterTyping = true;
-        _currentTypewriterCoroutine = StartCoroutine(RevealCharacters(_textBoxToUpdate));
+        _currentTypewriterCoroutine = StartCoroutine(RevealCharacters(_fullTmpTextToUpdate));
     }
 
 
@@ -124,7 +144,7 @@ public class DialogController : MonoBehaviour
             return;
         StopCoroutine(_currentTypewriterCoroutine);
         _typewriterTyping = false;
-        RevealAllCharacters(_textBoxToUpdate);
+        RevealAllCharacters(_fullTmpTextToUpdate);
 
 
     }
@@ -173,6 +193,16 @@ public class DialogController : MonoBehaviour
     private void RevealAllCharacters(TMP_Text textComponent)
     {
         textComponent.maxVisibleCharacters = int.MaxValue;
+    }
+
+    public void UpdateSelectionNumber(int selection)
+    {
+        currentDialogSelection = selection;
+        choiceMade = true;
+        _choice1TmpText.gameObject.SetActive(false);
+        _choice2TmpText.gameObject.SetActive(false);
+
+        AdvanceDialog();
     }
 
 

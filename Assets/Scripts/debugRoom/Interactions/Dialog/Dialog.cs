@@ -8,8 +8,12 @@ public class Dialog : ScriptableObject
     [System.Serializable]
     public class DialogParams
     {
+
         [SerializeField] public string Dialog;
-        [SerializeField] public string Name;
+        [SerializeField] public string Name = null;
+        [SerializeField] public bool IsChoice;
+        [SerializeField] public string[] ChoiceOptions;
+        [SerializeField] public int SelectionChoice;
     }
     [SerializeField] public DialogParams[] LinesOfDialog;
 }
