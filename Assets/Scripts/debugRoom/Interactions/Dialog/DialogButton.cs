@@ -8,9 +8,10 @@ public class DialogButton : MonoBehaviour
     [SerializeField] private int _selectionNumber;
     [SerializeField] private TMP_Text _buttonText;
     [SerializeField] private DialogController _dialogController;
+
     public void ReturnSelectionNumber()
     {
-        _dialogController.UpdateSelectionNumber(_selectionNumber);
+        _dialogController.HandleDialogButtonPressed(_selectionNumber);
     }
 
     public void UpdateButtonText(string newText)

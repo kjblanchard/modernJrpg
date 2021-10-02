@@ -12,6 +12,9 @@ using Object = UnityEngine.Object;
 /// </summary>
 public class DialogController : MonoBehaviour
 {
+    /// <summary>
+    /// Used by the Interaction Component to see if We are in a dialog
+    /// </summary>
     public bool InDialog { get; private set; }
 
     [SerializeField] private TMP_Text _fullTmpTextToUpdate;
@@ -29,17 +32,22 @@ public class DialogController : MonoBehaviour
     private bool _typewriterTyping;
     private Coroutine _currentTypewriterCoroutine;
     private WaitForSeconds _timeBetweenTypewriterTypingWait;
-    private int currentDialogSelection;
-    private bool choiceMade = false;
+    private int _currentDialogSelection;
+    private bool _choiceMade;
+
 
     /// <summary>
-    /// Register to watch for dialogBox animation completion events. On startup
+    /// This is called by the dialog buttons.  It updates the selection number and that a choice was made
     /// </summary>
-    private void Start()
+    /// <param name="selection">The number of button that was pressed</param>
+    public void HandleDialogButtonPressed(int selection)
     {
-        _dialogBoxOpenTween.DotweenCompleteEvent += OnDialogBoxOpenCompletedEvent;
-        _dialogBoxCloseTween.DotweenCompleteEvent += OnDialogBoxClosedCompletedEvent;
-        _timeBetweenTypewriterTypingWait = new WaitForSeconds(_timeBetweenTypewriterTyping);
+        _currentDialogSelection = selection;
+        _choiceMade = true;
+        _choice1TmpText.gameObject.SetActive(false);
+        _choice2TmpText.gameObject.SetActive(false);
+
+        AdvanceDialog();
     }
 
 
@@ -52,17 +60,27 @@ public class DialogController : MonoBehaviour
     {
         if (_dialogBoxLoading)
             return;
-        switch (InDialog)
+        if (!InDialog)
         {
-            case true when _typewriterTyping:
-                StopTypewriter();
-                return;
-            case true when !_typewriterTyping:
-                AdvanceDialog();
-                return;
+            InitializeDialogInteraction(dialogToGoThrough);
+            return;
         }
+        if (_typewriterTyping)
+        {
+            StopTypewriter();
+        }
+        else
+            AdvanceDialog();
+    }
 
-        InitializeDialogInteraction(dialogToGoThrough);
+    /// <summary>
+    /// Register to watch for dialogBox animation completion events. On startup
+    /// </summary>
+    private void Start()
+    {
+        _dialogBoxOpenTween.DotweenCompleteEvent += OnDialogBoxOpenCompletedEvent;
+        _dialogBoxCloseTween.DotweenCompleteEvent += OnDialogBoxClosedCompletedEvent;
+        _timeBetweenTypewriterTypingWait = new WaitForSeconds(_timeBetweenTypewriterTyping);
     }
 
     private void InitializeDialogInteraction(Dialog dialogToGoThrough)
@@ -73,14 +91,13 @@ public class DialogController : MonoBehaviour
         _fullTmpTextToUpdate.gameObject.SetActive(false);
         _fullTmpTextToUpdate.text = dialogToGoThrough.LinesOfDialog[_currentLocationInDialog].Dialog;
         _dialogToDisplay = dialogToGoThrough;
-        choiceMade = false;
+        _choiceMade = false;
         DOTween.Play(_dialogBoxOpen);
     }
 
-
     private void AdvanceDialog()
     {
-        if (_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].IsChoice && !choiceMade)
+        if (_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].IsChoice && !_choiceMade)
         {
             _choice1TmpText.UpdateButtonText(_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].ChoiceOptions[0]);
             _choice2TmpText.UpdateButtonText(_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].ChoiceOptions[1]);
@@ -94,10 +111,10 @@ public class DialogController : MonoBehaviour
             return;
         }
         _currentLocationInDialog++;
-        if (_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].SelectionChoice == 0 || _dialogToDisplay.LinesOfDialog[_currentLocationInDialog].SelectionChoice == currentDialogSelection)
+        if (_dialogToDisplay.LinesOfDialog[_currentLocationInDialog].SelectionChoice == 0 || _dialogToDisplay.LinesOfDialog[_currentLocationInDialog].SelectionChoice == _currentDialogSelection)
         {
             _fullTmpTextToUpdate.text = _dialogToDisplay.LinesOfDialog[_currentLocationInDialog].Dialog;
-            StartDialogPlayerInteraction(_dialogToDisplay);
+            InitializeTypewriterEffect();
         }
         else
         {
@@ -113,18 +130,11 @@ public class DialogController : MonoBehaviour
         DOTween.Rewind(_dialogBoxOpen);
     }
 
-    private void StartDialogPlayerInteraction(Dialog dialogToGoThrough)
+    private void OnDialogBoxOpenCompletedEvent(object thing, EventArgs e)
     {
         _dialogBoxLoading = false;
         _fullTmpTextToUpdate.gameObject.SetActive(true);
         InitializeTypewriterEffect();
-    }
-
-
-    private void OnDialogBoxOpenCompletedEvent(object thing, EventArgs e)
-    {
-
-        StartDialogPlayerInteraction(_dialogToDisplay);
     }
     private void OnDialogBoxClosedCompletedEvent(object thing, EventArgs e)
     {
@@ -137,15 +147,12 @@ public class DialogController : MonoBehaviour
         _currentTypewriterCoroutine = StartCoroutine(RevealCharacters(_fullTmpTextToUpdate));
     }
 
-
     private void StopTypewriter()
     {
         if (!_typewriterTyping)
             return;
         StopCoroutine(_currentTypewriterCoroutine);
-        _typewriterTyping = false;
-        RevealAllCharacters(_fullTmpTextToUpdate);
-
+        EndTypewriterText();
 
     }
     /// <summary>
@@ -184,26 +191,6 @@ public class DialogController : MonoBehaviour
     {
         _currentTypewriterCoroutine = null;
         _typewriterTyping = false;
+        _fullTmpTextToUpdate.maxVisibleCharacters = int.MaxValue;
     }
-
-    /// <summary>
-    /// Reveals all the characters when the typewriter is typing and the player presses rightclick
-    /// </summary>
-    /// <param name="textComponent"></param>
-    private void RevealAllCharacters(TMP_Text textComponent)
-    {
-        textComponent.maxVisibleCharacters = int.MaxValue;
-    }
-
-    public void UpdateSelectionNumber(int selection)
-    {
-        currentDialogSelection = selection;
-        choiceMade = true;
-        _choice1TmpText.gameObject.SetActive(false);
-        _choice2TmpText.gameObject.SetActive(false);
-
-        AdvanceDialog();
-    }
-
-
 }

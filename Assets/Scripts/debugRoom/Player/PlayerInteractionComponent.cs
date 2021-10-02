@@ -8,6 +8,7 @@ public class PlayerInteractionComponent : MonoBehaviour
     /// looks at the other controllers status each frame and updates itself
     /// </summary>
     public bool CurrentlyInteracting { get; private set; }
+
     [SerializeField] private DialogController _dialogController;
     [SerializeField] private PickupController _playerPickupController;
     [SerializeField] private GameObject _interactionSprite;
@@ -15,14 +16,14 @@ public class PlayerInteractionComponent : MonoBehaviour
 
     private void Update()
     {
-        var interacting = _dialogController.InDialog || _playerPickupController.InDialog;
-        CurrentlyInteracting = interacting;
+        CurrentlyInteracting = _dialogController.InDialog || _playerPickupController.InDialog;
     }
 
     /// <summary>
     /// This is called by a Remote interactable component.  It will turn on the interaction sprite, and also update your current interactable
     /// </summary>
-    /// <param name="newInteractable"></param>
+    /// <param name="newInteractable">The actual component that you will be interacting with</param>
+    /// <param name="isInteractable">If The interaction sprite should be turned on or off</param>
     public void UpdateInteraction(InteractableComponent newInteractable, bool isInteractable)
     {
         _interactionSprite.SetActive(isInteractable);
