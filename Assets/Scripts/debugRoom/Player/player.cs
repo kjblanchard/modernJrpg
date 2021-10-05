@@ -9,15 +9,18 @@ public class Player : MonoBehaviour
     [SerializeField]
     private PlayerInteractionComponent _playerInteractionComponent;
 
+    [SerializeField] private PlayerBattleComponent _playerBattleComponent;
+
     /// <summary>
     /// Handles the mouseclick using unitys new input system.
     /// </summary>
     void OnMouseClick()
     {
-        if (_playerInteractionComponent.CurrentlyInteracting)
+        if (_playerInteractionComponent.CurrentlyInteracting || _playerBattleComponent.InBattle)
             return;
         var mousePosition = CalculateMousePosition();
         _rigidBody.DOMove(mousePosition, 1.0f);
+        _playerBattleComponent.UpdateCurrentBattleAreaStepCounter();
     }
 
     /// <summary>
@@ -39,6 +42,11 @@ public class Player : MonoBehaviour
     {
         _playerInteractionComponent.PerformInteraction();
 
+    }
+
+    public PlayerBattleComponent GetPlayerBattleComponent()
+    {
+        return _playerBattleComponent;
     }
 
 
