@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BattleEncounters:
   - BattleGroups: {fileID: 11400000, guid: 3d501fd8cdc65bc4ca1e14b2f170da31, type: 2}
-    EncounterWeight: 0
+    EncounterWeight: 50
     LocationForBattle: 
     MusicToPlay: 0
   - BattleGroups: {fileID: 11400000, guid: 2722e2db67f64a84b873e60f78563fb0, type: 2}
-    EncounterWeight: 0
+    EncounterWeight: 50
     LocationForBattle: 
     MusicToPlay: 0

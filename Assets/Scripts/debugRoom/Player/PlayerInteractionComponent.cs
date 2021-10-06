@@ -1,7 +1,9 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class PlayerInteractionComponent : MonoBehaviour
+
 {
     /// <summary>
     /// If the interaction component is currently within an interaction.
@@ -23,10 +25,10 @@ public class PlayerInteractionComponent : MonoBehaviour
     /// This is called by a Remote interactable component.  It will turn on the interaction sprite, and also update your current interactable
     /// </summary>
     /// <param name="newInteractable">The actual component that you will be interacting with</param>
-    /// <param name="isInteractable">If The interaction sprite should be turned on or off</param>
-    public void UpdateInteraction(InteractableComponent newInteractable, bool isInteractable)
+    /// <param name="interactionSpriteStatus">If The interaction sprite should be turned on or off</param>
+    public void UpdateInteraction(InteractableComponent newInteractable, bool interactionSpriteStatus)
     {
-        _interactionSprite.SetActive(isInteractable);
+        _interactionSprite.SetActive(interactionSpriteStatus);
         _currentInteractableComponent = newInteractable;
     }
 

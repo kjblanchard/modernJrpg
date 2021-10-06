@@ -8,13 +8,13 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rigidBody;
     [SerializeField]
     private PlayerInteractionComponent _playerInteractionComponent;
-
-    [SerializeField] private PlayerBattleComponent _playerBattleComponent;
+    [SerializeField]
+    private PlayerBattleComponent _playerBattleComponent;
 
     /// <summary>
     /// Handles the mouseclick using unitys new input system.
     /// </summary>
-    void OnMouseClick()
+    private void OnMouseClick()
     {
         if (_playerInteractionComponent.CurrentlyInteracting || _playerBattleComponent.InBattle)
             return;
@@ -38,16 +38,9 @@ public class Player : MonoBehaviour
     /// <summary>
     /// Handles the Right mouseclick using unitys new input system.
     /// </summary>
-    void OnMouseRightClick()
+    private void OnMouseRightClick()
     {
         _playerInteractionComponent.PerformInteraction();
-
     }
-
-    public PlayerBattleComponent GetPlayerBattleComponent()
-    {
-        return _playerBattleComponent;
-    }
-
 
 }
