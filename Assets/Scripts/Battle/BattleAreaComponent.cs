@@ -4,10 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(PolygonCollider2D))]
 public class BattleAreaComponent : MonoBehaviour
 {
+    public BattleEncounterZone.BattleEncounter NextEncounter { get; private set; }
+
     [SerializeField] private int _maxStepsForEncounter;
     [SerializeField] private BattleEncounterZone _battleEncounterZone;
 
-    private BattleEncounterZone.BattleEncounter _nextEncounter;
     private int _remainingStepsUntilEncounter;
 
     /// <summary>
@@ -16,7 +17,7 @@ public class BattleAreaComponent : MonoBehaviour
     private void Start()
     {
         _remainingStepsUntilEncounter = CalculateNextBattleSteps();
-        _nextEncounter = CalculateNextEncounter();
+        NextEncounter = CalculateNextEncounter();
     }
 
     /// <summary>
