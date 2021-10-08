@@ -20,7 +20,8 @@ phases:
     commands:
       - echo Entered the build phase...
       - unity-editor -quit -batchmode -executeMethod EditorScripts.PerformBuild -serial $UNITY_SERIAL -username $UNITY_USERNAME -password $UNITY_PASSWORD -logFile Logs/buildLog
-      - cat Logs/buildLog
+      - tail Logs/buildLog
+      - ls ls -ld -- */
       - echo Build started on `date`
     finally:
       - echo This always runs even if the install command fails
@@ -29,4 +30,4 @@ phases:
       - echo Entered the post_build phase...
       - echo Build completed on `date`
 artifacts:
-  files: /WebGL-Dist/**/*
+  files: '/WebGL-Dist/**/*'
