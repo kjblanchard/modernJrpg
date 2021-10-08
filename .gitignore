@@ -1,9 +1,6 @@
 Created by https://www.gitignore.io/api/unity
 # Edit at https://www.gitignore.io/?templates=unity
 
-# Jetbrain Rider Cache
-.idea/
-Assets/Plugins/Editor/JetBrains*
 
 # Visual Studio Code
 .vscode/
@@ -16,9 +13,6 @@ Assets/Plugins/Editor/JetBrains*
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
-android/
-Assets/AssetStoreTools*
-!Assets/*
 Library/*
 library/*
 
@@ -42,9 +36,6 @@ ExportedObj/
 *.opendb
 *.VC.db
 
-# Unity3D generated meta files
-*.pidb.meta
-*.pdb.meta
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
@@ -65,8 +56,8 @@ sysinfo.txt
 /[Aa]ssets/Plugins/FMOD/Cache/*
                     
 # Ignore bank files in the StreamingAssets folder.
-/[Aa]ssets/StreamingAssets/**/*.bank
-/[Aa]ssets/StreamingAssets/**/*.bank.meta
+!/[Aa]ssets/StreamingAssets/**/*.bank
+!/[Aa]ssets/StreamingAssets/**/*.bank.meta
                     
 # If the source bank files are kept outside of the StreamingAssets folder then these can be ignored.
 # Log files can be ignored.
