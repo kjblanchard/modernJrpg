@@ -25,4 +25,4 @@ phases:
       - echo Entered the post_build phase...
       - echo Build completed on `date`
 artifacts:
-  files: /WebGL-DIST/**/*
+  files: /WebGL-Dist/**/*
