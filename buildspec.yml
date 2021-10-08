@@ -14,17 +14,15 @@ phases:
   pre_build:
     commands:
       - echo Entered the pre_build phase...
-      - mkdir WebGL-Dist/
     finally:
       - echo This always runs even if the login command fails 
   build:
     commands:
       - echo Entered the build phase...
       - unity-editor -quit -batchmode -executeMethod EditorScripts.PerformBuild -serial $UNITY_SERIAL -username $UNITY_USERNAME -password $UNITY_PASSWORD -logFile Logs/buildLog
-      - tail Logs/buildLog
+      - cat Logs/buildLog
       - ls -ld -- */
       - find . -name index.html
-      - echo Build started on `date`
     finally:
       - echo This always runs even if the install command fails
   post_build:
