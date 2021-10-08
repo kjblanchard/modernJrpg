@@ -21,7 +21,8 @@ phases:
       - echo Entered the build phase...
       - unity-editor -quit -batchmode -executeMethod EditorScripts.PerformBuild -serial $UNITY_SERIAL -username $UNITY_USERNAME -password $UNITY_PASSWORD -logFile Logs/buildLog
       - tail Logs/buildLog
-      - ls ls -ld -- */
+      - ls -ld -- */
+      - find . -name index.html
       - echo Build started on `date`
     finally:
       - echo This always runs even if the install command fails
