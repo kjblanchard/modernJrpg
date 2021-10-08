@@ -1,5 +1,9 @@
 version: 0.2
-
+env:
+  parameter-store:
+    UNITY_SERIAL: "/CodeBuild/unitySerial"
+    UNITY_USERNAME: "/CodeBuild/unityUsername"
+    UNITY_PASSWORD: "/CodeBuild/unityPassword"
 
 phases:
   install:
@@ -15,7 +19,7 @@ phases:
   build:
     commands:
       - echo Entered the build phase...
-      - unity-editor -quit -batchmode -executeMethod EditorScripts.PerformBuild -serial SC-RR6H-YWHQ-6H4F-XUDD-T9A4 -username enf3rno@yahoo.com -password Shadow89 -logFile Logs/buildLog
+      - unity-editor -quit -batchmode -executeMethod EditorScripts.PerformBuild -serial $UNITY_SERIAL -username $UNITY_USERNAME -password $UNITY_PASSWORD -logFile Logs/buildLog
       - cat Logs/buildLog
       - echo Build started on `date`
     finally:
