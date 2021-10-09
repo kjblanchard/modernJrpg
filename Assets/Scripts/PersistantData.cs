@@ -26,6 +26,13 @@ public class PersistantData : MonoBehaviour
     }
 
 
+    public BattleData GetBattleData()
+    {
+        return _battleData;
+
+    }
+
+
 
 
 

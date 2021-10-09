@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// The Encounter zone - this is used to hold all of the encounters that a zone can have, and their weights
@@ -18,7 +19,7 @@ public class BattleEncounterZone : ScriptableObject
     {
         public EnemyBattleGroup BattleGroups;
         public int EncounterWeight;
-        public string LocationForBattle;
+        public SceneController.GameScenesEnum LocationForBattle;
         public BattleMusic MusicToPlay;
     }
     /// <summary>

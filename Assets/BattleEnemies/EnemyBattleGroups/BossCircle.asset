@@ -12,5 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c6da00d3f72bdf40804182592f62aaf, type: 3}
   m_Name: BossCircle
   m_EditorClassIdentifier: 
-  EnemyBattlers:
-  - {fileID: 11400000, guid: 39fe1fa7b2f3b954f91cb0fa159dc3a7, type: 2}
+  EnemyBattlers: 01000000

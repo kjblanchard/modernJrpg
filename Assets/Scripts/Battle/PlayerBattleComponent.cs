@@ -1,7 +1,6 @@
 using System;
 using FMODUnity;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using STOP_MODE = FMOD.Studio.STOP_MODE;
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -60,7 +59,7 @@ public class PlayerBattleComponent : MonoBehaviour
 
     public void OnAnimationComplete(object obj, EventArgs e)
     {
-        SceneManager.LoadScene("battle1");
+        SceneController.ChangeGameScene(PersistantData.instance.GetBattleData().BattleEncounter.LocationForBattle);
 
     }
 }

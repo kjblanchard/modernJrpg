@@ -1,5 +1,7 @@
 // This is causing some errors with 2D colliders, enable it under your own responsibility
 //#define ENABLE_MERGED_SUBTILE_COLLIDERS
+#pragma warning disable 0436
+
 
 using UnityEngine;
 using System.Collections;

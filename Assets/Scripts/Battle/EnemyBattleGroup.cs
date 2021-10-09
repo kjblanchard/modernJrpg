@@ -8,5 +8,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Battle/EnemyBattleGroup", order = 2)]
 public class EnemyBattleGroup : ScriptableObject
 {
-    public Battler[] EnemyBattlers;
+    public EnemyBattlerDatabase.EnemyBattlerNames[] EnemyBattlers;
 }

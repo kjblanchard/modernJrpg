@@ -47,6 +47,8 @@
 
 //use_lines: Enables open path clipping. Adds a very minor cost to performance.
 #define use_lines
+//TODO figure out why this is needed in this guys stuff
+#pragma warning disable 0436
 
 
 using System;
