@@ -11,17 +11,17 @@ public class PlayerBattleComponent : MonoBehaviour
 
     [SerializeField] private Battler[] _playerParty;
     [SerializeField] private StudioEventEmitter _battleMusicEmitter;
-    private BattleAreaComponent _currentBattleAreaComponent;
     [SerializeField] private AnimationCompleteComponent battleTransitionCompleteComponent;
-
-
     [SerializeField] private EnterBattleCamera _enterBattleCamera;
 
+    private BattleAreaComponent _currentBattleAreaComponent;
 
+    /// <summary>
+    /// Subscribes to the battle transition complete component, so that it is notified correctly when it ends so that we can change the scene
+    /// </summary>
     void Start()
     {
         battleTransitionCompleteComponent.AnimationCompleteEvent += OnAnimationComplete;
-
     }
 
     /// <summary>
