@@ -841,6 +841,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: UserReportingPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 114676038347651840, guid: c1aa92cd8198f654b933334ac725dc4f, type: 3}
+      propertyPath: SendEventsToAnalytics
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114676038347651840, guid: c1aa92cd8198f654b933334ac725dc4f, type: 3}
+      propertyPath: UserReportSubmitting.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114676038347651840, guid: c1aa92cd8198f654b933334ac725dc4f, type: 3}
+      propertyPath: UserReportSubmitting.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114676038347651840, guid: c1aa92cd8198f654b933334ac725dc4f, type: 3}
+      propertyPath: UserReportSubmitting.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 224535167193121672, guid: c1aa92cd8198f654b933334ac725dc4f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -7598,7 +7614,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
-  m_Color: {r: 0.10215378, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.018452074, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
