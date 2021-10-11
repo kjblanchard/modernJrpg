@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0da513ef76951834898e4222d2145b1a, type: 3}
+  m_Script: {fileID: 11500000, guid: 30a921f138791734b932c109ebc6ccda, type: 3}
   m_Name: BigCircle
   m_EditorClassIdentifier: 
-  BattlerStats: {fileID: 11400000, guid: aaeedc9a02765804f85e9de07a672e8e, type: 2}
-  BattlerSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  BattlerName: BigCircle
+  BattlerHp: 20
+  BattlerStr: 2

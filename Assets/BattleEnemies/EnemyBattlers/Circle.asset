@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0da513ef76951834898e4222d2145b1a, type: 3}
   m_Name: Circle
   m_EditorClassIdentifier: 
-  BattlerName: Circle
-  BattlerHp: 20
-  BattlerStr: 1
+  BattlerStats: {fileID: 11400000, guid: eace1a1dd485d0643b3cf852e8a231ab, type: 2}
+  BattlerSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
