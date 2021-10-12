@@ -14,7 +14,7 @@ public class EnemyBattleGroup : ScriptableObject
     [System.Serializable]
     public class EnemyNameToLocation
     {
-       public EnemyBattlerDatabase.EnemyBattlerNames EnemyBattler;
+       public BattlerNames EnemyBattler;
        public int LocationToSpawnInBattle;
 
     }

@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c6da00d3f72bdf40804182592f62aaf, type: 3}
-  m_Name: Circle
+  m_Script: {fileID: 11500000, guid: 30a921f138791734b932c109ebc6ccda, type: 3}
+  m_Name: Kevin
   m_EditorClassIdentifier: 
-  EnemyBattlers:
-  - EnemyBattler: 5
-    LocationToSpawnInBattle: 0
+  BattlerName: Kevin
+  BattlerHp: 40
+  BattlerStr: 2

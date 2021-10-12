@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TwoCircles
   m_EditorClassIdentifier: 
   EnemyBattlers:
-  - EnemyBattler: 0
+  - EnemyBattler: 5
     LocationToSpawnInBattle: 1
-  - EnemyBattler: 0
+  - EnemyBattler: 5
     LocationToSpawnInBattle: 2

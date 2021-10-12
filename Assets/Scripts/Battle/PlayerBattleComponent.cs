@@ -8,10 +8,10 @@ public class PlayerBattleComponent : MonoBehaviour
 {
     public bool InBattle { get; private set; }
 
-    [SerializeField] private Battler[] _playerParty;
     [SerializeField] private StudioEventEmitter _battleMusicEmitter;
     [SerializeField] private AnimationCompleteComponent battleTransitionCompleteComponent;
     [SerializeField] private EnterBattleCamera _enterBattleCamera;
+    [SerializeField] private PlayerParty _playerParty;
 
     private BattleAreaComponent _currentBattleAreaComponent;
 
@@ -45,7 +45,7 @@ public class PlayerBattleComponent : MonoBehaviour
         bgmbus.stopAllEvents(STOP_MODE.ALLOWFADEOUT);
         _battleMusicEmitter.Play();
         _enterBattleCamera.StartBattleTransition();
-        PersistantData.instance.UpdateBattleData(new PersistantData.BattleData(_currentBattleAreaComponent.NextEncounter, _playerParty));
+        PersistantData.instance.UpdateBattleData(new PersistantData.BattleData(_currentBattleAreaComponent.NextEncounter, _playerParty.CurrentParty));
     }
 
     /// <summary>
