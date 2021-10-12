@@ -8,5 +8,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Battle/EnemyBattleGroup", order = 2)]
 public class EnemyBattleGroup : ScriptableObject
 {
-    public EnemyBattlerDatabase.EnemyBattlerNames[] EnemyBattlers;
+    public EnemyNameToLocation[] EnemyBattlers;
+
+
+    [System.Serializable]
+    public class EnemyNameToLocation
+    {
+       public EnemyBattlerDatabase.EnemyBattlerNames EnemyBattler;
+       public int LocationToSpawnInBattle;
+
+    }
 }

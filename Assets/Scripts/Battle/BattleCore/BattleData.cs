@@ -11,6 +11,7 @@ public class BattleData : MonoBehaviour
 
 
     [SerializeField] private EnemyBattlerDatabase _enemyBattlerDatabase;
+    [SerializeField] private SpawnLocations _spawnLocations;
 
 
     public void SetBattleData(PersistantData.BattleData newData)
@@ -19,7 +20,7 @@ public class BattleData : MonoBehaviour
         EnemyBattlers = LoadEnemyBattlers(_battleData.BattleEncounter.BattleGroups.EnemyBattlers, out _enemyPrefabArray);
     }
 
-    private Battler[] LoadEnemyBattlers(EnemyBattlerDatabase.EnemyBattlerNames[] enemyBattlerNames, out GameObject[] enemyPrefabs)
+    private Battler[] LoadEnemyBattlers(EnemyBattleGroup.EnemyNameToLocation[] enemyBattlerNames, out GameObject[] enemyPrefabs)
     {
         var count = enemyBattlerNames.Length;
         var battlerArray = new Battler[count];
@@ -27,7 +28,10 @@ public class BattleData : MonoBehaviour
 
         for (var i = 0; i < enemyBattlerNames.Length; i++)
         {
-            var _enemyBattlerGameObject = _enemyBattlerDatabase.GetEnemyBattlerGameObject(enemyBattlerNames[i], out var battler);
+            var enemyBattlerInfo = enemyBattlerNames[i];
+            var enemySpawnLocation = _spawnLocations.EnemySpawnLocation[enemyBattlerInfo.LocationToSpawnInBattle];
+            var _enemyBattlerGameObject = _enemyBattlerDatabase.GetEnemyBattlerGameObject(enemyBattlerInfo.EnemyBattler,enemySpawnLocation, out var battler);
+            enemyPrefabs[i] = _enemyBattlerGameObject;
             battlerArray[i] = battler;
             Debug.Log($@"The battler that just got spawned is named {battler.BattlerStats.BattlerName} and his hp is {battler.BattlerStats.BattlerHp}, and his strength is {battler.BattlerStats.BattlerStr}");
         }

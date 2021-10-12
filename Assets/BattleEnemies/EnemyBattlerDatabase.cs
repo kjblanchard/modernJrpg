@@ -16,11 +16,13 @@ public class EnemyBattlerDatabase : MonoBehaviour
     [SerializeField]
     private SerializableDictionaryBase<EnemyBattlerNames, GameObject> _enemyBattlerLookupDictionary;
 
-    public GameObject GetEnemyBattlerGameObject(EnemyBattlerNames battlerName, out Battler theBattlerForThePrefab)
+    public GameObject GetEnemyBattlerGameObject(EnemyBattlerNames battlerName, Transform locationToSpawnAt, out Battler theBattlerForThePrefab)
     {
 
+
+
         _enemyBattlerLookupDictionary.TryGetValue(battlerName, out var potentialBattler);
-        var instantiatedBattler = Instantiate(potentialBattler);
+        var instantiatedBattler = Instantiate(potentialBattler,locationToSpawnAt);
         theBattlerForThePrefab = potentialBattler.GetComponent<Battler>();
         return instantiatedBattler;
 

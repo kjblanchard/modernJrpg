@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: TwoCircles
   m_EditorClassIdentifier: 
   EnemyBattlers:
-  - {fileID: 11400000, guid: 8743beb9b4a214747abfcc9ee110c331, type: 2}
-  - {fileID: 11400000, guid: 8743beb9b4a214747abfcc9ee110c331, type: 2}
+  - EnemyBattler: 0
+    LocationToSpawnInBattle: 1
+  - EnemyBattler: 0
+    LocationToSpawnInBattle: 2
