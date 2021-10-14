@@ -15,3 +15,5 @@ MonoBehaviour:
   BattlerName: Circle
   BattlerHp: 10
   BattlerStr: 1
+  BattlerSpd: 3
+  BattlerLvl: 3

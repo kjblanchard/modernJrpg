@@ -15,3 +15,5 @@ MonoBehaviour:
   BattlerName: BigCircle
   BattlerHp: 20
   BattlerStr: 2
+  BattlerSpd: 10
+  BattlerLvl: 5

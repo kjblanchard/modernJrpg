@@ -5,10 +5,17 @@ public class PersistantData : MonoBehaviour
     public static PersistantData instance;
     private BattleData _battleData;
 
-    void Awake()
+    private void Awake()
     {
-        instance = this;
-        DontDestroyOnLoad(this);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
+        else
+        {
+            Destroy(this);
+        }
     }
 
     public void UpdateBattleData(BattleData battleData)

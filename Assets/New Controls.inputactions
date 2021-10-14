@@ -55,6 +55,17 @@
                 },
                 {
                     "name": "",
+                    "id": "d6d78959-1e54-4919-8d9e-5bd98cb888fd",
+                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8eebbf8b-8083-4ce4-aa11-1334cbd35e48",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",

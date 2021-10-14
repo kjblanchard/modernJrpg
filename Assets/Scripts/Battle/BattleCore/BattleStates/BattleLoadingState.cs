@@ -1,15 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleLoadingState :BattleState
 {
+    [SerializeField] private HorizontalLayoutGroup hlg;
     public override void StartState(params bool[] startupBools)
     {
 
         var data = PersistantData.instance.GetBattleData();
-        BattleComponent.BattleData.SetBattleData(data);
-        BattleComponent.BattleGui.StartFadeIn();
+        _battleComponent.BattleData.SetBattleData(data);
+        _battleComponent.BattleGui.StartFadeIn();
+        BattleClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers,hlg);
     }
 
     public override void StateUpdate()

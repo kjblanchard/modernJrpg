@@ -12,7 +12,7 @@ public class EnemyBattleGroup : ScriptableObject
 
 
     [System.Serializable]
-    public class EnemyNameToLocation
+    public struct EnemyNameToLocation
     {
        public BattlerNames EnemyBattler;
        public int LocationToSpawnInBattle;

@@ -57,6 +57,11 @@ public class PlayerBattleComponent : MonoBehaviour
         _currentBattleAreaComponent = newBattleArea;
     }
 
+    /// <summary>
+    /// Called after The battle transition animation is complete.  This actually will load the scene.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="e"></param>
     public void OnAnimationComplete(object obj, EventArgs e)
     {
         SceneController.ChangeGameScene(PersistantData.instance.GetBattleData().BattleEncounter.LocationForBattle);

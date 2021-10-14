@@ -12,18 +12,12 @@ public class PlayerParty : MonoBehaviour
     {
         return new PlayerStatsAndName {BattlerStats = _playerStatsAndNames[0].BattlerStats, Character = BattlerNames.Kevin};
 
-        //return new BattlerStats
-        //{
-        //    BattlerName = "hello",
-        //    BattlerStr = 1,
-        //    BattlerHp = 50
-        //};
 
     }
 
 
     [System.Serializable]
-    public struct PlayerStatsAndName
+    public class PlayerStatsAndName
     {
         public BattlerStats BattlerStats;
         public BattlerNames Character;

@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public abstract class BattleState : MonoBehaviour
 {
-    public static Battle BattleComponent;
+    protected static Battle _battleComponent;
     public abstract void StartState(params bool[] startupBools);
     public abstract void StateUpdate();
     public abstract void EndState();
@@ -13,8 +10,8 @@ public abstract class BattleState : MonoBehaviour
 
     private void Start()
     {
-        if (BattleComponent == null)
-            BattleComponent = FindObjectOfType<Battle>();
+        if (_battleComponent == null)
+            _battleComponent = FindObjectOfType<Battle>();
     }
 
 }

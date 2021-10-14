@@ -1,27 +1,43 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using RotaryHeart.Lib.SerializableDictionary;
 using UnityEngine;
 
 public class BattlerDatabase : MonoBehaviour
 {
 
+    /// <summary>
+    /// The Dictionary that is used to map a battler name to the prefab that will be spawned, so that you can spawn the characters easily when loading.
+    /// </summary>
     [SerializeField]
     private SerializableDictionaryBase<BattlerNames, GameObject> _enemyBattlerLookupDictionary;
 
-    public GameObject InstantiateBattler(BattlerNames battlerName, Transform locationToSpawnAt, out Battler theBattlerForThePrefab, BattlerStats battlerStats = null)
+    /// <summary>
+    /// Instantiates a battler; should be used in the battle scenes in the loading state.
+    /// </summary>
+    /// <param name="battlerName">The enum of battlers to spawn</param>
+    /// <param name="locationToSpawnAt">The transform to load the character at on the field</param>
+    /// <param name="battlerStats">The stats that should be attached to this battler, used for player characters. For enemies this is left blank. </param>
+    /// <returns></returns>
+    public Battler InstantiateBattler(BattlerNames battlerName, Transform locationToSpawnAt, BattlerStats battlerStats = null)
     {
-        _enemyBattlerLookupDictionary.TryGetValue(battlerName, out var potentialBattler);
-        var instantiatedBattler = Instantiate(potentialBattler, locationToSpawnAt);
-        theBattlerForThePrefab = potentialBattler.GetComponent<Battler>();
+        var charLookupSuccessful = _enemyBattlerLookupDictionary.TryGetValue(battlerName, out var potentialBattler);
+        if (!charLookupSuccessful)
+        {
+            //TODO Put this debug log into a logger
+            Debug.Log($"Char lookup failed for {battlerName}");
+            return null;
+        }
+        var instantiatedBattler = Instantiate(potentialBattler, locationToSpawnAt).GetComponent<Battler>();
         if (battlerStats)
-            theBattlerForThePrefab.BattlerStats = battlerStats;
+            instantiatedBattler.BattlerStats = battlerStats;
+
         return instantiatedBattler;
     }
 
 
 }
+/// <summary>
+/// A enum of battler names used for referencing prior to the battle, and passed into the Battler database to load their prefab for battle.
+/// </summary>
 [System.Serializable]
 public enum BattlerNames
 {
