@@ -2,36 +2,38 @@ using UnityEngine;
 
 public class BattlerInternalClock
 {
-    private const ushort _maxClockValue = 2048;
-    private const byte _turnsToCalculate = 20;
+    
+    public float[] Next20Turns { get; private set; } = new float[_turnsToCalculate];
 
+    private const ushort _maxClockValue = 1024;
+    private const byte _turnsToCalculate = 20;
+    private const byte _initialTurnVariance = 10;
+
+    private readonly float[] _temporaryNext20Turns = new float[_turnsToCalculate];
+
+
+    public void ConfirmTurn()
+    {
+        Next20Turns = _temporaryNext20Turns;
+    }
 
     public float[] CalculateTurns(BattlerStats battlerStats, float skillSpeedModifier = 1.0f, bool initialTurn = false)
     {
-        var clockValues = new ClockValues { CurrentLevel = battlerStats.BattlerLvl, SpeedStat = battlerStats.BattlerSpd };
-        clockValues.CurrentSpeed = initialTurn ? Random.Range(0, clockValues.CurrentLevel + clockValues.CurrentSpeed) : 0.0f;
-        var futureTurnTimes = new float[_turnsToCalculate];
-        var eachTurnClock = CalculateClock(clockValues, skillSpeedModifier);
-        futureTurnTimes[0] = eachTurnClock + clockValues.CurrentSpeed;
+        var currentSpeed = initialTurn ? Random.Range(0, battlerStats.BattlerLvl + battlerStats.BattlerSpd) * _initialTurnVariance : 0.0f;
+        var eachTurnClock = CalculateClock(battlerStats.BattlerLvl,battlerStats.BattlerSpd, skillSpeedModifier);
+        _temporaryNext20Turns[0] = eachTurnClock + currentSpeed;
         for (var i = 1; i < _turnsToCalculate; i++)
         {
-            futureTurnTimes[i] = futureTurnTimes[0] + eachTurnClock*i;
+            _temporaryNext20Turns[i] = _temporaryNext20Turns[0] + eachTurnClock*i;
         }
-        return futureTurnTimes;
-
+        return _temporaryNext20Turns;
     }
 
 
-    private float CalculateClock(ClockValues clockValuesToCalculateWith, float skillSpeedModifier)
+    private static float CalculateClock(int battlerLevel, int battlerSpeed, float skillSpeedModifier)
     {
-        return (_maxClockValue) / (clockValuesToCalculateWith.CurrentLevel +
-                                     clockValuesToCalculateWith.SpeedStat) * skillSpeedModifier;
+        return (_maxClockValue) / (float)(battlerLevel +
+                                     battlerSpeed) * skillSpeedModifier;
     }
 
-    public class ClockValues
-    {
-        public int SpeedStat;
-        public int CurrentLevel;
-        public float CurrentSpeed;
-    }
 }

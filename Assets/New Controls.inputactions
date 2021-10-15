@@ -28,6 +28,22 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "Touch",
+                    "type": "Button",
+                    "id": "20b91e53-bb28-4c36-b5a2-db72e2ff8643",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Tap",
+                    "type": "Button",
+                    "id": "338ea2ea-442f-446f-9cf3-59eba001aa52",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -55,7 +71,7 @@
                 },
                 {
                     "name": "",
-                    "id": "d6d78959-1e54-4919-8d9e-5bd98cb888fd",
+                    "id": "261c8a51-a50b-4935-a4a1-ab8420a4c10e",
                     "path": "<Touchscreen>/primaryTouch/tap",
                     "interactions": "",
                     "processors": "",
@@ -72,6 +88,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "MouseRightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f1754ddd-69c3-4ee6-84cd-959eca6c66a5",
+                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "interactions": "MultiTap",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseRightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "01830766-700c-46cd-8764-4d42a41d20d3",
+                    "path": "<Touchscreen>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c852596b-a8a0-4403-bba6-72296afe4ec2",
+                    "path": "<Touchscreen>/press",
+                    "interactions": "MultiTap",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

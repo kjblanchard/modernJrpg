@@ -1,11 +1,9 @@
+using DG.Tweening;
 using UnityEngine;
-using UnityStandardAssets.ImageEffects;
 
 public class EnterBattleCamera : MonoBehaviour
 {
     [SerializeField] private MainCamera _mainCamera;
-    [SerializeField] private GameObject _blackBarTransitionGameObject;
-    [SerializeField] private GameObject _cameraTweenGameObject;
     [SerializeField] private Animator _blackBarAnimation;
     [SerializeField] private const string _blackBarTriggerString = "start";
 
@@ -14,10 +12,15 @@ public class EnterBattleCamera : MonoBehaviour
     /// </summary>
     public void StartBattleTransition()
     {
-        _mainCamera.BlurBackground(true);
-        _cameraTweenGameObject.SetActive(true);
-        _blackBarTransitionGameObject.SetActive(true);
+        StartAllTweens();
         _blackBarAnimation.SetTrigger(_blackBarTriggerString);
+    }
+
+    private void StartAllTweens()
+    {
+        DOTween.Play("cameraZoomIn");
+        DOTween.Play("cameraRotate");
+        DOTween.Play("tintCamera");
     }
 
 

@@ -8,7 +8,6 @@ public class BattleClock : MonoBehaviour
 
     public static void GenerateTurnList(Battler[] battlersToCombine, HorizontalLayoutGroup hlg)
     {
-        var battlerTurnlist = new Battler[20];
         var fullBattlerTurnList = new List<battlerWithTime>();
         foreach (var _battler in battlersToCombine)
         {

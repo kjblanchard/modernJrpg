@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,22 +19,24 @@ public class Player : MonoBehaviour
     {
         if (_playerInteractionComponent.CurrentlyInteracting || _playerBattleComponent.InBattle)
             return;
-        var mousePosition = CalculateMousePosition();
-        _rigidBody.DOMove(mousePosition, 1.0f);
+
+        var positionToMoveTo = CalculatePositionToMoveForAllBuilds(Application.platform);
+        _rigidBody.DOMove(positionToMoveTo, 1.0f);
         _playerBattleComponent.UpdateCurrentBattleAreaStepCounter();
     }
 
-    /// <summary>
-    /// Calculates the mouse position from the screen to world
-    /// </summary>
-    /// <returns>Returns the vector of the mouse position</returns>
-    private Vector2 CalculateMousePosition()
+    private Vector2 CalculatePositionToMoveForAllBuilds(RuntimePlatform runtimeToLookFor)
     {
-        var mousePosition = Mouse.current.position.ReadValue();
-        var screenPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        screenPosition.z = 0;
-        return new Vector2(screenPosition.x, screenPosition.y);
+        var positionOfClickOrTouch = runtimeToLookFor switch
+        {
+            RuntimePlatform.Android => Touchscreen.current.primaryTouch.position.ReadValue(),
+            RuntimePlatform.IPhonePlayer => Touchscreen.current.primaryTouch.position.ReadValue(),
+            _ => Mouse.current.position.ReadValue()
+        };
+        var screenPos = Camera.main.ScreenToWorldPoint(positionOfClickOrTouch);
+        return new Vector2(screenPos.x, screenPos.y);
     }
+
 
     /// <summary>
     /// Handles the Right mouseclick using unitys new input system.
