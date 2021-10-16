@@ -8,25 +8,31 @@ public class BattleData : MonoBehaviour
     public Battler[] EnemyBattlers { get; private set; }
     public Battler[] PlayerBattlers { get; private set; }
 
-    public Battler[]  AllBattlers => EnemyBattlers.Concat(PlayerBattlers).ToArray();
+    public Battler[] AllBattlers => EnemyBattlers.Concat(PlayerBattlers).Where(x => x != null).ToArray();
 
 
     [SerializeField] private BattlerDatabase _battlerDatabase;
     [SerializeField] private SpawnLocations _spawnLocations;
 
-    private BattlerLoader _battlerLoader;
     private PersistantData.BattleData _battleData;
 
-    private void Awake()
-    {
-        _battlerLoader = new BattlerLoader();
-    }
 
+    /// <summary>
+    /// Sets the battle data from the persistent data from the overworld.
+    /// </summary>
+    /// <param name="newData"></param>
     public void SetBattleData(PersistantData.BattleData newData)
     {
         _battleData = newData;
-        EnemyBattlers = _battlerLoader.LoadEnemyBattlers(_battleData.BattleEncounter.BattleGroups.EnemyBattlers,_spawnLocations,_battlerDatabase);
-        PlayerBattlers = _battlerLoader.LoadPlayerBattlers(_battleData.PlayerBattlers,_spawnLocations,_battlerDatabase);
+    }
+
+    /// <summary>
+    /// Sets up the battlers by using the battle data
+    /// </summary>
+    public void SetBattlers()
+    {
+        EnemyBattlers = BattlerLoader.LoadEnemyBattlers(_battleData.BattleEncounter.BattleGroups.EnemyBattlers,_spawnLocations,_battlerDatabase);
+        PlayerBattlers = BattlerLoader.LoadPlayerBattlers(_battleData.PlayerBattlers,_spawnLocations,_battlerDatabase);
     }
 
 

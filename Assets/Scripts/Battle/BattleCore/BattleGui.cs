@@ -7,12 +7,21 @@ using UnityEngine;
 public class BattleGui : MonoBehaviour
 {
     private const string _fadeInTweenId = "fadeIn";
+    [SerializeField] private PlayerHud _playerHudComponent;
     [SerializeField] private DotweenBroadcasterComponent _fadeInTweenBroadcasterComponent;
+
 
 
     private void Start()
     {
         _fadeInTweenBroadcasterComponent.DotweenCompleteEvent += OnFadeInComplete;
+
+    }
+
+    public void LoadInitialPlayerHud(Battler[] playerBattlers)
+    {
+        _playerHudComponent.LoadPlayerBattlers(playerBattlers);
+        _playerHudComponent.LoadInitialPlayerHudItems();
 
     }
 

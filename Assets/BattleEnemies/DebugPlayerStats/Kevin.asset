@@ -17,3 +17,4 @@ MonoBehaviour:
   BattlerStr: 2
   BattlerSpd: 5
   BattlerLvl: 5
+  BattlerNameEnum: 1

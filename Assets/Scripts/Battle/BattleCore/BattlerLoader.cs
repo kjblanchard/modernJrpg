@@ -1,6 +1,9 @@
-using UnityEngine;
+using System;
 
-public class BattlerLoader 
+/// <summary>
+/// This class handles loading in the players and enemies
+/// </summary>
+public class BattlerLoader
 {
     /// <summary>
     /// Loads the enemy battlers by calling into the battler database.
@@ -9,7 +12,7 @@ public class BattlerLoader
     /// <param name="theSpawnLocations">A reference to the spawn locations on the scene</param>
     /// <param name="theBattlerDatabase">The battler database that holds the dictionary of prefabs to names</param>
     /// <returns></returns>
-    public Battler[] LoadEnemyBattlers(EnemyBattleGroup.EnemyNameToLocation[] enemyBattlerNames, SpawnLocations theSpawnLocations, BattlerDatabase theBattlerDatabase)
+    public static Battler[] LoadEnemyBattlers(EnemyBattleGroup.EnemyNameToLocation[] enemyBattlerNames, SpawnLocations theSpawnLocations, BattlerDatabase theBattlerDatabase)
     {
         var count = enemyBattlerNames.Length;
         var battlerArray = new Battler[count];
@@ -20,7 +23,7 @@ public class BattlerLoader
             var enemySpawnLocation = theSpawnLocations.EnemySpawnLocation[enemyBattlerInfo.LocationToSpawnInBattle];
             var enemyBattler = theBattlerDatabase.InstantiateBattler(enemyBattlerInfo.EnemyBattler, enemySpawnLocation);
             battlerArray[i] = enemyBattler;
-            enemyBattler.GetNext20Turns();
+            //enemyBattler.GetNext20Turns();
         }
         return battlerArray;
     }
@@ -31,20 +34,20 @@ public class BattlerLoader
     /// <param name="theSpawnLocations">A reference to the spawn locations on the scene</param>
     /// <param name="theBattlerDatabase">The battler database that holds the dictionary of prefabs to names</param>
     /// <returns></returns>
-    public Battler[] LoadPlayerBattlers(PlayerParty.PlayerStatsAndName[] playerStatsAndNames, SpawnLocations theSpawnLocations, BattlerDatabase theBattlerDatabase)
+    public static Battler[] LoadPlayerBattlers(BattlerStats[] playerBattlers, SpawnLocations theSpawnLocations, BattlerDatabase theBattlerDatabase)
     {
         var playerBattlerArray = new Battler[3];
 
-        for (var i = 0; i < playerStatsAndNames.Length; i++)
+        for (var i = 0; i < playerBattlers.Length; i++)
         {
-            var playerBattleInfo = playerStatsAndNames[i];
+            var currentPlayerBattlerStats = playerBattlers[i];
+            if(!currentPlayerBattlerStats)
+                continue;
             var playerSpawnLocation = theSpawnLocations.PlayerSpawnLocations[i];
-            if (playerBattleInfo.Character == BattlerNames.Default)
-                break;
-            var battler = theBattlerDatabase.InstantiateBattler(playerBattleInfo.Character,
-                playerSpawnLocation, playerBattleInfo.BattlerStats);
+            var battler = theBattlerDatabase.InstantiateBattler(currentPlayerBattlerStats.BattlerNameEnum,
+                playerSpawnLocation, currentPlayerBattlerStats);
             playerBattlerArray[i] = battler;
-            battler.GetNext20Turns();
+            //battler.GetNext20Turns();
         }
 
         return playerBattlerArray;

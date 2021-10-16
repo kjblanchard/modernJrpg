@@ -11,22 +11,44 @@ public class Battler : MonoBehaviour
     /// </summary>
     public GameObject BattlerGameObject => gameObject;
 
+    /// <summary>
+    /// The battlers stats
+    /// </summary>
     [SerializeField] public BattlerStats BattlerStats;
+    /// <summary>
+    /// The sprite attached to this battler
+    /// </summary>
     [SerializeField] public SpriteRenderer BattlerSprite;
 
-    private BattlerInternalClock _battlerInternalClock;
+    /// <summary>
+    /// Gets the Confirmed turns from the battlers clock
+    /// </summary>
+    public float[] CurrentTurns => _battlerClock.Next20Turns;
+    /// <summary>
+    /// Gets the last generated turns from the battlers clock
+    /// </summary>
+    public float[] PotentialTurns => _battlerClock.PotentialNext20Turns;
+
+    private BattlerClock _battlerClock;
 
     private void Awake()
     {
-        _battlerInternalClock = new BattlerInternalClock();
-
+        _battlerClock = new BattlerClock();
     }
 
-    public float[] GetNext20Turns()
+    public void ConfirmTurn()
+    {
+        _battlerClock.ConfirmTurn();
+    }
+
+
+    public float[] CalculatePotentialNext20Turns(float skillModifier = 1.0f, bool firstTurn = false)
     {
 
-        return  _battlerInternalClock.CalculateTurns(BattlerStats, 1, true);
+        return _battlerClock.CalculatePotentialTurns(BattlerStats, skillModifier, firstTurn);
     }
+
+
 
 
 

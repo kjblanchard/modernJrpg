@@ -27,7 +27,7 @@ public class PersistantData : MonoBehaviour
     {
         _battleData.BattleEncounter = battleEncounter;
     }
-    public void UpdateBattleData(PlayerParty.PlayerStatsAndName[] battlers)
+    public void UpdateBattleData(BattlerStats[] battlers)
     {
         _battleData.PlayerBattlers = battlers;
     }
@@ -50,12 +50,12 @@ public class PersistantData : MonoBehaviour
     [System.Serializable]
     public class BattleData
     {
-        public BattleData(BattleEncounterZone.BattleEncounter nextBattleGroup, PlayerParty.PlayerStatsAndName[] playerParty)
+        public BattleData(BattleEncounterZone.BattleEncounter nextBattleGroup, BattlerStats[] playerParty)
         {
             BattleEncounter = nextBattleGroup;
             PlayerBattlers = playerParty;
         }
         public BattleEncounterZone.BattleEncounter BattleEncounter;
-        public PlayerParty.PlayerStatsAndName[] PlayerBattlers;
+        public BattlerStats[] PlayerBattlers;
     }
 }

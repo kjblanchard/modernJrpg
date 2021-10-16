@@ -9,7 +9,6 @@ public class Battle : MonoBehaviour
 
     [SerializeField] private BattleGui _battleGui;
     [SerializeField] private BattleCamera _battleCamera;
-    [SerializeField] private BattleClock _battleClock;
     [SerializeField] private BattleData _battleData;
     [SerializeField] private BattleStateMachine _battleStateMachine;
 
