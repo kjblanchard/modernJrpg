@@ -11,6 +11,9 @@ public class Battler : MonoBehaviour
     /// </summary>
     public GameObject BattlerGameObject => gameObject;
 
+    public string GetNameToDisplayInBattle => string.IsNullOrEmpty(BattlerDisplayName) ? BattlerStats.BattlerName : BattlerDisplayName;
+
+
     /// <summary>
     /// The battlers stats
     /// </summary>
@@ -29,12 +32,21 @@ public class Battler : MonoBehaviour
     /// </summary>
     public float[] PotentialTurns => _battlerClock.PotentialNext20Turns;
 
+    /// <summary>
+    /// Used for enemies if there is more than one
+    /// </summary>
+    public string BattlerDisplayName = null;
+    public Guid BattlerGuid;
+
     private BattlerClock _battlerClock;
 
     private void Awake()
     {
         _battlerClock = new BattlerClock();
+        BattlerGuid = Guid.NewGuid();
     }
+
+
 
     public void ConfirmTurn()
     {

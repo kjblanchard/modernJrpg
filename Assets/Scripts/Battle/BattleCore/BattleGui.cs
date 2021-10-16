@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -8,7 +9,9 @@ public class BattleGui : MonoBehaviour
 {
     private const string _fadeInTweenId = "fadeIn";
     [SerializeField] private PlayerHud _playerHudComponent;
+    [SerializeField] private PlayerHud _enemyHudComponent;
     [SerializeField] private DotweenBroadcasterComponent _fadeInTweenBroadcasterComponent;
+    [SerializeField] private TurnOrderGui _mainTurnOrderGui;
 
 
 
@@ -22,6 +25,21 @@ public class BattleGui : MonoBehaviour
     {
         _playerHudComponent.LoadPlayerBattlers(playerBattlers);
         _playerHudComponent.LoadInitialPlayerHudItems();
+
+    }
+    public void LoadInitialEnemyHud(Battler[] enemyBattlers)
+    {
+        _enemyHudComponent.LoadPlayerBattlers(enemyBattlers);
+        _enemyHudComponent.LoadInitialPlayerHudItems();
+
+    }
+
+    public void LoadInitialTurnOrder(Battler[] next20TurnBattlers)
+    {
+        var battlerNames = next20TurnBattlers.ToList().Select(battler => battler.GetNameToDisplayInBattle).ToArray();
+        
+
+        _mainTurnOrderGui.InitializeTurnOrderTexts(battlerNames);
 
     }
 

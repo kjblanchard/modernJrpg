@@ -31,7 +31,7 @@ public class PlayerHud : MonoBehaviour
                 continue;
             }
             _playerHudItem.HpText.text = _playerHudItem.BattlerAssigned.BattlerStats.BattlerHp.ToString();
-            _playerHudItem.NameText.text = _playerHudItem.BattlerAssigned.BattlerStats.BattlerName.ToString();
+            _playerHudItem.NameText.text = _playerHudItem.BattlerAssigned.GetNameToDisplayInBattle;
             _playerHudItem.MpText.text = "N/a";
         }
 
