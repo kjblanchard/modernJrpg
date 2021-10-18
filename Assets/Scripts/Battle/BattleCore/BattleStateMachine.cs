@@ -24,6 +24,8 @@ public class BattleStateMachine : MonoBehaviour
     public enum BattleStates
     {
         Default,
-        LoadingState
+        LoadingState,
+        BetweenTurnState
+
     }
 }

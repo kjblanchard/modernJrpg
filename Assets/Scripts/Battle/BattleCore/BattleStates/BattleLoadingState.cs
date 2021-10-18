@@ -1,87 +1,145 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
-using UnityEngine;
-using UnityEngine.UI;
 
 public class BattleLoadingState : BattleState
 {
-    [SerializeField] private HorizontalLayoutGroup hlg;
     public override void StartState(params bool[] startupBools)
     {
+        SubscribeToGuiFadeInEvent();
+        PopulateBattleDataFromPersistentData();
+        var allBattlers = InstantiateBattlers();
+        InitializeBattlerStats(allBattlers);
+        InitializeTurnOrderGui(allBattlers);
+        InitializeHuds(_battleComponent.BattleData.PlayerBattlers,_battleComponent.BattleData.EnemyBattlers);
+        StartBattleFadeIn();
+    }
+
+    /// <summary>
+    /// Subscribes to the gui event for fading in, so that we can fire a function when it is complete.
+    /// </summary>
+    private void SubscribeToGuiFadeInEvent()
+    {
+        _battleComponent.BattleGui.BattleFadeInEvent += OnGuiFadeInComplete;
+    }
+
+    /// <summary>
+    /// Grab the data from the persistent data so that we can use it throughout the battle.
+    /// </summary>
+    private static void PopulateBattleDataFromPersistentData()
+    {
         _battleComponent.BattleData.SetBattleData(PersistantData.instance.GetBattleData());
-        _battleComponent.BattleData.SetBattlers();
+    }
+
+    /// <summary>
+    /// Instantiate the battlers in from the battle data
+    /// </summary>
+    /// <returns>An array of all the battlers that have been loaded in</returns>
+    private static Battler[] InstantiateBattlers()
+    {
+        _battleComponent.BattleData.ConfigureAllBattlers();
         var allBattlers = _battleComponent.BattleData.AllBattlers;
-        CheckForDuplicateEnemies();
-        _battleComponent.BattleGui.LoadInitialPlayerHud(_battleComponent.BattleData.PlayerBattlers);
-        _battleComponent.BattleGui.LoadInitialEnemyHud(_battleComponent.BattleData.EnemyBattlers);
-        CalculateInitialTurnsForBattlers(allBattlers);
-        var next20Turns = BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers, true);
-        _battleComponent.BattleGui.LoadInitialTurnOrder(next20Turns);
-        _battleComponent.BattleGui.StartFadeIn();
-        //Move into between turn state at end of fade in
-
+        return allBattlers;
+    }
+    /// <summary>
+    /// Generates the initial stats for all the batters based on their stats.
+    /// </summary>
+    /// <param name="battlers"></param>
+    private static void InitializeBattlerStats(Battler[] battlers)
+    {
+        foreach (var _battler in battlers)
+        {
+            _battler.CreateInitialStats();
+            
+        }
+        CorrectDuplicateEnemyNames(battlers.ToList());
+        CalculateInitialTurnsForBattlers(battlers);
     }
 
-    public override void StateUpdate()
+    /// <summary>
+    /// Checks all the enemies and adds a prefix to their name if they are duplicates
+    /// </summary>
+    private static void CorrectDuplicateEnemyNames(List<Battler> battlerList)
     {
-        throw new System.NotImplementedException();
-    }
+        var groupsOfDuplicateEnemies = from battler in battlerList
+                    group battler by battler.BattleStats.BattlerNameEnum
+            into battlerTypes
+                    where battlerTypes.Count() > 1
+                    select battlerTypes;
 
-    public override void EndState()
-    {
-        throw new System.NotImplementedException();
-    }
+        foreach (var group in groupsOfDuplicateEnemies)
+        {
+            var letterToAppend = 'A';
+            foreach (var _battler in group)
+            {
+                _battler.BattleStats.AddBattlerNamePostFix(letterToAppend.ToString());
+                letterToAppend++;
+            }
+        }
 
-    public override void ResetState()
-    {
-        throw new System.NotImplementedException();
     }
 
     /// <summary>
     /// Calculates the initial 20 turns for battle and then confirms them
     /// </summary>
     /// <param name="battlers"></param>
-    private void CalculateInitialTurnsForBattlers(Battler[] battlers)
+    private static void CalculateInitialTurnsForBattlers(Battler[] battlers)
     {
         foreach (var _battler in battlers)
         {
-            _battler.CalculatePotentialNext20Turns(1.0f, true);
-            _battler.ConfirmTurn();
+            _battler.BattlerTimeManager.CalculatePotentialNext20Turns(1.0f, true);
+            _battler.BattlerTimeManager.ConfirmTurn();
 
         }
-
     }
 
-    private void CheckForDuplicateEnemies()
+    /// <summary>
+    /// Initializes the turn order gui from the turn order
+    /// </summary>
+    /// <param name="battlers"></param>
+    private static void InitializeTurnOrderGui(Battler[] battlers)
     {
-        var enemyBattlers = _battleComponent.BattleData.EnemyBattlers.ToList();
-        CheckForDuplicatesQuery(enemyBattlers);
-        foreach (var _enemyBattler in enemyBattlers)
-        {
-            Debug.Log($"The enemies renamed name is {_enemyBattler.GetNameToDisplayInBattle}");
-        }
-
+        var next20Turns = BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers, true);
+        _battleComponent.BattleGui.LoadInitialTurnOrder(next20Turns);
     }
 
-    private void CheckForDuplicatesQuery(List<Battler> battlerList)
+    /// <summary>
+    /// Initializes both of the Huds from the battlers.
+    /// </summary>
+    private static void InitializeHuds(Battler[] playerBattlers, Battler[] enemyBattlers)
     {
-        var query = from battler in battlerList
-                    group battler by battler.BattlerStats.BattlerNameEnum
-            into battlerTypes
-                    where battlerTypes.Count() > 1
-                    select battlerTypes;
+        _battleComponent.BattleGui.LoadInitialPlayerHud(playerBattlers);
+        _battleComponent.BattleGui.LoadInitialEnemyHud(enemyBattlers);
+    }
+
+    /// <summary>
+    /// Calls into the battle gui and starts the fade in.
+    /// </summary>
+    private static void StartBattleFadeIn()
+    {
+        _battleComponent.BattleGui.StartFadeIn();
+    }
 
 
-        foreach (var group in query)
-        {
-            var letterToAppend = 'A';
-            foreach (var _battler in group)
-            {
-                _battler.BattlerDisplayName = $"{_battler.BattlerStats.BattlerName} {letterToAppend}";
-                letterToAppend++;
-            }
-        }
+    /// <summary>
+    /// This is used to handle when the fade in is complete to keep the logic here instead of in the battle gui
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="e"></param>
+    private void OnGuiFadeInComplete(object obj, EventArgs e)
+    {
+        _battleComponent.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState);
 
+    }
+    public override void StateUpdate()
+    {
+    }
+
+    public override void EndState()
+    {
+    }
+
+    public override void ResetState()
+    {
     }
 }

@@ -3,6 +3,9 @@ using FMODUnity;
 using UnityEngine;
 using STOP_MODE = FMOD.Studio.STOP_MODE;
 
+/// <summary>
+/// This is the battle component that should be attached to the player in the overworld.  This is used to handle the transition to, and calculate when he should move into a battle.
+/// </summary>
 [RequireComponent(typeof(BoxCollider2D))]
 public class PlayerBattleComponent : MonoBehaviour
 {

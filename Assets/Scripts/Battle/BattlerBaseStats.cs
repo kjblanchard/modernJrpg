@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Battle/BattlerStats", order = 1)]
-public class BattlerStats : ScriptableObject
+public class BattlerBaseStats : ScriptableObject
 {
     public string BattlerName;
     public int BattlerHp;

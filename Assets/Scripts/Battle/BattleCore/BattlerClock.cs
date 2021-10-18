@@ -35,7 +35,7 @@ public class BattlerClock
     public static Battler[] GenerateTurnList(Battler[] battlersToCombine, bool debugOutput = false)
     {
         var query = from battler in battlersToCombine
-                    from next20Turn in battler.CurrentTurns
+                    from next20Turn in battler.BattlerTimeManager.CurrentTurns
                     orderby next20Turn
                     select battler;
         if (debugOutput)
@@ -43,7 +43,7 @@ public class BattlerClock
             for (int i = 0; i < 20; i++)
             {
                 var tempList = query.Take(20).ToArray();
-                Debug.Log($"The battler is {tempList[i].BattlerStats.BattlerName} and the turn is {i}");
+                Debug.Log($"The battler is {tempList[i].BattleStats.BattlerDisplayName} and the turn is {i}");
 
             }
         }
@@ -62,14 +62,14 @@ public class BattlerClock
     /// <summary>
     /// Calculates the potential next 20 turns based on it's input.  This needs to be confirmed before it is applied
     /// </summary>
-    /// <param name="battlerStats">The stats that it is going to look at</param>
+    /// <param name="battleStats">The stats that it is going to look at</param>
     /// <param name="skillSpeedModifier">The skill speed that will modify the value</param>
     /// <param name="initialTurn">If it is the initial turn of the battle</param>
     /// <returns>The potential values</returns>
-    public float[] CalculatePotentialTurns(BattlerStats battlerStats, float skillSpeedModifier = 1.0f, bool initialTurn = false)
+    public float[] CalculatePotentialTurns(BattleStats battleStats, float skillSpeedModifier = 1.0f, bool initialTurn = false)
     {
-        var currentSpeed = initialTurn ? Random.Range(0, battlerStats.BattlerLvl + battlerStats.BattlerSpd) * _initialTurnVariance : 0.0f;
-        var eachTurnClock = CalculateClock(battlerStats.BattlerLvl, battlerStats.BattlerSpd, skillSpeedModifier);
+        var currentSpeed = initialTurn ? Random.Range(0, battleStats.BattlerLvl + battleStats.BattlerSpd) * _initialTurnVariance : 0.0f;
+        var eachTurnClock = CalculateClock(battleStats.BattlerLvl, battleStats.BattlerSpd, skillSpeedModifier);
         PotentialNext20Turns[0] = eachTurnClock + currentSpeed;
         for (var i = 1; i < _turnsToCalculate; i++)
         {
@@ -79,7 +79,6 @@ public class BattlerClock
         return PotentialNext20Turns;
     }
 
-
     /// <summary>
     /// This is the calculation That is ran to generate the amount of wait time for each players turn.
     /// </summary>
@@ -88,6 +87,4 @@ public class BattlerClock
         return (_maxClockValue) / (float)(battlerLevel +
                                      battlerSpeed) * skillSpeedModifier;
     }
-
-
 }

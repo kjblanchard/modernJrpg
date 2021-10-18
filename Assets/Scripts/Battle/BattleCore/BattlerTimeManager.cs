@@ -1,0 +1,40 @@
+
+/// <summary>
+/// A class that holds and returns information about the battlers time, and instanties the battle clock
+/// </summary>
+public class BattlerTimeManager
+{
+    /// <summary>
+    /// Gets the Confirmed turns from the battlers clock
+    /// </summary>
+    public float[] CurrentTurns => _battlerClock.Next20Turns;
+    /// <summary>
+    /// Gets the last generated turns from the battlers clock
+    /// </summary>
+    public float[] PotentialTurns => _battlerClock.PotentialNext20Turns;
+
+    /// <summary>
+    /// Instantiates a battler time manager
+    /// </summary>
+    /// <param name="battleStats">The battle stats that this should reference for timekeeping decisions</param>
+    public BattlerTimeManager(BattleStats battleStats)
+    {
+        _battleStats = battleStats;
+        _battlerClock = new BattlerClock();
+    }
+
+    private readonly BattleStats _battleStats;
+    private readonly BattlerClock _battlerClock;
+
+    public void ConfirmTurn()
+    {
+        _battlerClock.ConfirmTurn();
+    }
+    public float[] CalculatePotentialNext20Turns(float skillModifier = 1.0f, bool firstTurn = false)
+    {
+
+        return _battlerClock.CalculatePotentialTurns(_battleStats, skillModifier, firstTurn);
+    }
+
+}
+

@@ -127,5 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0da513ef76951834898e4222d2145b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BattlerStats: {fileID: 0}
+  _battlerBaseStats: {fileID: 11400000, guid: 89638aec8037ad44d9685b7977709a55, type: 2}
   BattlerSprite: {fileID: 7772781141415255046}
+  BattlerDisplayName: 

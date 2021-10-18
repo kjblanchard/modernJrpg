@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerParty : MonoBehaviour
 {
-    public BattlerStats[] CurrentParty => _playerPartyBattlers;
-    [SerializeField] private BattlerStats[] _playerPartyBattlers;
+    public BattlerBaseStats[] CurrentParty => _playerPartyBattlers;
+    [SerializeField] private BattlerBaseStats[] _playerPartyBattlers;
 
 }

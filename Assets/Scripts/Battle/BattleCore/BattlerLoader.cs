@@ -34,7 +34,7 @@ public class BattlerLoader
     /// <param name="theSpawnLocations">A reference to the spawn locations on the scene</param>
     /// <param name="theBattlerDatabase">The battler database that holds the dictionary of prefabs to names</param>
     /// <returns></returns>
-    public static Battler[] LoadPlayerBattlers(BattlerStats[] playerBattlers, SpawnLocations theSpawnLocations, BattlerDatabase theBattlerDatabase)
+    public static Battler[] LoadPlayerBattlers(BattlerBaseStats[] playerBattlers, SpawnLocations theSpawnLocations, BattlerDatabase theBattlerDatabase)
     {
         var playerBattlerArray = new Battler[3];
 

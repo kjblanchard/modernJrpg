@@ -27,12 +27,13 @@ public class BattleData : MonoBehaviour
     }
 
     /// <summary>
-    /// Sets up the battlers by using the battle data
+    /// Instantiates the player battlers and the enemy battlers based on battle data
     /// </summary>
-    public void SetBattlers()
+    public void ConfigureAllBattlers()
     {
         EnemyBattlers = BattlerLoader.LoadEnemyBattlers(_battleData.BattleEncounter.BattleGroups.EnemyBattlers,_spawnLocations,_battlerDatabase);
         PlayerBattlers = BattlerLoader.LoadPlayerBattlers(_battleData.PlayerBattlers,_spawnLocations,_battlerDatabase);
+
     }
 
 

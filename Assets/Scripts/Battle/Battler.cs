@@ -1,65 +1,49 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Battler : MonoBehaviour
 
 {
-    /// <summary>
-    /// Gets the gameobject that is attached to this battler.
-    /// </summary>
-    public GameObject BattlerGameObject => gameObject;
-
-    public string GetNameToDisplayInBattle => string.IsNullOrEmpty(BattlerDisplayName) ? BattlerStats.BattlerName : BattlerDisplayName;
-
 
     /// <summary>
-    /// The battlers stats
+    /// The battlers battle stats that is used for displaying information and calculating things in battle
     /// </summary>
-    [SerializeField] public BattlerStats BattlerStats;
-    /// <summary>
-    /// The sprite attached to this battler
-    /// </summary>
-    [SerializeField] public SpriteRenderer BattlerSprite;
+    [SerializeField] public BattleStats BattleStats { get; private set; }
 
     /// <summary>
-    /// Gets the Confirmed turns from the battlers clock
+    /// The battlers Time manager, which controls the turns and stuff
     /// </summary>
-    public float[] CurrentTurns => _battlerClock.Next20Turns;
-    /// <summary>
-    /// Gets the last generated turns from the battlers clock
-    /// </summary>
-    public float[] PotentialTurns => _battlerClock.PotentialNext20Turns;
+    public BattlerTimeManager BattlerTimeManager { get; private set; }
 
     /// <summary>
-    /// Used for enemies if there is more than one
+    /// The battlers GUID, this is generated to decipher between the battlers in game for any reason.  It changes every battle.
     /// </summary>
-    public string BattlerDisplayName = null;
     public Guid BattlerGuid;
 
-    private BattlerClock _battlerClock;
+    /// <summary>
+    /// The battlers stats that should not be changed, this is assigned here for ENEMIES, so that we can assign their stats.  Probably move these to json eventually
+    /// </summary>
+    [SerializeField] private BattlerBaseStats _battlerBaseStats;
 
-    private void Awake()
+    /// <summary>
+    /// Initializes the battle stats and timekeeper for the battler
+    /// </summary>
+    public void CreateInitialStats()
     {
-        _battlerClock = new BattlerClock();
+        BattleStats = new BattleStats(_battlerBaseStats);
         BattlerGuid = Guid.NewGuid();
+        BattlerTimeManager = new BattlerTimeManager(BattleStats);
     }
 
-
-
-    public void ConfirmTurn()
+    /// <summary>
+    /// This is used to assign the players base battle stats and should only be used at the beginning of the battle when it is created.
+    /// </summary>
+    /// <param name="playerBattleStats"></param>
+    public void AssignPlayerBaseBattleStats(BattlerBaseStats playerBattleStats)
     {
-        _battlerClock.ConfirmTurn();
+        //TODO this will need to actually generate the players stats and add it to it.
+        _battlerBaseStats = playerBattleStats;
     }
-
-
-    public float[] CalculatePotentialNext20Turns(float skillModifier = 1.0f, bool firstTurn = false)
-    {
-
-        return _battlerClock.CalculatePotentialTurns(BattlerStats, skillModifier, firstTurn);
-    }
-
 
 
 

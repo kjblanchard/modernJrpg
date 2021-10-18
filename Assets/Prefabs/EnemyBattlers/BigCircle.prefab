@@ -44,8 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0da513ef76951834898e4222d2145b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BattlerStats: {fileID: 11400000, guid: aaeedc9a02765804f85e9de07a672e8e, type: 2}
+  _battlerBaseStats: {fileID: 11400000, guid: aaeedc9a02765804f85e9de07a672e8e, type: 2}
   BattlerSprite: {fileID: 1889874177984259928}
+  BattlerDisplayName: 
 --- !u!1 &7592977697704846799
 GameObject:
   m_ObjectHideFlags: 0

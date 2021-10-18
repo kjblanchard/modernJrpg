@@ -15,9 +15,9 @@ public class BattlerDatabase : MonoBehaviour
     /// </summary>
     /// <param name="battlerName">The enum of battlers to spawn</param>
     /// <param name="locationToSpawnAt">The transform to load the character at on the field</param>
-    /// <param name="battlerStats">The stats that should be attached to this battler, used for player characters. For enemies this is left blank. </param>
+    /// <param name="battlerBaseStats">The stats that should be attached to this battler, used for player characters. For enemies this is left blank. </param>
     /// <returns></returns>
-    public Battler InstantiateBattler(BattlerNames battlerName, Transform locationToSpawnAt, BattlerStats battlerStats = null)
+    public Battler InstantiateBattler(BattlerNames battlerName, Transform locationToSpawnAt, BattlerBaseStats battlerBaseStats = null)
     {
         var charLookupSuccessful = _enemyBattlerLookupDictionary.TryGetValue(battlerName, out var potentialBattler);
         if (!charLookupSuccessful)
@@ -27,12 +27,11 @@ public class BattlerDatabase : MonoBehaviour
             return null;
         }
         var instantiatedBattler = Instantiate(potentialBattler, locationToSpawnAt).GetComponent<Battler>();
-        if (battlerStats)
-            instantiatedBattler.BattlerStats = battlerStats;
+        if (battlerBaseStats)
+            instantiatedBattler.AssignPlayerBaseBattleStats(battlerBaseStats);
 
         return instantiatedBattler;
     }
-
 
 }
 /// <summary>
