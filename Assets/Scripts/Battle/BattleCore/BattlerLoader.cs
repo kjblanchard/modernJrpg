@@ -47,7 +47,6 @@ public class BattlerLoader
             var battler = theBattlerDatabase.InstantiateBattler(currentPlayerBattlerStats.BattlerNameEnum,
                 playerSpawnLocation, currentPlayerBattlerStats);
             playerBattlerArray[i] = battler;
-            //battler.GetNext20Turns();
         }
 
         return playerBattlerArray;

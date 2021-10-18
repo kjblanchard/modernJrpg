@@ -12,6 +12,7 @@ public class BattleLoadingState : BattleState
         InitializeBattlerStats(allBattlers);
         InitializeTurnOrderGui(allBattlers);
         InitializeHuds(_battleComponent.BattleData.PlayerBattlers,_battleComponent.BattleData.EnemyBattlers);
+        InitializePlayerWindows(_battleComponent.BattleData.PlayerBattlers);
         StartBattleFadeIn();
     }
 
@@ -99,7 +100,8 @@ public class BattleLoadingState : BattleState
     /// <param name="battlers"></param>
     private static void InitializeTurnOrderGui(Battler[] battlers)
     {
-        var next20Turns = BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers, true);
+        var next20Turns = BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers);
+        BattlerClock.ConfirmNext20Battlers();
         _battleComponent.BattleGui.LoadInitialTurnOrder(next20Turns);
     }
 
@@ -110,6 +112,11 @@ public class BattleLoadingState : BattleState
     {
         _battleComponent.BattleGui.LoadInitialPlayerHud(playerBattlers);
         _battleComponent.BattleGui.LoadInitialEnemyHud(enemyBattlers);
+    }
+
+    private static void InitializePlayerWindows(Battler[] playerBattlers)
+    {
+        _battleComponent.BattleGui.LoadInitialPlayerBattleWindows(playerBattlers);
     }
 
     /// <summary>

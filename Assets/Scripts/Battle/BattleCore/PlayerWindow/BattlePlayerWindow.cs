@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BattlePlayerWindow : MonoBehaviour
 {
+
+    public Battler BattlerOwner { get; private set; }
+
     private const string _player1WindowOpenScale = "player1WindowOpenScaleTween";
     private const string _player1WindowOpenMove = "player1WindowOpenMoveTween";
     private const string _player1WindowOpenRotate = "player1WindowOpenRotateTween";
@@ -30,6 +33,18 @@ public class BattlePlayerWindow : MonoBehaviour
         DOTween.PlayBackwards(_player1WindowOpenScale);
         DOTween.PlayBackwards(_player1WindowOpenMove);
 
+    }
+
+    public void AssignBattlerToWindow(Battler battlerToOwnThisWindow)
+    {
+        BattlerOwner = battlerToOwnThisWindow;
+    }
+
+    public bool CheckIfOwner(Guid guid)
+    {
+        if (BattlerOwner is null)
+            return false;
+        return BattlerOwner.BattlerGuid == guid;
     }
 
 

@@ -26,8 +26,10 @@ public class BattleStats
     public int BattlerSpd => _theBattlersBaseBaseStats.BattlerSpd;
     public int BattlerLvl => _theBattlersBaseBaseStats.BattlerLvl;
     public BattlerNames BattlerNameEnum => _theBattlersBaseBaseStats.BattlerNameEnum;
+    public bool IsPlayer => _theBattlersBaseBaseStats.IsPlayer;
 
     private string _battlerNamePostFix;
+
 
     /// <summary>
     /// This is used to rename enemies due to multiples for their display names;

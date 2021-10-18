@@ -8,5 +8,6 @@ public class BattlerBaseStats : ScriptableObject
     public int BattlerStr;
     public int BattlerSpd;
     public int BattlerLvl;
+    public bool IsPlayer = false;
     public BattlerNames BattlerNameEnum;
 }

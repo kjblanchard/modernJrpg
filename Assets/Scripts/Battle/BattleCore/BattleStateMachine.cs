@@ -25,7 +25,10 @@ public class BattleStateMachine : MonoBehaviour
     {
         Default,
         LoadingState,
-        BetweenTurnState
+        BetweenTurnState,
+        PlayerTurnState,
+        EnemyTurnState,
+
 
     }
 }

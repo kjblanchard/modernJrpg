@@ -32,8 +32,17 @@ public class BattlerTimeManager
     }
     public float[] CalculatePotentialNext20Turns(float skillModifier = 1.0f, bool firstTurn = false)
     {
-
         return _battlerClock.CalculatePotentialTurns(_battleStats, skillModifier, firstTurn);
+    }
+
+    public void SubtractBattleTime(float timeThatHasPassed)
+    {
+
+        for (var i = 0; i < _battlerClock.Next20Turns.Length; i++)
+        {
+            _battlerClock.Next20Turns[i] -= timeThatHasPassed;
+        }
+
     }
 
 }

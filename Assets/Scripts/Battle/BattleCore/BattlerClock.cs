@@ -13,6 +13,9 @@ public class BattlerClock
     /// </summary>
     public float[] PotentialNext20Turns { get; } = new float[_turnsToCalculate];
 
+    public static Battler[] Next20Battlers { get; private set; } = new Battler[20];
+    public static Battler[] PotentialNext20Battlers { get; private set; } = new Battler[20];
+
     /// <summary>
     /// The max clock value, this is used for the speed calculation and is a variable that determines the speed stat per turn
     /// </summary>
@@ -32,23 +35,22 @@ public class BattlerClock
     /// <param name="battlersToCombine">The battlers that it's going to combine with their confirmed 20 turns</param>
     /// <param name="debugOutput">If you should see the output in the debug log</param>
     /// <returns></returns>
-    public static Battler[] GenerateTurnList(Battler[] battlersToCombine, bool debugOutput = false)
+    public static Battler[] GenerateTurnList(Battler[] battlersToCombine)
     {
         var query = from battler in battlersToCombine
                     from next20Turn in battler.BattlerTimeManager.CurrentTurns
                     orderby next20Turn
                     select battler;
-        if (debugOutput)
-        {
-            for (int i = 0; i < 20; i++)
-            {
-                var tempList = query.Take(20).ToArray();
-                Debug.Log($"The battler is {tempList[i].BattleStats.BattlerDisplayName} and the turn is {i}");
 
-            }
-        }
+        PotentialNext20Battlers = query.Take(20).ToArray();
 
-        return query.Take(20).ToArray();
+        return PotentialNext20Battlers;
+    }
+
+    public static void ConfirmNext20Battlers()
+    {
+        PotentialNext20Battlers.CopyTo(Next20Battlers,0);
+        
     }
 
     /// <summary>

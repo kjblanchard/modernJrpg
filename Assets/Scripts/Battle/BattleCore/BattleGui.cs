@@ -12,6 +12,8 @@ public class BattleGui : MonoBehaviour
     [SerializeField] private PlayerHud _enemyHudComponent;
     [SerializeField] private DotweenBroadcasterComponent _fadeInTweenBroadcasterComponent;
     [SerializeField] private TurnOrderGui _mainTurnOrderGui;
+
+    [SerializeField] private BattlePlayerWindow[] _playerWindows;
     [SerializeField] private BattlePlayerWindow _player1BattlePlayerWindow;
 
     public delegate void BattleGuiEventHandler(object sender, EventArgs e);
@@ -54,6 +56,28 @@ public class BattleGui : MonoBehaviour
         var battlerNames = next20TurnBattlers.ToList().Select(battler => battler.BattleStats.BattlerDisplayName).ToArray();
         _mainTurnOrderGui.InitializeTurnOrderTexts(battlerNames);
 
+    }
+
+    public void LoadInitialPlayerBattleWindows(Battler[] playerBattlers)
+    {
+        for (var i = 0; i < playerBattlers.Length; i++)
+        {
+            if(playerBattlers[i] != null)
+                _playerWindows[i].AssignBattlerToWindow(playerBattlers[i]);
+        }
+    }
+
+    public int GetCurrentPlayersWindow(Guid currentPlayersGuid)
+    {
+        for (var i = 0; i < _playerWindows.Length; i++)
+        {
+            if (_playerWindows[i].CheckIfOwner(currentPlayersGuid))
+                return i;
+        }
+
+        return 0;
+        //TODO handle this better
+        throw new Exception("Failed the lookup");
     }
 
 
