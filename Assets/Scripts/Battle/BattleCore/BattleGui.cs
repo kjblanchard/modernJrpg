@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class BattleGui : MonoBehaviour
 {
-    public BattlePlayerWindow Player1Window => _player1BattlePlayerWindow;
+    public BattlePlayerWindow Player1Window => _playerWindows[0];
+    public BattlePlayerWindow Player2Window => _playerWindows[1];
+    public BattlePlayerWindow Player3Window => _playerWindows[2];
+
+    public BattleNotificationsGui BattleNotifications => _battleNotificationsGui;
 
     private const string _fadeInTweenId = "fadeIn";
     [SerializeField] private PlayerHud _playerHudComponent;
@@ -14,7 +18,7 @@ public class BattleGui : MonoBehaviour
     [SerializeField] private TurnOrderGui _mainTurnOrderGui;
 
     [SerializeField] private BattlePlayerWindow[] _playerWindows;
-    [SerializeField] private BattlePlayerWindow _player1BattlePlayerWindow;
+    [SerializeField] private BattleNotificationsGui _battleNotificationsGui;
 
     public delegate void BattleGuiEventHandler(object sender, EventArgs e);
     public event BattleGuiEventHandler BattleFadeInEvent;
@@ -58,27 +62,6 @@ public class BattleGui : MonoBehaviour
 
     }
 
-    public void LoadInitialPlayerBattleWindows(Battler[] playerBattlers)
-    {
-        for (var i = 0; i < playerBattlers.Length; i++)
-        {
-            if(playerBattlers[i] != null)
-                _playerWindows[i].AssignBattlerToWindow(playerBattlers[i]);
-        }
-    }
-
-    public int GetCurrentPlayersWindow(Guid currentPlayersGuid)
-    {
-        for (var i = 0; i < _playerWindows.Length; i++)
-        {
-            if (_playerWindows[i].CheckIfOwner(currentPlayersGuid))
-                return i;
-        }
-
-        return 0;
-        //TODO handle this better
-        throw new Exception("Failed the lookup");
-    }
 
 
     /// <summary>

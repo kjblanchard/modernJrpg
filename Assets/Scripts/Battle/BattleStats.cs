@@ -1,13 +1,17 @@
+using System;
 using UnityEngine;
 
 /// <summary>
 /// This is the battle stats in battle, and this should be modified with stat changes, etc
 /// </summary>
+[System.Serializable]
 public class BattleStats
 {
     public BattleStats(BattlerBaseStats battlersStats)
     {
         _theBattlersBaseBaseStats = battlersStats;
+        BattlerGuid = Guid.NewGuid();
+        BattlerCurrentHp = BattlerMaxHp;
     }
 
     private BattlerBaseStats _theBattlersBaseBaseStats;
@@ -20,7 +24,11 @@ public class BattleStats
             ? _theBattlersBaseBaseStats.BattlerName
             : $"{_theBattlersBaseBaseStats.BattlerName} {_battlerNamePostFix}");
 
-    public int BattlerCurrentHp;
+
+    public Guid BattlerGuid { get; }
+    public int BattlerNumber { get; private set; }
+
+    public int BattlerCurrentHp { get; private set; }
     public int BattlerMaxHp => _theBattlersBaseBaseStats.BattlerHp;
     public int BattlerStr => _theBattlersBaseBaseStats.BattlerStr;
     public int BattlerSpd => _theBattlersBaseBaseStats.BattlerSpd;
@@ -30,6 +38,10 @@ public class BattleStats
 
     private string _battlerNamePostFix;
 
+    /// <summary>
+    /// The battlers GUID, this is generated to decipher between the battlers in game for any reason.  It changes every battle.
+    /// </summary>
+
 
     /// <summary>
     /// This is used to rename enemies due to multiples for their display names;
@@ -38,6 +50,22 @@ public class BattleStats
     {
         _battlerNamePostFix = thePostFix;
 
+    }
+
+    public void AddBattlerNumber(int battlerNum)
+    {
+        BattlerNumber = battlerNum;
+
+    }
+
+    /// <summary>
+    /// Returns true if the battler is still alive
+    /// </summary>
+    /// <param name="damageToGive"></param>
+    /// <returns></returns>
+    public int ApplyDamage(int damageToGive)
+    {
+        return BattlerCurrentHp = Mathf.Clamp(BattlerCurrentHp - damageToGive ,0, BattlerMaxHp);
     }
 
 }

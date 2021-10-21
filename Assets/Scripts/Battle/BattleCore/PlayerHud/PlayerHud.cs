@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerHud : MonoBehaviour
@@ -17,6 +18,9 @@ public class PlayerHud : MonoBehaviour
             if (currentBattler is null)
                 continue;
             _playerHudItems[i].BattlerAssigned = currentBattler;
+
+            //SubscribeToBattlersDamageCausedEvent to be able to update the gui when this happens
+            currentBattler.BattlerDamageComponent.DamageCausedEvent += OnDamageCaused;
         }
     }
 
@@ -29,10 +33,28 @@ public class PlayerHud : MonoBehaviour
                 _playerHudItem.gameObject.SetActive(false);
                 continue;
             }
-            _playerHudItem.HpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerMaxHp.ToString();
+            _playerHudItem.HpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentHp.ToString();
             _playerHudItem.NameText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerDisplayName;
             _playerHudItem.MpText.text = "N/a";
         }
+    }
+
+    public void UpdatePlayerHud()
+    {
+        foreach (var _playerHudItem in _playerHudItems)
+        {
+            if (_playerHudItem.BattlerAssigned is null) continue;
+            _playerHudItem.HpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentHp.ToString();
+            _playerHudItem.NameText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerDisplayName;
+            _playerHudItem.MpText.text = "N/a";
+
+        }
+    }
+
+    private void OnDamageCaused(object obj, EventArgs e)
+    {
+        UpdatePlayerHud();
+
     }
 
 }

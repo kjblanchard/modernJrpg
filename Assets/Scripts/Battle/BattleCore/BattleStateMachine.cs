@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BattleStateMachine : MonoBehaviour
 {
+
+    public BattleStates CurrentBattleStateEnum { get; private set; }
     private BattleState _currentBattleState;
 
     private BattleState _previousBattleState;
@@ -18,6 +20,7 @@ public class BattleStateMachine : MonoBehaviour
     {
         if (!_battleStateDictionary.TryGetValue(battleStateToChangeTo, out var newBattleState)) return;
         _currentBattleState = newBattleState;
+        CurrentBattleStateEnum = battleStateToChangeTo;
         _currentBattleState.StartState();
     }
 
@@ -28,6 +31,9 @@ public class BattleStateMachine : MonoBehaviour
         BetweenTurnState,
         PlayerTurnState,
         EnemyTurnState,
+        PlayerTargetingState,
+        ActionPerformState,
+        BattleEndState,
 
 
     }

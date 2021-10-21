@@ -89,4 +89,10 @@ public class BattlerClock
         return (_maxClockValue) / (float)(battlerLevel +
                                      battlerSpeed) * skillSpeedModifier;
     }
+    public void Testing(float[] newTurns)
+    {
+        Next20Turns = newTurns;
+
+
+    }
 }

@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Linq.Expressions;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class BetweenTurnState : BattleState
@@ -8,8 +10,21 @@ public class BetweenTurnState : BattleState
     {
         var next20Turns = BattlerClock.Next20Battlers;
         var nextBattler = _currentBattler is null ? next20Turns[0] : next20Turns[1];
-        var timeToSubtract = nextBattler.BattlerTimeManager.CurrentTurns[0];
+        float timeToSubtract = 0;
+        if (_currentBattler != null)
+            timeToSubtract = (_currentBattler.BattlerTimeManager.CurrentTurns[0] == 0) ? nextBattler.BattlerTimeManager.CurrentTurns[1] : nextBattler.BattlerTimeManager.CurrentTurns[0];
+        else
+        {
+            timeToSubtract = nextBattler.BattlerTimeManager.CurrentTurns[0];
+        }
         var allBattlers = _battleComponent.BattleData.AllBattlers;
+
+        //Temporary until switching to queue
+        if (_currentBattler != null)
+        {
+            var newArray = test(_currentBattler.BattlerTimeManager.CurrentTurns);
+            _currentBattler.BattlerTimeManager.Testing(newArray);
+        }
 
         foreach (var _battler in allBattlers)
         {
@@ -28,7 +43,24 @@ public class BetweenTurnState : BattleState
             ? BattleStateMachine.BattleStates.PlayerTurnState
             : BattleStateMachine.BattleStates.EnemyTurnState);
 
+        BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers);
+        BattlerClock.ConfirmNext20Battlers();
+        var newTurns = BattlerClock.Next20Battlers;
 
+        _battleComponent.BattleGui.LoadInitialTurnOrder(next20Turns);
+
+
+    }
+    static float[] test(float[] numbers)
+    {
+        int size = numbers.Length;
+        float[] shiftNums = new float[size];
+
+        for (int i = 0; i < size; i++)
+        {
+            shiftNums[i] = numbers[(i + 1) % size];
+        }
+        return shiftNums;
     }
 
     public override void StateUpdate()

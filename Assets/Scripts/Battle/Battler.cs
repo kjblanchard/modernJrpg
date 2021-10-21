@@ -10,29 +10,36 @@ public class Battler : MonoBehaviour
     /// </summary>
     [SerializeField] public BattleStats BattleStats { get; private set; }
 
+    public DamageComponent BattlerDamageComponent { get; private set; }
+
+
     /// <summary>
     /// The battlers Time manager, which controls the turns and stuff
     /// </summary>
     public BattlerTimeManager BattlerTimeManager { get; private set; }
 
-    /// <summary>
-    /// The battlers GUID, this is generated to decipher between the battlers in game for any reason.  It changes every battle.
-    /// </summary>
-    public Guid BattlerGuid;
+    [SerializeField]
+    public BattlerClickHandler BattlerClickHandler;
+
 
     /// <summary>
     /// The battlers stats that should not be changed, this is assigned here for ENEMIES, so that we can assign their stats.  Probably move these to json eventually
     /// </summary>
     [SerializeField] private BattlerBaseStats _battlerBaseStats;
 
-    /// <summary>
-    /// Initializes the battle stats and timekeeper for the battler
-    /// </summary>
-    public void CreateInitialStats()
+    private void Awake()
     {
         BattleStats = new BattleStats(_battlerBaseStats);
-        BattlerGuid = Guid.NewGuid();
         BattlerTimeManager = new BattlerTimeManager(BattleStats);
+        BattlerDamageComponent = new DamageComponent(BattleStats);
+
+
+    }
+
+    private void Start()
+    {
+
+       // BattlerClickHandler._battleButtonBroadcaster.ButtonPressedEvent += OnBattlerClicked;
     }
 
     /// <summary>
@@ -44,6 +51,13 @@ public class Battler : MonoBehaviour
         //TODO this will need to actually generate the players stats and add it to it.
         _battlerBaseStats = playerBattleStats;
     }
+
+    //public void OnBattlerClicked(object obj, EventArgs e)
+    //{
+
+    //    Debug.Log($"This guy just got clicked, {BattleStats.BattlerDisplayName}");
+
+    //}
 
 
 

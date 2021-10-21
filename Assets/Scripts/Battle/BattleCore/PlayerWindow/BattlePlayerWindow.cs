@@ -5,58 +5,96 @@ using UnityEngine;
 public class BattlePlayerWindow : MonoBehaviour
 {
 
-    public Battler BattlerOwner { get; private set; }
 
-    private const string _player1WindowOpenScale = "player1WindowOpenScaleTween";
-    private const string _player1WindowOpenMove = "player1WindowOpenMoveTween";
-    private const string _player1WindowOpenRotate = "player1WindowOpenRotateTween";
+    private const string _playerWindowOpenScale = "player1WindowOpenScaleTween";
+    private const string _playerWindowOpenMove = "player1WindowOpenMoveTween";
+    private const string _playerWindowOpenRotate = "player1WindowOpenRotateTween";
 
-    [SerializeField] private DotweenBroadcasterComponent _player1WindowOpenBroadcaster;
+    private const int _attackButtonNum = 0;
+    private const int _magicButtonNum = 1;
+    private const int _defendButtonNum = 2;
+
+    [SerializeField] private DotweenBroadcasterComponent _playerWindowOpenBroadcaster;
+
+    [SerializeField] private BattleButton[] _battleButtons;
+
+    private static BattleStateMachine _battleStateMachine;
+
+
+
+
 
 
     void Awake()
     {
-        _player1WindowOpenBroadcaster.DotweenCompleteEvent += OnPlayer1DotweenWindowOpenComplete;
-        _player1WindowOpenBroadcaster.DotweenRewindCompleteEvent += OnPlayer1DotweenWindowRewindComplete;
+        _playerWindowOpenBroadcaster.DotweenCompleteEvent += OnPlayerDotweenWindowOpenComplete;
+        _playerWindowOpenBroadcaster.DotweenRewindCompleteEvent += OnPlayerWindowCloseComplete;
+
+        _battleButtons[_attackButtonNum].BattleButtonBroadcaster.ButtonPressedEvent += OnPlayerAttackButtonPress;
+        _battleButtons[_attackButtonNum].BattleButtonBroadcaster.ButtonHoveredEvent += OnPlayerAttackButtonHover;
+
+        _battleButtons[_magicButtonNum].BattleButtonBroadcaster.ButtonPressedEvent += OnPlayerMagicButtonPress;
+        _battleButtons[_defendButtonNum].BattleButtonBroadcaster.ButtonPressedEvent += OnPlayerDefendButtonPress;
+
     }
 
-    public void OpenPlayer1Window()
+    void Start()
     {
-        DOTween.Restart(_player1WindowOpenMove);
-        DOTween.Restart(_player1WindowOpenScale);
-        DOTween.Restart(_player1WindowOpenRotate);
+        _battleStateMachine ??= FindObjectOfType<BattleStateMachine>();
+    }
+
+    public void OpenPlayerWindow()
+    {
+        DOTween.Restart(_playerWindowOpenMove);
+        DOTween.Restart(_playerWindowOpenScale);
+        DOTween.Restart(_playerWindowOpenRotate);
     }
 
     public void ClosePlayerWindow()
     {
-        DOTween.PlayBackwards(_player1WindowOpenRotate);
-        DOTween.PlayBackwards(_player1WindowOpenScale);
-        DOTween.PlayBackwards(_player1WindowOpenMove);
+        DOTween.PlayBackwards(_playerWindowOpenRotate);
+        DOTween.PlayBackwards(_playerWindowOpenScale);
+        DOTween.PlayBackwards(_playerWindowOpenMove);
 
     }
 
-    public void AssignBattlerToWindow(Battler battlerToOwnThisWindow)
+    private void OnPlayerDotweenWindowOpenComplete(object obj, EventArgs e)
     {
-        BattlerOwner = battlerToOwnThisWindow;
-    }
-
-    public bool CheckIfOwner(Guid guid)
-    {
-        if (BattlerOwner is null)
-            return false;
-        return BattlerOwner.BattlerGuid == guid;
-    }
-
-
-    private void OnPlayer1DotweenWindowOpenComplete(object obj, EventArgs e)
-    {
-        //ClosePlayerWindow();
 
     }
 
-    private void OnPlayer1DotweenWindowRewindComplete(object obj, EventArgs e)
+    private void OnPlayerWindowCloseComplete(object obj, EventArgs e)
     {
-        //OpenPlayer1Window();
+
+    }
+    private void OnPlayerAttackButtonHover(object obj, EventArgs e)
+    {
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
+            return;
+        Debug.Log("Attack is hovered!");
+
+    }
+
+    private void OnPlayerAttackButtonPress(object obj, EventArgs e)
+    {
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
+            return;
+        _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
+        //Change state
+
+    }
+    private void OnPlayerMagicButtonPress(object obj, EventArgs e)
+    {
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
+            return;
+        Debug.Log("Magic!");
+
+    }
+    private void OnPlayerDefendButtonPress(object obj, EventArgs e)
+    {
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
+            return;
+        Debug.Log("Defend!");
 
     }
 

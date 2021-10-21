@@ -45,5 +45,10 @@ public class BattlerTimeManager
 
     }
 
+    public void Testing(float[] newTurns)
+    {
+        _battlerClock.Testing(newTurns);
+    }
+
 }
 

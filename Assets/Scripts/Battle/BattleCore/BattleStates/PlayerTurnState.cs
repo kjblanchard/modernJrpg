@@ -8,8 +8,8 @@ public class PlayerTurnState : BattleState
     public override void StartState(params bool[] startupBools)
     {
         Debug.Log("This is the player Turn state");
-        _battleComponent.BattleGui.Player1Window.OpenPlayer1Window();
-        var battlerNumber = _battleComponent.BattleGui.GetCurrentPlayersWindow(_currentBattler.BattlerGuid);
+        _battleComponent.BattleGui.Player1Window.OpenPlayerWindow();
+        var battlerNumber = _currentBattler.BattleStats.BattlerNumber;
         Debug.Log($"Your battler number is {battlerNumber}");
 
 

@@ -23,7 +23,7 @@ public class BattlerLoader
             var enemySpawnLocation = theSpawnLocations.EnemySpawnLocation[enemyBattlerInfo.LocationToSpawnInBattle];
             var enemyBattler = theBattlerDatabase.InstantiateBattler(enemyBattlerInfo.EnemyBattler, enemySpawnLocation);
             battlerArray[i] = enemyBattler;
-            //enemyBattler.GetNext20Turns();
+            enemyBattler.BattleStats.AddBattlerNumber(i);
         }
         return battlerArray;
     }
@@ -46,6 +46,7 @@ public class BattlerLoader
             var playerSpawnLocation = theSpawnLocations.PlayerSpawnLocations[i];
             var battler = theBattlerDatabase.InstantiateBattler(currentPlayerBattlerStats.BattlerNameEnum,
                 playerSpawnLocation, currentPlayerBattlerStats);
+            battler.BattleStats.AddBattlerNumber(i);
             playerBattlerArray[i] = battler;
         }
 

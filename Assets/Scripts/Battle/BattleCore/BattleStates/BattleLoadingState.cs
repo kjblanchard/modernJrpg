@@ -9,10 +9,11 @@ public class BattleLoadingState : BattleState
         SubscribeToGuiFadeInEvent();
         PopulateBattleDataFromPersistentData();
         var allBattlers = InstantiateBattlers();
-        InitializeBattlerStats(allBattlers);
+        //InitializeBattlerStats(allBattlers);
+        CorrectDuplicateEnemyNames(allBattlers.ToList());
+        CalculateInitialTurnsForBattlers(allBattlers);
         InitializeTurnOrderGui(allBattlers);
         InitializeHuds(_battleComponent.BattleData.PlayerBattlers,_battleComponent.BattleData.EnemyBattlers);
-        InitializePlayerWindows(_battleComponent.BattleData.PlayerBattlers);
         StartBattleFadeIn();
     }
 
@@ -48,11 +49,6 @@ public class BattleLoadingState : BattleState
     /// <param name="battlers"></param>
     private static void InitializeBattlerStats(Battler[] battlers)
     {
-        foreach (var _battler in battlers)
-        {
-            _battler.CreateInitialStats();
-            
-        }
         CorrectDuplicateEnemyNames(battlers.ToList());
         CalculateInitialTurnsForBattlers(battlers);
     }
@@ -114,10 +110,6 @@ public class BattleLoadingState : BattleState
         _battleComponent.BattleGui.LoadInitialEnemyHud(enemyBattlers);
     }
 
-    private static void InitializePlayerWindows(Battler[] playerBattlers)
-    {
-        _battleComponent.BattleGui.LoadInitialPlayerBattleWindows(playerBattlers);
-    }
 
     /// <summary>
     /// Calls into the battle gui and starts the fade in.
