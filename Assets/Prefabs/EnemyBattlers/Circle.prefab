@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0da513ef76951834898e4222d2145b1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteComp: {fileID: 1889874177984259928}
   BattlerClickHandler: {fileID: 8400479742643681395}
   _battlerBaseStats: {fileID: 11400000, guid: eace1a1dd485d0643b3cf852e8a231ab, type: 2}
 --- !u!1 &7592977697704846799

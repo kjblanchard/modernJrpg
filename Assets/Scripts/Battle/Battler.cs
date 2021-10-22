@@ -12,6 +12,7 @@ public class Battler : MonoBehaviour
 
     public DamageComponent BattlerDamageComponent { get; private set; }
 
+    [SerializeField] public SpriteRenderer spriteComp;
 
     /// <summary>
     /// The battlers Time manager, which controls the turns and stuff
@@ -33,6 +34,8 @@ public class Battler : MonoBehaviour
         BattlerTimeManager = new BattlerTimeManager(BattleStats);
         BattlerDamageComponent = new DamageComponent(BattleStats);
 
+        BattlerDamageComponent.DeathCausedEvent += OnDeath;
+
 
     }
 
@@ -50,6 +53,13 @@ public class Battler : MonoBehaviour
     {
         //TODO this will need to actually generate the players stats and add it to it.
         _battlerBaseStats = playerBattleStats;
+    }
+
+    public void OnDeath(object obj, EventArgs e)
+    {
+        
+        spriteComp.color = Color.red;
+
     }
 
     //public void OnBattlerClicked(object obj, EventArgs e)

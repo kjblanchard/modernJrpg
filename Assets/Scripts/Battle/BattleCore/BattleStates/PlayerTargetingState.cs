@@ -27,7 +27,8 @@ public class PlayerTargetingState : BattleState
                         return;
                     Debug.Log($"The Battler that was just selected was {battler.BattleStats.BattlerDisplayName} and he should be attacked now!");
                     _targetBattler = battler;
-                    _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
+                    _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
+                    //_battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
 
                 };
             }
@@ -42,7 +43,8 @@ public class PlayerTargetingState : BattleState
                         return;
                     Debug.Log($"The Battler that was just selected was {battler.BattleStats.BattlerDisplayName} and he should be attacked now!");
                     _targetBattler = battler;
-                    _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
+                    _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
+                    //_battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
                 };
             }
 

@@ -7,7 +7,7 @@ public class ActionPerformState : BattleState
         var damageToCause = _currentBattler.BattlerDamageComponent.GiveDamage(_targetBattler.BattleStats);
         _targetBattler.BattlerDamageComponent.TakeDamage(damageToCause);
 
-        _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
+        //_battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
         _battleComponent.BattleGui.BattleNotifications.EnableSelectATarget(false);
         _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState);
         

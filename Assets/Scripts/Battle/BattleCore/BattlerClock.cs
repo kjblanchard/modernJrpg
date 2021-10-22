@@ -38,6 +38,7 @@ public class BattlerClock
     public static Battler[] GenerateTurnList(Battler[] battlersToCombine)
     {
         var query = from battler in battlersToCombine
+                    where !battler.BattleStats.IsDead
                     from next20Turn in battler.BattlerTimeManager.CurrentTurns
                     orderby next20Turn
                     select battler;
@@ -49,8 +50,8 @@ public class BattlerClock
 
     public static void ConfirmNext20Battlers()
     {
-        PotentialNext20Battlers.CopyTo(Next20Battlers,0);
-        
+        PotentialNext20Battlers.CopyTo(Next20Battlers, 0);
+
     }
 
     /// <summary>
@@ -58,7 +59,7 @@ public class BattlerClock
     /// </summary>
     public void ConfirmTurn()
     {
-        PotentialNext20Turns.CopyTo(Next20Turns,0);
+        PotentialNext20Turns.CopyTo(Next20Turns, 0);
     }
 
     /// <summary>
@@ -68,11 +69,38 @@ public class BattlerClock
     /// <param name="skillSpeedModifier">The skill speed that will modify the value</param>
     /// <param name="initialTurn">If it is the initial turn of the battle</param>
     /// <returns>The potential values</returns>
+    //public float[] CalculatePotentialTurns(BattleStats battleStats, float skillSpeedModifier = 1.0f, bool initialTurn = false)
+    //{
+    //    var currentSpeed = initialTurn ? Random.Range(0, battleStats.BattlerLvl + battleStats.BattlerSpd) * _initialTurnVariance : 0.0f;
+    //    var eachTurnClock = CalculateClock(battleStats.BattlerLvl, battleStats.BattlerSpd, skillSpeedModifier);
+    //    PotentialNext20Turns[0] = eachTurnClock + currentSpeed;
+    //    for (var i = 1; i < _turnsToCalculate; i++)
+    //    {
+    //        PotentialNext20Turns[i] = PotentialNext20Turns[0] + eachTurnClock * i;
+    //    }
+
+    //    return PotentialNext20Turns;
+    //}
+    /// <summary>
+    /// Calculates the potential next 20 turns based on it's input.  This needs to be confirmed before it is applied
+    /// </summary>
+    /// <param name="battleStats">The stats that it is going to look at</param>
+    /// <param name="skillSpeedModifier">The skill speed that will modify the value</param>
+    /// <param name="initialTurn">If it is the initial turn of the battle</param>
+    /// <returns>The potential values</returns>
     public float[] CalculatePotentialTurns(BattleStats battleStats, float skillSpeedModifier = 1.0f, bool initialTurn = false)
     {
-        var currentSpeed = initialTurn ? Random.Range(0, battleStats.BattlerLvl + battleStats.BattlerSpd) * _initialTurnVariance : 0.0f;
+        var initialTurnModifier = 0.0f;
+        if (initialTurn)
+            initialTurnModifier = Random.Range(0, battleStats.BattlerLvl + battleStats.BattlerSpd) *
+                _initialTurnVariance;
+        else
+        {
+            initialTurnModifier = Next20Turns[1];
+        }
         var eachTurnClock = CalculateClock(battleStats.BattlerLvl, battleStats.BattlerSpd, skillSpeedModifier);
-        PotentialNext20Turns[0] = eachTurnClock + currentSpeed;
+
+        PotentialNext20Turns[0] = initialTurnModifier;
         for (var i = 1; i < _turnsToCalculate; i++)
         {
             PotentialNext20Turns[i] = PotentialNext20Turns[0] + eachTurnClock * i;
@@ -95,4 +123,5 @@ public class BattlerClock
 
 
     }
+
 }

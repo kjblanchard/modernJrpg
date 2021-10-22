@@ -45,10 +45,13 @@ public class BattlerTimeManager
 
     }
 
-    public void Testing(float[] newTurns)
+    public void EndTurn()
     {
-        _battlerClock.Testing(newTurns);
+        CalculatePotentialNext20Turns();
+        ConfirmTurn();
+
     }
+
 
 }
 

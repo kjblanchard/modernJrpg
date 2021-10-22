@@ -36,6 +36,7 @@ public class BattleStats
     public BattlerNames BattlerNameEnum => _theBattlersBaseBaseStats.BattlerNameEnum;
     public bool IsPlayer => _theBattlersBaseBaseStats.IsPlayer;
 
+    public bool IsDead;
     private string _battlerNamePostFix;
 
     /// <summary>

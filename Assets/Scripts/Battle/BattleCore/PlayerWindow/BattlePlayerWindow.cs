@@ -65,6 +65,8 @@ public class BattlePlayerWindow : MonoBehaviour
 
     private void OnPlayerWindowCloseComplete(object obj, EventArgs e)
     {
+        _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
+
 
     }
     private void OnPlayerAttackButtonHover(object obj, EventArgs e)

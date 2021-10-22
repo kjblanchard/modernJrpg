@@ -5,6 +5,7 @@ using UnityEngine;
 public class DamageComponent
 {
     public event DamageCausedEventHandler DamageCausedEvent;
+    public event DamageCausedEventHandler DeathCausedEvent;
 
     public delegate void DamageCausedEventHandler(object sender, EventArgs e);
 
@@ -27,6 +28,11 @@ public class DamageComponent
     public void TakeDamage(float damage)
     {
         var newHpAmount = _battleStatsToReference.ApplyDamage(Mathf.RoundToInt(damage));
+        if (newHpAmount == 0)
+        {
+            _battleStatsToReference.IsDead = true;
+            OnDeath(this,EventArgs.Empty);
+        }
         Debug.Log($"The new hp is {newHpAmount}");
         OnDamageCaused(this,EventArgs.Empty);
     }
@@ -34,5 +40,11 @@ public class DamageComponent
     public void OnDamageCaused(object sender, EventArgs e)
     {
         DamageCausedEvent?.Invoke(this,EventArgs.Empty);
+    }
+
+    public void OnDeath(object sender, EventArgs e)
+    {
+        DeathCausedEvent?.Invoke(this, EventArgs.Empty);
+
     }
 }
