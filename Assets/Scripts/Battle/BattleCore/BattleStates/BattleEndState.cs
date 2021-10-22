@@ -14,6 +14,17 @@ public class BattleEndState : BattleState
         bgmbus.stopAllEvents(STOP_MODE.ALLOWFADEOUT);
         battleMusic.Play();
         _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification("You Win!!!");
+
+
+    }
+
+    private void OnMouseClick()
+    {
+        if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum !=
+            BattleStateMachine.BattleStates.BattleEndState) return;
+        var bgmbus = FMODUnity.RuntimeManager.GetBus("bus:/bgm");
+        bgmbus.stopAllEvents(STOP_MODE.ALLOWFADEOUT);
+        SceneController.ChangeGameScene(SceneController.GameScenesEnum.DebugRoom);
     }
 
     public override void StateUpdate()
@@ -33,12 +44,12 @@ public class BattleEndState : BattleState
 
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

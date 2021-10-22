@@ -23,13 +23,24 @@ public class PlayerTargetingState : BattleState
                 _playerClicks[i] = battler.BattlerClickHandler;
                 _playerClicks[i]._battleButtonBroadcaster.ButtonPressedEvent += (object obj, EventArgs e) =>
                 {
-                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState)
+                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
                         return;
-                    Debug.Log($"The Battler that was just selected was {battler.BattleStats.BattlerDisplayName} and he should be attacked now!");
                     _targetBattler = battler;
                     _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
                     //_battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
 
+                };
+                _playerClicks[i]._battleButtonBroadcaster.ButtonHoveredEvent += (object obj, EventArgs e) =>
+                {
+                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
+                        return;
+                    _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"{battler.BattleStats.BattlerDisplayName}");
+                };
+                _playerClicks[i]._battleButtonBroadcaster.ButtonHoveredLeaveEvent += (object obj, EventArgs e) =>
+                {
+                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
+                        return;
+                    _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
                 };
             }
             for (var i = 0; i < _battleComponent.BattleData.EnemyBattlers.Length; i++)
@@ -39,12 +50,23 @@ public class PlayerTargetingState : BattleState
                 _enemyClicks[i] = battler.BattlerClickHandler;
                 _enemyClicks[i]._battleButtonBroadcaster.ButtonPressedEvent += (object obj, EventArgs e) =>
                 {
-                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState)
+                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
                         return;
-                    Debug.Log($"The Battler that was just selected was {battler.BattleStats.BattlerDisplayName} and he should be attacked now!");
                     _targetBattler = battler;
                     _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
                     //_battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
+                };
+                _enemyClicks[i]._battleButtonBroadcaster.ButtonHoveredEvent += (object obj, EventArgs e) =>
+                {
+                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
+                        return;
+                    _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"{battler.BattleStats.BattlerDisplayName}");
+                };
+                _enemyClicks[i]._battleButtonBroadcaster.ButtonHoveredLeaveEvent += (object obj, EventArgs e) =>
+                {
+                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
+                        return;
+                    _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
                 };
             }
 

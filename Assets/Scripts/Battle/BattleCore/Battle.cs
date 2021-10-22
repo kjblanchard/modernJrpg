@@ -19,9 +19,9 @@ public class Battle : MonoBehaviour
         ChangeBattleState(BattleStateMachine.BattleStates.LoadingState);
     }
 
-    public void ChangeBattleState(BattleStateMachine.BattleStates stateToChangeTo)
+    public void ChangeBattleState(BattleStateMachine.BattleStates stateToChangeTo, bool[] startupBools = null)
     {
-        _battleStateMachine.ChangeBattleState(stateToChangeTo);
+        _battleStateMachine.ChangeBattleState(stateToChangeTo, startupBools);
     }
 
 }

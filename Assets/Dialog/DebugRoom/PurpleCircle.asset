@@ -35,3 +35,8 @@ MonoBehaviour:
     IsChoice: 0
     ChoiceOptions: []
     SelectionChoice: 2
+  - Dialog: Make sure you watch out for the grass, bad boi's live in there
+    Name: Ringleader
+    IsChoice: 0
+    ChoiceOptions: []
+    SelectionChoice: 0

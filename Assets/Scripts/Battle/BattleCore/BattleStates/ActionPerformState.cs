@@ -4,6 +4,7 @@ public class ActionPerformState : BattleState
 {
     public override void StartState(params bool[] startupBools)
     {
+        _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
         var damageToCause = _currentBattler.BattlerDamageComponent.GiveDamage(_targetBattler.BattleStats);
         _targetBattler.BattlerDamageComponent.TakeDamage(damageToCause);
 

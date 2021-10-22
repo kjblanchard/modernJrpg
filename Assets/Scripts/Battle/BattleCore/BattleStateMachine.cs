@@ -16,12 +16,12 @@ public class BattleStateMachine : MonoBehaviour
     /// Changes the battle state to the referenced enum of the battlestates
     /// </summary>
     /// <param name="battleStateToChangeTo">The enum for battle state to change to</param>
-    public void ChangeBattleState(BattleStates battleStateToChangeTo)
+    public void ChangeBattleState(BattleStates battleStateToChangeTo, bool[] startupBools = null)
     {
         if (!_battleStateDictionary.TryGetValue(battleStateToChangeTo, out var newBattleState)) return;
         _currentBattleState = newBattleState;
         CurrentBattleStateEnum = battleStateToChangeTo;
-        _currentBattleState.StartState();
+        _currentBattleState.StartState(startupBools);
     }
 
     public enum BattleStates

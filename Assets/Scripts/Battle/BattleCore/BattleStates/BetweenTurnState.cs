@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -6,44 +7,31 @@ public class BetweenTurnState : BattleState
     // Start is called before the first frame update
     public override void StartState(params bool[] startupBools)
     {
-        var allEnemies = _battleComponent.BattleData.EnemyBattlers;
-        var areAnyEnemiesAlive = HandleWinScenario(allEnemies);
-        if (!areAnyEnemiesAlive)
-        {
-            _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BattleEndState);
-            return;
+        if (CheckForWinCondition()) return;
 
-        }
-
+        var isFirstTurn = CheckForFirstTurn(startupBools);
         var next20Turns = BattlerClock.Next20Battlers;
-        float timeToSubtract = 0;
-        Battler nextBattler;
-        if (_currentBattler == null)
-        {
-            //This is the first turn of the battle.
-            nextBattler = next20Turns[0];
-            timeToSubtract = nextBattler.BattlerTimeManager.CurrentTurns[0];
-        }
-        else
-        {
-
-            if (_currentBattler.BattleStats.IsDead)
-            {
-                _currentBattler = next20Turns[1];
-                _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState);
-
-            }
-            //This is between the turns
-            nextBattler = next20Turns[1];
-            //Handle if the next battler is actually the current battler
-            timeToSubtract = (_currentBattler.BattleStats.BattlerGuid == nextBattler.BattleStats.BattlerGuid)
-                ? nextBattler.BattlerTimeManager.CurrentTurns[1]
-                : nextBattler.BattlerTimeManager.CurrentTurns[0];
-            //Generate a new turn order based on his next turn
-            _currentBattler.BattlerTimeManager.EndTurn();
-        }
-
+        var nextBattler = NextBattlerSelection(isFirstTurn, next20Turns);
+        var timeToSubtract = CalculateTimeToSubtractForAllBattlers(isFirstTurn, _currentBattler, nextBattler);
+        _currentBattler?.BattlerTimeManager.EndTurn();
         var allBattlers = _battleComponent.BattleData.AllBattlers;
+        _currentBattler = nextBattler;
+        UpdateBattlerClocks(allBattlers, timeToSubtract);
+        _battleComponent.BattleGui.LoadInitialTurnOrder(next20Turns);
+        _battleComponent.BattleStateMachine.ChangeBattleState(_currentBattler.BattleStats.IsPlayer
+            ? BattleStateMachine.BattleStates.PlayerTurnState
+            : BattleStateMachine.BattleStates.EnemyTurnState);
+    }
+
+    private static void UpdateBattlerClocks(Battler[] allBattlers, float timeToSubtract)
+    {
+        SubtractTimeFromAllBattlers(allBattlers, timeToSubtract);
+        BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers);
+        BattlerClock.ConfirmNext20Battlers();
+    }
+
+    private static void SubtractTimeFromAllBattlers(Battler[] allBattlers, float timeToSubtract)
+    {
 
         foreach (var _battler in allBattlers)
         {
@@ -55,25 +43,43 @@ public class BetweenTurnState : BattleState
                 Debug.Log($"The battler {_battler.BattleStats.BattlerDisplayName} and his speed time is {i}");
             });
         }
-
-        _currentBattler = nextBattler;
-
-        BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers);
-        BattlerClock.ConfirmNext20Battlers();
-        var newTurns = BattlerClock.Next20Battlers;
-
-        _battleComponent.BattleGui.LoadInitialTurnOrder(next20Turns);
-        _battleComponent.BattleStateMachine.ChangeBattleState(_currentBattler.BattleStats.IsPlayer
-            ? BattleStateMachine.BattleStates.PlayerTurnState
-            : BattleStateMachine.BattleStates.EnemyTurnState);
-
-
-
     }
 
-    private bool HandleWinScenario(Battler[] allEnemies)
+    private float CalculateTimeToSubtractForAllBattlers(bool isFirstTurn, Battler currentBattler, Battler nextBattler)
     {
-        return allEnemies.Any(_allEnemy => !_allEnemy.BattleStats.IsDead);
+        if (isFirstTurn)
+            return nextBattler.BattlerTimeManager.CurrentTurns[0];
+        var isNextBattlerTheCurrentBattler =
+            currentBattler?.BattleStats.BattlerGuid == nextBattler.BattleStats.BattlerGuid;
+        if (isNextBattlerTheCurrentBattler)
+            return nextBattler.BattlerTimeManager.CurrentTurns[1];
+        return nextBattler.BattlerTimeManager.CurrentTurns[0];
+    }
+
+    private static bool CheckForFirstTurn(IReadOnlyList<bool> startupBools) => startupBools != null && startupBools[0];
+
+    private Battler NextBattlerSelection(bool IsFirstTurn, Battler[] nextBattlers)
+    {
+        if (IsFirstTurn)
+            return nextBattlers[0];
+
+        for (var i = 1; i < nextBattlers.Length; i++)
+        {
+            if (nextBattlers[i].BattleStats.IsDead)
+                continue;
+            return nextBattlers[i];
+        }
+
+        return IsFirstTurn ? nextBattlers[0] : nextBattlers[1];
+    }
+
+    private bool CheckForWinCondition()
+    {
+        var allEnemies = _battleComponent.BattleData.EnemyBattlers;
+        var areAnyEnemiesAlive = allEnemies.Any(_allEnemy => !_allEnemy.BattleStats.IsDead);
+        if (areAnyEnemiesAlive) return false;
+        _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BattleEndState);
+        return true;
     }
 
     public override void StateUpdate()

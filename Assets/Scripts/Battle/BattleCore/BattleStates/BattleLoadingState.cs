@@ -6,6 +6,7 @@ public class BattleLoadingState : BattleState
 {
     public override void StartState(params bool[] startupBools)
     {
+
         SubscribeToGuiFadeInEvent();
         PopulateBattleDataFromPersistentData();
         var allBattlers = InstantiateBattlers();
@@ -127,7 +128,8 @@ public class BattleLoadingState : BattleState
     /// <param name="e"></param>
     private void OnGuiFadeInComplete(object obj, EventArgs e)
     {
-        _battleComponent.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState);
+        bool[] stateBools = {true};
+        _battleComponent.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState, stateBools);
 
     }
     public override void StateUpdate()

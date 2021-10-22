@@ -18,7 +18,7 @@ public class BattlePlayerWindow : MonoBehaviour
 
     [SerializeField] private BattleButton[] _battleButtons;
 
-    private static BattleStateMachine _battleStateMachine;
+    private BattleStateMachine _battleStateMachine;
 
 
 
@@ -55,6 +55,7 @@ public class BattlePlayerWindow : MonoBehaviour
         DOTween.PlayBackwards(_playerWindowOpenRotate);
         DOTween.PlayBackwards(_playerWindowOpenScale);
         DOTween.PlayBackwards(_playerWindowOpenMove);
+
 
     }
 
