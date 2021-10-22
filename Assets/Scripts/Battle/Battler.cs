@@ -42,7 +42,6 @@ public class Battler : MonoBehaviour
     private void Start()
     {
 
-       // BattlerClickHandler._battleButtonBroadcaster.ButtonPressedEvent += OnBattlerClicked;
     }
 
     /// <summary>

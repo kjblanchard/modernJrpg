@@ -4,17 +4,21 @@ using System.Linq;
 
 public class BattleLoadingState : BattleState
 {
+    private void Start()
+    {
+        SubscribeToGuiFadeInEvent();
+
+    }
+
     public override void StartState(params bool[] startupBools)
     {
-
-        SubscribeToGuiFadeInEvent();
         PopulateBattleDataFromPersistentData();
         var allBattlers = InstantiateBattlers();
-        //InitializeBattlerStats(allBattlers);
         CorrectDuplicateEnemyNames(allBattlers.ToList());
         CalculateInitialTurnsForBattlers(allBattlers);
-        InitializeTurnOrderGui(allBattlers);
-        InitializeHuds(_battleComponent.BattleData.PlayerBattlers,_battleComponent.BattleData.EnemyBattlers);
+        var initialTurnOrder = CreateInitialTurnOrder(allBattlers);
+        InitializeTurnOrderGui(initialTurnOrder);
+        InitializeHuds(_battleComponent.BattleData.PlayerBattlers, _battleComponent.BattleData.EnemyBattlers);
         StartBattleFadeIn();
     }
 
@@ -44,15 +48,6 @@ public class BattleLoadingState : BattleState
         var allBattlers = _battleComponent.BattleData.AllBattlers;
         return allBattlers;
     }
-    /// <summary>
-    /// Generates the initial stats for all the batters based on their stats.
-    /// </summary>
-    /// <param name="battlers"></param>
-    private static void InitializeBattlerStats(Battler[] battlers)
-    {
-        CorrectDuplicateEnemyNames(battlers.ToList());
-        CalculateInitialTurnsForBattlers(battlers);
-    }
 
     /// <summary>
     /// Checks all the enemies and adds a prefix to their name if they are duplicates
@@ -60,17 +55,17 @@ public class BattleLoadingState : BattleState
     private static void CorrectDuplicateEnemyNames(List<Battler> battlerList)
     {
         var groupsOfDuplicateEnemies = from battler in battlerList
-                    group battler by battler.BattleStats.BattlerNameEnum
+                                       group battler by battler.BattleStats.BattlerNameEnum
             into battlerTypes
-                    where battlerTypes.Count() > 1
-                    select battlerTypes;
+                                       where battlerTypes.Count() > 1
+                                       select battlerTypes;
 
         foreach (var group in groupsOfDuplicateEnemies)
         {
             var letterToAppend = 'A';
             foreach (var _battler in group)
             {
-                _battler.BattleStats.AddBattlerNamePostFix(letterToAppend.ToString());
+                _battler.BattleStats.AddBattlerNamePostFix(letterToAppend);
                 letterToAppend++;
             }
         }
@@ -78,7 +73,7 @@ public class BattleLoadingState : BattleState
     }
 
     /// <summary>
-    /// Calculates the initial 20 turns for battle and then confirms them
+    /// Calculates the initial 20 turns for battle and then confirms them so that there is an initial display
     /// </summary>
     /// <param name="battlers"></param>
     private static void CalculateInitialTurnsForBattlers(Battler[] battlers)
@@ -87,19 +82,29 @@ public class BattleLoadingState : BattleState
         {
             _battler.BattlerTimeManager.CalculatePotentialNext20Turns(1.0f, true);
             _battler.BattlerTimeManager.ConfirmTurn();
-
         }
+    }
+
+    /// <summary>
+    /// Generates and confirms the initial 20 turns of the battle
+    /// </summary>
+    /// <param name="allBattlers">All battlers that are going to </param>
+    /// <returns></returns>
+    private static Battler[] CreateInitialTurnOrder(Battler[] allBattlers)
+    {
+        var next20Turns = BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers);
+        BattlerClock.ConfirmNext20Battlers();
+        return next20Turns;
+
     }
 
     /// <summary>
     /// Initializes the turn order gui from the turn order
     /// </summary>
     /// <param name="battlers"></param>
-    private static void InitializeTurnOrderGui(Battler[] battlers)
+    private static void InitializeTurnOrderGui(Battler[] turnOrder)
     {
-        var next20Turns = BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers);
-        BattlerClock.ConfirmNext20Battlers();
-        _battleComponent.BattleGui.LoadInitialTurnOrder(next20Turns);
+        _battleComponent.BattleGui.LoadInitialTurnOrder(turnOrder);
     }
 
     /// <summary>
@@ -128,7 +133,7 @@ public class BattleLoadingState : BattleState
     /// <param name="e"></param>
     private void OnGuiFadeInComplete(object obj, EventArgs e)
     {
-        bool[] stateBools = {true};
+        bool[] stateBools = { true };
         _battleComponent.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState, stateBools);
 
     }

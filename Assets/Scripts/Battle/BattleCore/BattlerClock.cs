@@ -48,6 +48,9 @@ public class BattlerClock
         return PotentialNext20Battlers;
     }
 
+    /// <summary>
+    /// Confirms the potential battlers list that was generated last into the next 20 turns
+    /// </summary>
     public static void ConfirmNext20Battlers()
     {
         PotentialNext20Battlers.CopyTo(Next20Battlers, 0);

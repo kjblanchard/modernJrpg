@@ -20,9 +20,9 @@ public class BattleStats
     /// The battlers name postfixed with the postfix if it exists
     /// </summary>
     public string BattlerDisplayName =>
-        (string.IsNullOrWhiteSpace(_battlerNamePostFix)
+        (_battlerNamePostFix == 0)
             ? _theBattlersBaseBaseStats.BattlerName
-            : $"{_theBattlersBaseBaseStats.BattlerName} {_battlerNamePostFix}");
+            : $"{_theBattlersBaseBaseStats.BattlerName} {_battlerNamePostFix}";
 
 
     public Guid BattlerGuid { get; }
@@ -37,7 +37,7 @@ public class BattleStats
     public bool IsPlayer => _theBattlersBaseBaseStats.IsPlayer;
 
     public bool IsDead;
-    private string _battlerNamePostFix;
+    private char _battlerNamePostFix;
 
     /// <summary>
     /// The battlers GUID, this is generated to decipher between the battlers in game for any reason.  It changes every battle.
@@ -47,9 +47,9 @@ public class BattleStats
     /// <summary>
     /// This is used to rename enemies due to multiples for their display names;
     /// </summary>
-    public void AddBattlerNamePostFix(string thePostFix)
+    public void AddBattlerNamePostFix(char thePostFix)
     {
-        _battlerNamePostFix = thePostFix;
+        _battlerNamePostFix += thePostFix;
 
     }
 
