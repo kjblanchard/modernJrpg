@@ -813,6 +813,7 @@ MonoBehaviour:
   - {fileID: 1148809344}
   - {fileID: 595175518}
   - {fileID: 1448900490}
+  _battleStateMachine: {fileID: 978584045}
 --- !u!4 &177029003
 Transform:
   m_ObjectHideFlags: 0

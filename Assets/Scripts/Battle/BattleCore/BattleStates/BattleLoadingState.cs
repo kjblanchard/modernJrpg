@@ -18,7 +18,7 @@ public class BattleLoadingState : BattleState
         CalculateInitialTurnsForBattlers(allBattlers);
         var initialTurnOrder = CreateInitialTurnOrder(allBattlers);
         InitializeTurnOrderGui(initialTurnOrder);
-        InitializeHuds(_battleComponent.BattleData.PlayerBattlers, _battleComponent.BattleData.EnemyBattlers);
+        InitializeGuiHuds(_battleComponent.BattleData.PlayerBattlers, _battleComponent.BattleData.EnemyBattlers);
         StartBattleFadeIn();
     }
 
@@ -104,13 +104,13 @@ public class BattleLoadingState : BattleState
     /// <param name="battlers"></param>
     private static void InitializeTurnOrderGui(Battler[] turnOrder)
     {
-        _battleComponent.BattleGui.LoadInitialTurnOrder(turnOrder);
+        _battleComponent.BattleGui.LoadTurnOrderIntoGui(turnOrder);
     }
 
     /// <summary>
     /// Initializes both of the Huds from the battlers.
     /// </summary>
-    private static void InitializeHuds(Battler[] playerBattlers, Battler[] enemyBattlers)
+    private static void InitializeGuiHuds(Battler[] playerBattlers, Battler[] enemyBattlers)
     {
         _battleComponent.BattleGui.LoadInitialPlayerHud(playerBattlers);
         _battleComponent.BattleGui.LoadInitialEnemyHud(enemyBattlers);

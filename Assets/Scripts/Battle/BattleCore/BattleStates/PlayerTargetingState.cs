@@ -73,8 +73,6 @@ public class PlayerTargetingState : BattleState
         }
 
         _targetBattler = null;
-
-        Debug.Log("Entered the PlayerTargetingState");
         _battleComponent.BattleGui.BattleNotifications.EnableSelectATarget(true);
 
 

@@ -26,8 +26,7 @@ public class BattleGui : MonoBehaviour
 
     private void Start()
     {
-        _fadeInTweenBroadcasterComponent.DotweenCompleteEvent += OnFadeInComplete;
-
+        _fadeInTweenBroadcasterComponent.DotweenCompleteEvent += OnBattleFadeInComplete;
     }
 
     /// <summary>
@@ -55,7 +54,7 @@ public class BattleGui : MonoBehaviour
     /// Loads the initial battles turns into the turn order gui
     /// </summary>
     /// <param name="next20TurnBattlers"></param>
-    public void LoadInitialTurnOrder(Battler[] next20TurnBattlers)
+    public void LoadTurnOrderIntoGui(Battler[] next20TurnBattlers)
     {
         var battlerNames = next20TurnBattlers.ToList().Select(battler => battler.BattleStats.BattlerDisplayName).ToArray();
         _mainTurnOrderGui.InitializeTurnOrderTexts(battlerNames);
@@ -72,16 +71,16 @@ public class BattleGui : MonoBehaviour
         DOTween.Play(_fadeInTweenId);
     }
 
+    //private void OnFadeInComplete(object obj, EventArgs e)
+    //{
+        
+    //    OnBattleFadeInComplete();
+        
+    //}
     /// <summary>
     /// This should put us into the next battlers turn once this is complete, for now just let us know that it is done
     /// </summary>
-    private void OnFadeInComplete(object obj, EventArgs e)
-    {
-        
-        OnBattleFadeInComplete();
-        
-    }
-    private void OnBattleFadeInComplete()
+    private void OnBattleFadeInComplete(object obj, EventArgs e)
     {
         BattleFadeInEvent?.Invoke(this,EventArgs.Empty);
     }

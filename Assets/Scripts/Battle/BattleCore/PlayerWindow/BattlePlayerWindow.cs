@@ -18,14 +18,10 @@ public class BattlePlayerWindow : MonoBehaviour
 
     [SerializeField] private BattleButton[] _battleButtons;
 
-    private BattleStateMachine _battleStateMachine;
+    [SerializeField] private BattleStateMachine _battleStateMachine;
 
 
-
-
-
-
-    void Awake()
+    private void Awake()
     {
         _playerWindowOpenBroadcaster.DotweenCompleteEvent += OnPlayerDotweenWindowOpenComplete;
         _playerWindowOpenBroadcaster.DotweenRewindCompleteEvent += OnPlayerWindowCloseComplete;
@@ -36,11 +32,6 @@ public class BattlePlayerWindow : MonoBehaviour
         _battleButtons[_magicButtonNum].BattleButtonBroadcaster.ButtonPressedEvent += OnPlayerMagicButtonPress;
         _battleButtons[_defendButtonNum].BattleButtonBroadcaster.ButtonPressedEvent += OnPlayerDefendButtonPress;
 
-    }
-
-    void Start()
-    {
-        _battleStateMachine ??= FindObjectOfType<BattleStateMachine>();
     }
 
     public void OpenPlayerWindow()
@@ -55,8 +46,6 @@ public class BattlePlayerWindow : MonoBehaviour
         DOTween.PlayBackwards(_playerWindowOpenRotate);
         DOTween.PlayBackwards(_playerWindowOpenScale);
         DOTween.PlayBackwards(_playerWindowOpenMove);
-
-
     }
 
     private void OnPlayerDotweenWindowOpenComplete(object obj, EventArgs e)
@@ -74,7 +63,6 @@ public class BattlePlayerWindow : MonoBehaviour
     {
         if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
             return;
-        Debug.Log("Attack is hovered!");
 
     }
 
@@ -83,21 +71,18 @@ public class BattlePlayerWindow : MonoBehaviour
         if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
             return;
         _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
-        //Change state
 
     }
     private void OnPlayerMagicButtonPress(object obj, EventArgs e)
     {
         if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
             return;
-        Debug.Log("Magic!");
 
     }
     private void OnPlayerDefendButtonPress(object obj, EventArgs e)
     {
         if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
             return;
-        Debug.Log("Defend!");
 
     }
 

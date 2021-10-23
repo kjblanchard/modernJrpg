@@ -1,5 +1,4 @@
 using System;
-using JetBrains.Annotations;
 using UnityEngine;
 
 public class DamageComponent
@@ -33,7 +32,6 @@ public class DamageComponent
             _battleStatsToReference.IsDead = true;
             OnDeath(this,EventArgs.Empty);
         }
-        Debug.Log($"The new hp is {newHpAmount}");
         OnDamageCaused(this,EventArgs.Empty);
     }
 

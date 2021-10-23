@@ -6,7 +6,6 @@ public class EnemyTurnState : BattleState
     // Start is called before the first frame update
     public override void StartState(params bool[] startupBools)
     {
-        Debug.Log($"This is the enemy Turn state and the current battler is {_currentBattler}");
         _targetBattler = _battleComponent.BattleData.PlayerBattlers[0];
         StartCoroutine(DisplayBattleMessageCo());
     }
@@ -26,7 +25,7 @@ public class EnemyTurnState : BattleState
         throw new System.NotImplementedException();
     }
 
-    private IEnumerator DisplayBattleMessageCo()
+    private static IEnumerator DisplayBattleMessageCo()
     {
         _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"The enemy {_currentBattler.BattleStats.BattlerDisplayName} attacks {_targetBattler.BattleStats.BattlerDisplayName}");
         yield return new WaitForSeconds(1);

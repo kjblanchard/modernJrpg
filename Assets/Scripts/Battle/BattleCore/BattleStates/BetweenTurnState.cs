@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class BetweenTurnState : BattleState
 {
-    // Start is called before the first frame update
+    /// <summary>
+    /// Enable debug mode if you want to see some output of the player turns, otherwise it is set to false here.
+    /// </summary>
+    private const bool _debugMode = false;
     public override void StartState(params bool[] startupBools)
     {
         if (CheckForWinCondition()) return;
+        if (CheckForLoseCondition()) return;
 
         var isFirstTurn = CheckForFirstTurn(startupBools);
         var next20Turns = BattlerClock.Next20Battlers;
@@ -16,51 +20,54 @@ public class BetweenTurnState : BattleState
         _currentBattler?.BattlerTimeManager.EndTurn();
         var allBattlers = _battleComponent.BattleData.AllBattlers;
         _currentBattler = nextBattler;
-        UpdateBattlerClocks(allBattlers, timeToSubtract);
-        _battleComponent.BattleGui.LoadInitialTurnOrder(next20Turns);
+        var newBattlerTurnOrder = UpdateBattlerClocks(allBattlers, timeToSubtract);
+        _battleComponent.BattleGui.LoadTurnOrderIntoGui(newBattlerTurnOrder);
         _battleComponent.BattleStateMachine.ChangeBattleState(_currentBattler.BattleStats.IsPlayer
             ? BattleStateMachine.BattleStates.PlayerTurnState
             : BattleStateMachine.BattleStates.EnemyTurnState);
     }
 
-    private static void UpdateBattlerClocks(Battler[] allBattlers, float timeToSubtract)
+    /// <summary>
+    /// Checks to see if any of the enemies are alive.  If not, there is a win condition
+    /// </summary>
+    /// <returns>If the battle is won</returns>
+    private static bool CheckForWinCondition()
     {
-        SubtractTimeFromAllBattlers(allBattlers, timeToSubtract);
-        BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers);
-        BattlerClock.ConfirmNext20Battlers();
+        var allEnemies = _battleComponent.BattleData.EnemyBattlers;
+        var areAnyEnemiesAlive = allEnemies.Any(_allEnemy => !_allEnemy.BattleStats.IsDead);
+        if (areAnyEnemiesAlive) return false;
+        _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BattleEndState);
+        return true;
     }
 
-    private static void SubtractTimeFromAllBattlers(Battler[] allBattlers, float timeToSubtract)
+    /// <summary>
+    /// Checks to see if any of the players are alive.  If not, there is a lose condition.
+    /// </summary>
+    /// <returns>If the battle is lost</returns>
+    private static bool CheckForLoseCondition()
     {
-
-        foreach (var _battler in allBattlers)
-        {
-            _battler.BattlerTimeManager.SubtractBattleTime(timeToSubtract);
-
-            var next5Turns = _battler.BattlerTimeManager.CurrentTurns.Take(5).ToList();
-            next5Turns.ForEach(i =>
-            {
-                Debug.Log($"The battler {_battler.BattleStats.BattlerDisplayName} and his speed time is {i}");
-            });
-        }
+        var allPlayers = _battleComponent.BattleData.PlayerBattlers;
+        var areAnyPlayersAlive = allPlayers.Any(_allPlayer => _allPlayer != null && !_allPlayer.BattleStats.IsDead);
+        if (areAnyPlayersAlive) return false;
+        _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BattleEndState);
+        return true;
     }
-
-    private float CalculateTimeToSubtractForAllBattlers(bool isFirstTurn, Battler currentBattler, Battler nextBattler)
-    {
-        if (isFirstTurn)
-            return nextBattler.BattlerTimeManager.CurrentTurns[0];
-        var isNextBattlerTheCurrentBattler =
-            currentBattler?.BattleStats.BattlerGuid == nextBattler.BattleStats.BattlerGuid;
-        if (isNextBattlerTheCurrentBattler)
-            return nextBattler.BattlerTimeManager.CurrentTurns[1];
-        return nextBattler.BattlerTimeManager.CurrentTurns[0];
-    }
-
+    /// <summary>
+    /// Looks at the startup bools if they are available.  If they are there, read the first one and That is if this is the first turn.
+    /// </summary>
+    /// <param name="startupBools"></param>
+    /// <returns></returns>
     private static bool CheckForFirstTurn(IReadOnlyList<bool> startupBools) => startupBools != null && startupBools[0];
 
-    private Battler NextBattlerSelection(bool IsFirstTurn, Battler[] nextBattlers)
+    /// <summary>
+    /// Chooses the next battler.  If it's the first turn, set the next battler to the first in the list.  Otherwise, look for the next battler that is alive and choose him.
+    /// </summary>
+    /// <param name="isFirstTurn"></param>
+    /// <param name="nextBattlers"></param>
+    /// <returns></returns>
+    private static Battler NextBattlerSelection(bool isFirstTurn, Battler[] nextBattlers)
     {
-        if (IsFirstTurn)
+        if (isFirstTurn)
             return nextBattlers[0];
 
         for (var i = 1; i < nextBattlers.Length; i++)
@@ -69,18 +76,60 @@ public class BetweenTurnState : BattleState
                 continue;
             return nextBattlers[i];
         }
-
-        return IsFirstTurn ? nextBattlers[0] : nextBattlers[1];
+        return null;
     }
 
-    private bool CheckForWinCondition()
+    /// <summary>
+    /// Looks at the current battler and the next battler.  Determines the amount of time that should pass based on them.
+    /// </summary>
+    /// <param name="isFirstTurn">If it's the first turn of the battle</param>
+    /// <param name="currentBattler">The current battler</param>
+    /// <param name="nextBattler">The next battler</param>
+    /// <returns></returns>
+    private static float CalculateTimeToSubtractForAllBattlers(bool isFirstTurn, Battler currentBattler, Battler nextBattler)
     {
-        var allEnemies = _battleComponent.BattleData.EnemyBattlers;
-        var areAnyEnemiesAlive = allEnemies.Any(_allEnemy => !_allEnemy.BattleStats.IsDead);
-        if (areAnyEnemiesAlive) return false;
-        _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BattleEndState);
-        return true;
+        if (isFirstTurn)
+            return nextBattler.BattlerTimeManager.CurrentTurns[0];
+        var isNextBattlerTheCurrentBattler =
+            currentBattler?.BattleStats.BattlerGuid == nextBattler.BattleStats.BattlerGuid;
+        return isNextBattlerTheCurrentBattler ? nextBattler.BattlerTimeManager.CurrentTurns[1] : nextBattler.BattlerTimeManager.CurrentTurns[0];
     }
+
+    /// <summary>
+    /// Subtracts the time from all battlers clocks, and then generates a new turn list from it.
+    /// </summary>
+    /// <param name="allBattlers"></param>
+    /// <param name="timeToSubtract"></param>
+    private static Battler[] UpdateBattlerClocks(Battler[] allBattlers, float timeToSubtract)
+    {
+        SubtractTimeFromAllBattlers(allBattlers, timeToSubtract);
+        var newBattlerList = BattlerClock.GenerateTurnList(_battleComponent.BattleData.AllBattlers);
+        BattlerClock.ConfirmNext20Battlers();
+        return newBattlerList;
+    }
+
+    /// <summary>
+    /// Goes through all of the battlers, and subtracts the time that has passed from their clocks
+    /// </summary>
+    /// <param name="allBattlers">All of the battlers in an array</param>
+    /// <param name="timeToSubtract">The amount of time that has passed</param>
+    private static void SubtractTimeFromAllBattlers(Battler[] allBattlers, float timeToSubtract)
+    {
+        foreach (var _battler in allBattlers)
+        {
+            _battler.BattlerTimeManager.SubtractBattleTime(timeToSubtract);
+
+            if (!_debugMode) continue;
+            var next5Turns = _battler.BattlerTimeManager.CurrentTurns.Take(5).ToList();
+            next5Turns.ForEach(i =>
+            {
+                Debug.Log($"The battler {_battler.BattleStats.BattlerDisplayName} and his speed time is {i}");
+            });
+        }
+    }
+
+
+
 
     public override void StateUpdate()
     {

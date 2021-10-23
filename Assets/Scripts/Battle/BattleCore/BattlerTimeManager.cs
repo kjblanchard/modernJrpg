@@ -45,11 +45,13 @@ public class BattlerTimeManager
 
     }
 
+    /// <summary>
+    /// Calculates the next 20 turns for the battler when they finish their turn.  Needed as their speed is 0 to progress their float array.
+    /// </summary>
     public void EndTurn()
     {
         CalculatePotentialNext20Turns();
         ConfirmTurn();
-
     }
 
 

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Debug = System.Diagnostics.Debug;
 
 public class Battler : MonoBehaviour
 
@@ -27,7 +28,6 @@ public class Battler : MonoBehaviour
     /// The battlers stats that should not be changed, this is assigned here for ENEMIES, so that we can assign their stats.  Probably move these to json eventually
     /// </summary>
     [SerializeField] private BattlerBaseStats _battlerBaseStats;
-
     private void Awake()
     {
         BattleStats = new BattleStats(_battlerBaseStats);
@@ -56,7 +56,7 @@ public class Battler : MonoBehaviour
 
     public void OnDeath(object obj, EventArgs e)
     {
-        
+
         spriteComp.color = Color.red;
 
     }
