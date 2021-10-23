@@ -134,7 +134,7 @@ public class BattleLoadingState : BattleState
     private void OnGuiFadeInComplete(object obj, EventArgs e)
     {
         bool[] stateBools = { true };
-        _battleComponent.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState, stateBools);
+        _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState, stateBools);
 
     }
     public override void StateUpdate()

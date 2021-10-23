@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class BattleGui : MonoBehaviour
 {
+    private const string _fadeInTweenId = "fadeIn";
+
     public BattlePlayerWindow Player1Window => _playerWindows[0];
     public BattlePlayerWindow Player2Window => _playerWindows[1];
     public BattlePlayerWindow Player3Window => _playerWindows[2];
 
     public BattleNotificationsGui BattleNotifications => _battleNotificationsGui;
 
-    private const string _fadeInTweenId = "fadeIn";
     [SerializeField] private PlayerHud _playerHudComponent;
     [SerializeField] private PlayerHud _enemyHudComponent;
     [SerializeField] private DotweenBroadcasterComponent _fadeInTweenBroadcasterComponent;
@@ -20,8 +21,9 @@ public class BattleGui : MonoBehaviour
     [SerializeField] private BattlePlayerWindow[] _playerWindows;
     [SerializeField] private BattleNotificationsGui _battleNotificationsGui;
 
-    public delegate void BattleGuiEventHandler(object sender, EventArgs e);
+
     public event BattleGuiEventHandler BattleFadeInEvent;
+    public delegate void BattleGuiEventHandler(object sender, EventArgs e);
 
 
     private void Start()
@@ -51,7 +53,7 @@ public class BattleGui : MonoBehaviour
     }
 
     /// <summary>
-    /// Loads the initial battles turns into the turn order gui
+    /// Loads the turns into the turn order gui
     /// </summary>
     /// <param name="next20TurnBattlers"></param>
     public void LoadTurnOrderIntoGui(Battler[] next20TurnBattlers)
@@ -62,7 +64,6 @@ public class BattleGui : MonoBehaviour
     }
 
 
-
     /// <summary>
     /// Starts the fade in that should be played after everything is loaded in the load state.
     /// </summary>
@@ -71,14 +72,8 @@ public class BattleGui : MonoBehaviour
         DOTween.Play(_fadeInTweenId);
     }
 
-    //private void OnFadeInComplete(object obj, EventArgs e)
-    //{
-        
-    //    OnBattleFadeInComplete();
-        
-    //}
     /// <summary>
-    /// This should put us into the next battlers turn once this is complete, for now just let us know that it is done
+    /// This event is called when the fadein is complete.  Probably starts the between turn state.  This is chained from the dotween broadcaster event firing, then this fires.
     /// </summary>
     private void OnBattleFadeInComplete(object obj, EventArgs e)
     {

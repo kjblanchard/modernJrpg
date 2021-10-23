@@ -1,14 +1,25 @@
 using System;
 
+/// <summary>
+/// The broadcaster that holds subscriptions to what the buttons should actually do.  These events are fired from the BattleButton when things happen.
+/// </summary>
 public class BattleButtonBroadcaster
 {
 
-    public event ButtonPressedEventHandler ButtonPressedEvent;
-    public event ButtonPressedEventHandler ButtonHoveredEvent;
-    public event ButtonPressedEventHandler ButtonHoveredLeaveEvent;
+    /// <summary>
+    /// Sub here to control when this button is pressed
+    /// </summary>
+    public event BattleButtonActionEventHandler ButtonPressedEvent;
+    /// <summary>
+    /// Sub here to control when this button is hovered over
+    /// </summary>
+    public event BattleButtonActionEventHandler ButtonHoveredEvent;
+    /// <summary>
+    /// Sub here to control when this buttons hover has left
+    /// </summary>
+    public event BattleButtonActionEventHandler ButtonHoveredLeaveEvent;
 
-    public delegate void ButtonPressedEventHandler(object sender, EventArgs e);
-
+    public delegate void BattleButtonActionEventHandler(object sender, EventArgs e);
 
     public void OnButtonPressed()
     {
@@ -17,12 +28,13 @@ public class BattleButtonBroadcaster
 
     public void OnButtonHovered()
     {
-        ButtonHoveredEvent?.Invoke(this,EventArgs.Empty);
+        ButtonHoveredEvent?.Invoke(this, EventArgs.Empty);
 
     }
+
     public void OnButtonHoverLeave()
     {
-        ButtonHoveredLeaveEvent?.Invoke(this,EventArgs.Empty);
+        ButtonHoveredLeaveEvent?.Invoke(this, EventArgs.Empty);
 
     }
 

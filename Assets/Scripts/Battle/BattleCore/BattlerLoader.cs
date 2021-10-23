@@ -1,5 +1,3 @@
-using System;
-
 /// <summary>
 /// This class handles loading in the players and enemies
 /// </summary>
@@ -28,7 +26,7 @@ public class BattlerLoader
         return battlerArray;
     }
     /// <summary>
-    /// Loads the enemy battlers by calling into the battler database.
+    /// Loads the player battlers by calling into the battler database.
     /// </summary>
     /// <param name="playerStatsAndNames">An array of Player names to stats number in reference to the scene locations of players to spawn</param>
     /// <param name="theSpawnLocations">A reference to the spawn locations on the scene</param>

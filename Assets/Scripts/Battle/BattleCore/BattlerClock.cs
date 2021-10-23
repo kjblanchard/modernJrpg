@@ -24,10 +24,11 @@ public class BattlerClock
     /// How many turns that will be calculated for each character and stored here
     /// </summary>
     private const byte _turnsToCalculate = 20;
+
     /// <summary>
     /// This is a variance for the initial turn, causes a more random range the higher it gets
     /// </summary>
-    private const byte _initialTurnVariance = 10;
+    private const byte _initialTurnVariance = 2;
 
     /// <summary>
     /// This generates the next 20 turns based on it's battler input.  Debugs out the order if you want to as well
@@ -72,37 +73,11 @@ public class BattlerClock
     /// <param name="skillSpeedModifier">The skill speed that will modify the value</param>
     /// <param name="initialTurn">If it is the initial turn of the battle</param>
     /// <returns>The potential values</returns>
-    //public float[] CalculatePotentialTurns(BattleStats battleStats, float skillSpeedModifier = 1.0f, bool initialTurn = false)
-    //{
-    //    var currentSpeed = initialTurn ? Random.Range(0, battleStats.BattlerLvl + battleStats.BattlerSpd) * _initialTurnVariance : 0.0f;
-    //    var eachTurnClock = CalculateClock(battleStats.BattlerLvl, battleStats.BattlerSpd, skillSpeedModifier);
-    //    PotentialNext20Turns[0] = eachTurnClock + currentSpeed;
-    //    for (var i = 1; i < _turnsToCalculate; i++)
-    //    {
-    //        PotentialNext20Turns[i] = PotentialNext20Turns[0] + eachTurnClock * i;
-    //    }
-
-    //    return PotentialNext20Turns;
-    //}
-    /// <summary>
-    /// Calculates the potential next 20 turns based on it's input.  This needs to be confirmed before it is applied
-    /// </summary>
-    /// <param name="battleStats">The stats that it is going to look at</param>
-    /// <param name="skillSpeedModifier">The skill speed that will modify the value</param>
-    /// <param name="initialTurn">If it is the initial turn of the battle</param>
-    /// <returns>The potential values</returns>
     public float[] CalculatePotentialTurns(BattleStats battleStats, float skillSpeedModifier = 1.0f, bool initialTurn = false)
     {
-        var initialTurnModifier = 0.0f;
-        if (initialTurn)
-            initialTurnModifier = Random.Range(0, battleStats.BattlerLvl + battleStats.BattlerSpd) *
-                _initialTurnVariance;
-        else
-        {
-            initialTurnModifier = Next20Turns[1];
-        }
+        //var initialTurnModifier = 0.0f;
         var eachTurnClock = CalculateClock(battleStats.BattlerLvl, battleStats.BattlerSpd, skillSpeedModifier);
-
+        var initialTurnModifier = initialTurn ? Random.Range(0, eachTurnClock * _initialTurnVariance) : Next20Turns[1];
         PotentialNext20Turns[0] = initialTurnModifier;
         for (var i = 1; i < _turnsToCalculate; i++)
         {

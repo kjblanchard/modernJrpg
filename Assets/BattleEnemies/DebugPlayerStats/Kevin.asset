@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BattlerName: Kevin
   BattlerHp: 40
-  BattlerStr: 12
+  BattlerStr: 2
   BattlerSpd: 5
   BattlerLvl: 5
   IsPlayer: 1

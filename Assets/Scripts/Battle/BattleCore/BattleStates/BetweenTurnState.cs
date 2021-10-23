@@ -18,9 +18,9 @@ public class BetweenTurnState : BattleState
         var nextBattler = NextBattlerSelection(isFirstTurn, next20Turns);
         var timeToSubtract = CalculateTimeToSubtractForAllBattlers(isFirstTurn, _currentBattler, nextBattler);
         _currentBattler?.BattlerTimeManager.EndTurn();
-        var allBattlers = _battleComponent.BattleData.AllBattlers;
+        var allLiveBattlers = _battleComponent.BattleData.AllLiveBattlers;
         _currentBattler = nextBattler;
-        var newBattlerTurnOrder = UpdateBattlerClocks(allBattlers, timeToSubtract);
+        var newBattlerTurnOrder = UpdateBattlerClocks(allLiveBattlers, timeToSubtract);
         _battleComponent.BattleGui.LoadTurnOrderIntoGui(newBattlerTurnOrder);
         _battleComponent.BattleStateMachine.ChangeBattleState(_currentBattler.BattleStats.IsPlayer
             ? BattleStateMachine.BattleStates.PlayerTurnState
