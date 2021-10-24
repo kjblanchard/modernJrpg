@@ -38,6 +38,8 @@ public class BattlePlayerWindow : MonoBehaviour
     /// </summary>
     [SerializeField] private BattleStateMachine _battleStateMachine;
 
+    [SerializeField] private BattleMagicWindow _battleMagicWindow;
+
 
     private void Awake()
     {
@@ -111,6 +113,9 @@ public class BattlePlayerWindow : MonoBehaviour
     {
         if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
             return;
+
+        _battleMagicWindow.ClosePlayerWindow();
+        BattleState.CurrentAbility = null;
         _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
 
     }
@@ -118,6 +123,7 @@ public class BattlePlayerWindow : MonoBehaviour
     {
         if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
             return;
+        _battleMagicWindow.OpenPlayerWindow();
 
     }
     private void OnPlayerDefendButtonPress(object obj, EventArgs e)

@@ -23,6 +23,8 @@ public class Battler : MonoBehaviour
     [SerializeField]
     public BattlerClickHandler BattlerClickHandler;
 
+    [SerializeField] public Transform LocationForDamageDisplay;
+
 
     /// <summary>
     /// The battlers stats that should not be changed, this is assigned here for ENEMIES, so that we can assign their stats.  Probably move these to json eventually
@@ -35,8 +37,6 @@ public class Battler : MonoBehaviour
         BattlerDamageComponent = new DamageComponent(BattleStats);
 
         BattlerDamageComponent.DeathCausedEvent += OnDeath;
-
-
     }
 
     private void Start()

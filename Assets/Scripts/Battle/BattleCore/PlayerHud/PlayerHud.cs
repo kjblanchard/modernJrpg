@@ -51,7 +51,7 @@ public class PlayerHud : MonoBehaviour
         }
     }
 
-    private void OnDamageCaused(object obj, EventArgs e)
+    private void OnDamageCaused(object obj, int e)
     {
         UpdatePlayerHud();
 

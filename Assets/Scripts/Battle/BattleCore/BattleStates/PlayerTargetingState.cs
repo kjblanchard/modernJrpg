@@ -27,6 +27,7 @@ public class PlayerTargetingState : BattleState
                         return;
                     _targetBattler = battler;
                     _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
+                    _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
                     //_battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
 
                 };
@@ -54,6 +55,7 @@ public class PlayerTargetingState : BattleState
                         return;
                     _targetBattler = battler;
                     _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
+                    _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
                     //_battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
                 };
                 _enemyClicks[i]._battleButtonBroadcaster.ButtonHoveredEvent += (object obj, EventArgs e) =>

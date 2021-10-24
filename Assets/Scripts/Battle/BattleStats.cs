@@ -35,6 +35,8 @@ public class BattleStats
     public int BattlerLvl => _theBattlersBaseBaseStats.BattlerLvl;
     public BattlerNames BattlerNameEnum => _theBattlersBaseBaseStats.BattlerNameEnum;
     public bool IsPlayer => _theBattlersBaseBaseStats.IsPlayer;
+    public int BattlerMp => 999;
+    public Ability[] Abilities => _theBattlersBaseBaseStats.Abilities;
 
     public bool IsDead;
     private char _battlerNamePostFix;

@@ -7,6 +7,7 @@ public class EnemyTurnState : BattleState
     public override void StartState(params bool[] startupBools)
     {
         _targetBattler = _battleComponent.BattleData.PlayerBattlers[0];
+        CurrentAbility = _battleComponent.BattleData.GetAbilityByName(Ability.AbilityName.BaseAttack);
         StartCoroutine(DisplayBattleMessageCo());
     }
 

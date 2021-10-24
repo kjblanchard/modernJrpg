@@ -1,6 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+using TMPro;
+using UnityEngine;
 
 public class BattleLoadingState : BattleState
 {
@@ -12,13 +17,17 @@ public class BattleLoadingState : BattleState
 
     public override void StartState(params bool[] startupBools)
     {
+        BattleMusicHandler.LoadBattleMusic();
         PopulateBattleDataFromPersistentData();
         var allBattlers = InstantiateBattlers();
         CorrectDuplicateEnemyNames(allBattlers.ToList());
         CalculateInitialTurnsForBattlers(allBattlers);
         var initialTurnOrder = CreateInitialTurnOrder(allBattlers);
         InitializeTurnOrderGui(initialTurnOrder);
+        InitializePlayerMagic(_battleComponent.BattleData.PlayerBattlers);
         InitializeGuiHuds(_battleComponent.BattleData.PlayerBattlers, _battleComponent.BattleData.EnemyBattlers);
+        _battleComponent.BattleGui.BattleNotifications.SpawnDamageTexts();
+        SubscribeBattlersToDamageDisplay(allBattlers);
         StartBattleFadeIn();
     }
 
@@ -116,6 +125,11 @@ public class BattleLoadingState : BattleState
         _battleComponent.BattleGui.LoadInitialEnemyHud(enemyBattlers);
     }
 
+    private static void InitializePlayerMagic(Battler[] playerBattlers)
+    {
+            _battleComponent.BattleGui.LoadPlayersMagicIntoWindows(playerBattlers);
+    }
+
 
     /// <summary>
     /// Calls into the battle gui and starts the fade in.
@@ -147,5 +161,28 @@ public class BattleLoadingState : BattleState
 
     public override void ResetState()
     {
+    }
+
+    private  void SubscribeBattlersToDamageDisplay(Battler[] allBattlers)
+    {
+        foreach (var _allBattler in allBattlers)
+        {
+            _allBattler.BattlerDamageComponent.DamageCausedEvent += (object obj, int e) =>
+            {
+                var textToDisplay = _battleComponent.BattleGui.BattleNotifications.GetTmpTextFromQueue();
+                textToDisplay.text = e.ToString();
+                textToDisplay.transform.position =
+                    Camera.main.WorldToScreenPoint(_allBattler.LocationForDamageDisplay.transform.position);
+                StartCoroutine(DisplayDamage(textToDisplay));
+            };
+        }
+    }
+
+    private IEnumerator DisplayDamage(TMP_Text textToDisplayOn)
+    {
+        textToDisplayOn.enabled = true;
+        yield return new WaitForSeconds(0.5f);
+        textToDisplayOn.enabled = false;
+
     }
 }

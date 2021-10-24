@@ -100,6 +100,7 @@ Transform:
   m_Children:
   - {fileID: 5187195157749226871}
   - {fileID: 5617603950389959115}
+  - {fileID: 8791101648780683132}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -117,7 +118,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteComp: {fileID: 1889874177984259928}
   BattlerClickHandler: {fileID: 8400479742643681395}
+  LocationForDamageDisplay: {fileID: 8791101648780683132}
   _battlerBaseStats: {fileID: 11400000, guid: eace1a1dd485d0643b3cf852e8a231ab, type: 2}
+--- !u!1 &3757090737659783269
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8791101648780683132}
+  m_Layer: 0
+  m_Name: DamageTextLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8791101648780683132
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3757090737659783269}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.591, y: 0.364, z: -6.756484}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3674981933108343407}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7592977697704846799
 GameObject:
   m_ObjectHideFlags: 0

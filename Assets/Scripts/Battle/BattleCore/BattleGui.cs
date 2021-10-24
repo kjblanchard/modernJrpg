@@ -10,6 +10,10 @@ public class BattleGui : MonoBehaviour
     public BattlePlayerWindow Player1Window => _playerWindows[0];
     public BattlePlayerWindow Player2Window => _playerWindows[1];
     public BattlePlayerWindow Player3Window => _playerWindows[2];
+    public BattleMagicWindow Player1MagicWindow => _playerMagicWindows[0];
+    public BattleMagicWindow Player2MagicWindow => _playerMagicWindows[1];
+    public BattleMagicWindow Player3MagicWindow => _playerMagicWindows[2];
+
 
     public BattleNotificationsGui BattleNotifications => _battleNotificationsGui;
 
@@ -19,6 +23,7 @@ public class BattleGui : MonoBehaviour
     [SerializeField] private TurnOrderGui _mainTurnOrderGui;
 
     [SerializeField] private BattlePlayerWindow[] _playerWindows;
+    [SerializeField] private BattleMagicWindow[] _playerMagicWindows;
     [SerializeField] private BattleNotificationsGui _battleNotificationsGui;
 
 
@@ -61,6 +66,17 @@ public class BattleGui : MonoBehaviour
         var battlerNames = next20TurnBattlers.ToList().Select(battler => battler.BattleStats.BattlerDisplayName).ToArray();
         _mainTurnOrderGui.InitializeTurnOrderTexts(battlerNames);
 
+    }
+
+    public void LoadPlayersMagicIntoWindows(Battler[] battlers)
+    {
+        for (var i = 0; i < battlers.Length; i++)
+        {
+            var currentBattler = battlers[i];
+            if(currentBattler == null)
+                continue;
+            _playerMagicWindows[i].LoadAbilitiesIntoButtons(currentBattler.BattleStats.Abilities,currentBattler);
+        }
     }
 
 

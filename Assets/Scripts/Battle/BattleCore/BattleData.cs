@@ -15,11 +15,15 @@ public class BattleData : MonoBehaviour
     public Battler[] AllLiveBattlers => EnemyBattlers.Where(x => !x.BattleStats.IsDead).Concat(PlayerBattlers)
         .Where(x => x != null && !x.BattleStats.IsDead).ToArray();
 
+    public Ability GetAbilityByName(Ability.AbilityName ability) => _abilityDatabase.GetAbility(ability);
+
 
     /// <summary>
     /// The database that is used for spawning enemies.
     /// </summary>
     [SerializeField] private BattlerDatabase _battlerDatabase;
+
+    [SerializeField] private AbilityDatabase _abilityDatabase;
 
     /// <summary>
     /// The locations that the players and enemies will be spawned at for each scene

@@ -5,10 +5,11 @@ public class ActionPerformState : BattleState
     public override void StartState(params bool[] startupBools)
     {
         _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
-        var damageToCause = _currentBattler.BattlerDamageComponent.GiveDamage(_targetBattler.BattleStats);
-        _targetBattler.BattlerDamageComponent.TakeDamage(damageToCause);
 
-        //_battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
+        if (CurrentAbility == null)
+            CurrentAbility = _battleComponent.BattleData.GetAbilityByName(Ability.AbilityName.BaseAttack);
+        var damageToCause = _currentBattler.BattlerDamageComponent.GiveDamage(_targetBattler.BattleStats, CurrentAbility);
+        _targetBattler.BattlerDamageComponent.TakeDamage(damageToCause);
         _battleComponent.BattleGui.BattleNotifications.EnableSelectATarget(false);
         _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState);
         

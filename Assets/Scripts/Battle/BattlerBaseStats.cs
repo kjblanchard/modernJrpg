@@ -11,4 +11,5 @@ public class BattlerBaseStats : ScriptableObject
     public int BattlerLvl;
     public bool IsPlayer = false;
     public BattlerNames BattlerNameEnum;
+    public Ability[] Abilities;
 }
