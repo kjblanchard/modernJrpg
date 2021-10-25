@@ -115,7 +115,7 @@ public class BattlePlayerWindow : MonoBehaviour
             return;
 
         _battleMagicWindow.ClosePlayerWindow();
-        BattleState.CurrentAbility = null;
+        BattleState.SetAbility(null);
         _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
 
     }

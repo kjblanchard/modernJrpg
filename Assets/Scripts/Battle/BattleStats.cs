@@ -12,6 +12,7 @@ public class BattleStats
         _theBattlersBaseBaseStats = battlersStats;
         BattlerGuid = Guid.NewGuid();
         BattlerCurrentHp = BattlerMaxHp;
+        BattlerCurrentMp = BattlerMaxMp;
     }
 
     private BattlerBaseStats _theBattlersBaseBaseStats;
@@ -29,6 +30,8 @@ public class BattleStats
     public int BattlerNumber { get; private set; }
 
     public int BattlerCurrentHp { get; private set; }
+    public int BattlerCurrentMp { get; private set; }
+    public int BattlerMaxMp => _theBattlersBaseBaseStats.BattlerMp;
     public int BattlerMaxHp => _theBattlersBaseBaseStats.BattlerHp;
     public int BattlerStr => _theBattlersBaseBaseStats.BattlerStr;
     public int BattlerSpd => _theBattlersBaseBaseStats.BattlerSpd;

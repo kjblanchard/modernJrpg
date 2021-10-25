@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// The notifications gui that will show notifications in the GUI for the player such as damage numbers or helping text
+/// </summary>
 public class BattleNotificationsGui : MonoBehaviour
 {
 
-    [SerializeField] private TMP_Text pleaseSelectATargetTmp;
-    [SerializeField] private TMP_Text battleNotificationTmp;
+    [SerializeField] private TMP_Text _pleaseSelectATargetTmp;
+    [SerializeField] private TMP_Text _battleNotificationTmp;
 
     [SerializeField] private GameObject _damageTextToSpawn;
     [SerializeField] private GameObject _damageTextParent;
@@ -15,6 +18,9 @@ public class BattleNotificationsGui : MonoBehaviour
     private Queue<TMP_Text> _damageTextQueue;
 
 
+    /// <summary>
+    /// This is used to spawn the texts that will be used in battle for displaying damage numbers.
+    /// </summary>
     public void SpawnDamageTexts()
     {
         _damageTextQueue = new Queue<TMP_Text>();
@@ -27,31 +33,50 @@ public class BattleNotificationsGui : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gets a text from the tmp text queue for pooling
+    /// </summary>
+    /// <returns>A tmp text that can be used for displaying damage.</returns>
     public TMP_Text GetTmpTextFromQueue()
     {
         return _damageTextQueue.Dequeue();
     }
 
+    /// <summary>
+    /// Puts the tmp text back into the queue
+    /// </summary>
+    /// <param name="textToReturn"></param>
     public void ReturnDamageTextToQueue(TMP_Text textToReturn)
     {
         _damageTextQueue.Enqueue(textToReturn);
     }
 
+    /// <summary>
+    /// Enables the select a target text on screen
+    /// </summary>
+    /// <param name="isEnabled"></param>
     public void EnableSelectATarget(bool isEnabled)
     {
-        pleaseSelectATargetTmp.enabled = isEnabled;
+        _pleaseSelectATargetTmp.enabled = isEnabled;
     }
 
+    /// <summary>
+    /// Shows a text on the screen
+    /// </summary>
+    /// <param name="textToDisplay"></param>
     public void DisplayBattleNotification(string textToDisplay)
     {
-        battleNotificationTmp.text = textToDisplay;
-        battleNotificationTmp.enabled = true;
+        _battleNotificationTmp.text = textToDisplay;
+        _battleNotificationTmp.enabled = true;
 
     }
 
+    /// <summary>
+    /// Disables a text on the screen;
+    /// </summary>
     public void DisableBattleNotification()
     {
-        battleNotificationTmp.enabled = false;
+        _battleNotificationTmp.enabled = false;
     }
 
 

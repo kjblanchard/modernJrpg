@@ -6,6 +6,7 @@ public class BattlerBaseStats : ScriptableObject
     
     public string BattlerName;
     public int BattlerHp;
+    public int BattlerMp;
     public int BattlerStr;
     public int BattlerSpd;
     public int BattlerLvl;

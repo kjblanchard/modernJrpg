@@ -6,9 +6,9 @@ public class ActionPerformState : BattleState
     {
         _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
 
-        if (CurrentAbility == null)
-            CurrentAbility = _battleComponent.BattleData.GetAbilityByName(Ability.AbilityName.BaseAttack);
-        var damageToCause = _currentBattler.BattlerDamageComponent.GiveDamage(_targetBattler.BattleStats, CurrentAbility);
+        if (_currentAbility == null)
+            _currentAbility = _battleComponent.BattleData.GetAbilityByName(Ability.AbilityName.BaseAttack);
+        var damageToCause = _currentBattler.BattlerDamageComponent.GiveDamage(_targetBattler.BattleStats, _currentAbility);
         _targetBattler.BattlerDamageComponent.TakeDamage(damageToCause);
         _battleComponent.BattleGui.BattleNotifications.EnableSelectATarget(false);
         _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState);

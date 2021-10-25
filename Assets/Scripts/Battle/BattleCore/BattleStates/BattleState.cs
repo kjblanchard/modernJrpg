@@ -5,7 +5,7 @@ public abstract class BattleState : MonoBehaviour
     protected static Battle _battleComponent;
     protected static Battler _currentBattler;
     protected static Battler _targetBattler;
-    public static Ability CurrentAbility;
+    protected static Ability _currentAbility;
 
     public abstract void StartState(params bool[] startupBools);
     public abstract void StateUpdate();
@@ -16,6 +16,15 @@ public abstract class BattleState : MonoBehaviour
     {
         if (_battleComponent == null)
             _battleComponent = FindObjectOfType<Battle>();
+    }
+
+    /// <summary>
+    /// Used to set the ability that is going to be used in the next turn by outside sources.
+    /// </summary>
+    /// <param name="abilityToSetTo"></param>
+    public static void SetAbility(Ability abilityToSetTo)
+    {
+        _currentAbility = abilityToSetTo;
     }
 
 }

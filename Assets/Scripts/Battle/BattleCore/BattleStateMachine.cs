@@ -13,6 +13,19 @@ public class BattleStateMachine : MonoBehaviour
     private BattleState _previousBattleState;
 
     /// <summary>
+    /// Used to get a current state by its enum value in the dictionary. 
+    /// </summary>
+    /// <typeparam name="T">The type that this will be casted to, the actual Battle state you want</typeparam>
+    /// <param name="stateToLookup">The enum for the battle state that you are going to be looking up</param>
+    /// <returns>The casted battle state that you need to reference.</returns>
+    public T GetStateByBattleState<T>(BattleStates stateToLookup) where T : BattleState
+    {
+        if (_battleStateDictionary.TryGetValue(stateToLookup, out var battleState))
+            return (T) battleState;
+        return null;
+    }
+
+    /// <summary>
     /// This dictionary is a lookup for the state to change to.  It is set in the editor when new battle states are added.
     /// </summary>
     [SerializeField]

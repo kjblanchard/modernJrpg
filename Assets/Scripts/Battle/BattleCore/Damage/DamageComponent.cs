@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class DamageComponent
 {
+
     public event DamageCausedEventHandler DamageCausedEvent;
+
     public event DeathEventHandler DeathCausedEvent;
 
     public delegate void DamageCausedEventHandler(object sender, int e);

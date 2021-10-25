@@ -43,7 +43,7 @@ public class BattleMagicWindow : MonoBehaviour
             {
                 if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || battler.BattleStats.BattlerMp < ability.MpCost)
                     return;
-                BattleState.CurrentAbility = ability;
+                BattleState.SetAbility(ability);
                 _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
             };
             _magicBattleButtons.Add(spawnedBattleButton);
@@ -67,12 +67,5 @@ public class BattleMagicWindow : MonoBehaviour
         DOTween.PlayBackwards(_playerWindowOpenRotate);
         DOTween.PlayBackwards(_playerWindowOpenScale);
         DOTween.PlayBackwards(_playerWindowOpenMove);
-    }
-    private void OnPlayerAttackButtonPress(object obj, EventArgs e)
-    {
-        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
-            return;
-        _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
-
     }
 }

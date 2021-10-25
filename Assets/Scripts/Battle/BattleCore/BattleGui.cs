@@ -28,12 +28,14 @@ public class BattleGui : MonoBehaviour
 
 
     public event BattleGuiEventHandler BattleFadeInEvent;
+    public event BattleGuiEventHandler BattleFadeOutEvent;
     public delegate void BattleGuiEventHandler(object sender, EventArgs e);
 
 
     private void Start()
     {
         _fadeInTweenBroadcasterComponent.DotweenCompleteEvent += OnBattleFadeInComplete;
+        _fadeInTweenBroadcasterComponent.DotweenRewindCompleteEvent += OnBattleFadeOutComplete;
     }
 
     /// <summary>
@@ -68,6 +70,10 @@ public class BattleGui : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Loads the player battlers abilities into their respective magic windows.
+    /// </summary>
+    /// <param name="battlers"></param>
     public void LoadPlayersMagicIntoWindows(Battler[] battlers)
     {
         for (var i = 0; i < battlers.Length; i++)
@@ -79,13 +85,21 @@ public class BattleGui : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Starts the fade in that should be played after everything is loaded in the load state.
     /// </summary>
     public void StartFadeIn()
     {
-        DOTween.Play(_fadeInTweenId);
+        DOTween.Restart(_fadeInTweenId);
+    }
+
+    /// <summary>
+    /// Play the fade out at 3x speed so that it goes faster.
+    /// </summary>
+    public void StartFadeOut()
+    {
+        DOTween.timeScale = 3.0f;
+        DOTween.PlayBackwards(_fadeInTweenId);
     }
 
     /// <summary>
@@ -94,5 +108,16 @@ public class BattleGui : MonoBehaviour
     private void OnBattleFadeInComplete(object obj, EventArgs e)
     {
         BattleFadeInEvent?.Invoke(this,EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// This event is called when the fadeout is complete.  probably switches the scene.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="e"></param>
+    private void OnBattleFadeOutComplete(object obj, EventArgs e)
+    {
+        DOTween.timeScale = 1.0f;
+        BattleFadeOutEvent?.Invoke(this,EventArgs.Empty);
     }
 }

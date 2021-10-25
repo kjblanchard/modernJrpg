@@ -1,3 +1,5 @@
+using System;
+
 public class BattleEndState : BattleState
 {
     // Start is called before the first frame update
@@ -12,8 +14,7 @@ public class BattleEndState : BattleState
     {
         if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum !=
             BattleStateMachine.BattleStates.BattleEndState) return;
-        BattleMusicHandler.StopBattleWin();
-        SceneController.ChangeGameScene(SceneController.GameScenesEnum.DebugRoom);
+        _battleComponent.BattleGui.StartFadeOut();
     }
 
     public override void StateUpdate()

@@ -2,16 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// This state should load as many things as possible at the beginning of the battle while the screen is black to reduce loading during the battle.
+/// </summary>
 public class BattleLoadingState : BattleState
 {
     private void Start()
     {
         SubscribeToGuiFadeInEvent();
+        _battleComponent.BattleGui.BattleFadeOutEvent += OnFadeOutComplete;
 
     }
 
@@ -26,9 +28,21 @@ public class BattleLoadingState : BattleState
         InitializeTurnOrderGui(initialTurnOrder);
         InitializePlayerMagic(_battleComponent.BattleData.PlayerBattlers);
         InitializeGuiHuds(_battleComponent.BattleData.PlayerBattlers, _battleComponent.BattleData.EnemyBattlers);
+        InitializeBattlerDamageDisplays(allBattlers);
+        InitializeBattlersClickHandlers();
+        StartBattleFadeIn();
+    }
+
+    private static void InitializeBattlersClickHandlers()
+    {
+        _battleComponent.BattleStateMachine.GetStateByBattleState<PlayerTargetingState>(BattleStateMachine.BattleStates
+            .PlayerTargetingState).LoadBattleClicks();
+    }
+
+    private void InitializeBattlerDamageDisplays(Battler[] allBattlers)
+    {
         _battleComponent.BattleGui.BattleNotifications.SpawnDamageTexts();
         SubscribeBattlersToDamageDisplay(allBattlers);
-        StartBattleFadeIn();
     }
 
     /// <summary>
@@ -65,7 +79,7 @@ public class BattleLoadingState : BattleState
     {
         var groupsOfDuplicateEnemies = from battler in battlerList
                                        group battler by battler.BattleStats.BattlerNameEnum
-            into battlerTypes
+                                       into battlerTypes
                                        where battlerTypes.Count() > 1
                                        select battlerTypes;
 
@@ -127,7 +141,7 @@ public class BattleLoadingState : BattleState
 
     private static void InitializePlayerMagic(Battler[] playerBattlers)
     {
-            _battleComponent.BattleGui.LoadPlayersMagicIntoWindows(playerBattlers);
+        _battleComponent.BattleGui.LoadPlayersMagicIntoWindows(playerBattlers);
     }
 
 
@@ -151,19 +165,7 @@ public class BattleLoadingState : BattleState
         _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState, stateBools);
 
     }
-    public override void StateUpdate()
-    {
-    }
-
-    public override void EndState()
-    {
-    }
-
-    public override void ResetState()
-    {
-    }
-
-    private  void SubscribeBattlersToDamageDisplay(Battler[] allBattlers)
+    private void SubscribeBattlersToDamageDisplay(Battler[] allBattlers)
     {
         foreach (var _allBattler in allBattlers)
         {
@@ -183,6 +185,25 @@ public class BattleLoadingState : BattleState
         textToDisplayOn.enabled = true;
         yield return new WaitForSeconds(0.5f);
         textToDisplayOn.enabled = false;
+        _battleComponent.BattleGui.BattleNotifications.ReturnDamageTextToQueue(textToDisplayOn);
 
     }
+    public void OnFadeOutComplete(object obj, EventArgs e)
+    {
+        BattleMusicHandler.StopBattleWin();
+        SceneController.ChangeGameScene(SceneController.GameScenesEnum.DebugRoom);
+    }
+
+    public override void StateUpdate()
+    {
+    }
+
+    public override void EndState()
+    {
+    }
+
+    public override void ResetState()
+    {
+    }
+
 }

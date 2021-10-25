@@ -1728,8 +1728,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f988947d3af600646b2d10851ae4e3db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pleaseSelectATargetTmp: {fileID: 1478960103}
-  battleNotificationTmp: {fileID: 1221529279}
+  _pleaseSelectATargetTmp: {fileID: 1478960103}
+  _battleNotificationTmp: {fileID: 1221529279}
   _damageTextToSpawn: {fileID: 6818646155278349708, guid: f9b189b552d617a48875bef82b74d312, type: 3}
   _damageTextParent: {fileID: 682060868}
 --- !u!1 &332996369
@@ -8380,7 +8380,7 @@ MonoBehaviour:
   hasOnStepComplete: 0
   hasOnComplete: 1
   hasOnTweenCreated: 0
-  hasOnRewind: 0
+  hasOnRewind: 1
   onStart:
     m_PersistentCalls:
       m_Calls: []
@@ -8413,7 +8413,19 @@ MonoBehaviour:
       m_Calls: []
   onRewind:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1606930615}
+        m_TargetAssemblyTypeName: DotweenBroadcasterComponent, Assembly-CSharp
+        m_MethodName: OnDotweenRewindEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   targetIsSelf: 0
   targetGO: {fileID: 1935392637}
   tweenTargetIsTargetGO: 1
@@ -8450,7 +8462,7 @@ MonoBehaviour:
   isRelative: 0
   isFrom: 0
   isIndependentUpdate: 0
-  autoKill: 1
+  autoKill: 0
   autoGenerate: 1
   isActive: 1
   isValid: 1
@@ -8458,7 +8470,7 @@ MonoBehaviour:
   animationType: 7
   targetType: 3
   forcedTargetType: 0
-  autoPlay: 1
+  autoPlay: 0
   useTargetAsV3: 0
   endValueFloat: 0
   endValueV3: {x: 0, y: 0, z: 360}

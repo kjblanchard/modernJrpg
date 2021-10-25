@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PlayerHud : MonoBehaviour
@@ -28,7 +27,7 @@ public class PlayerHud : MonoBehaviour
     {
         foreach (var _playerHudItem in _playerHudItems)
         {
-            if (_playerHudItem.BattlerAssigned is null)
+            if (_playerHudItem.BattlerAssigned == null)
             {
                 _playerHudItem.gameObject.SetActive(false);
                 continue;
@@ -43,7 +42,7 @@ public class PlayerHud : MonoBehaviour
     {
         foreach (var _playerHudItem in _playerHudItems)
         {
-            if (_playerHudItem.BattlerAssigned is null) continue;
+            if (_playerHudItem.BattlerAssigned == null) continue;
             _playerHudItem.HpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentHp.ToString();
             _playerHudItem.NameText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerDisplayName;
             _playerHudItem.MpText.text = "N/a";

@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using Debug = System.Diagnostics.Debug;
 
 public class Battler : MonoBehaviour
 
@@ -39,11 +38,6 @@ public class Battler : MonoBehaviour
         BattlerDamageComponent.DeathCausedEvent += OnDeath;
     }
 
-    private void Start()
-    {
-
-    }
-
     /// <summary>
     /// This is used to assign the players base battle stats and should only be used at the beginning of the battle when it is created.
     /// </summary>
@@ -60,15 +54,5 @@ public class Battler : MonoBehaviour
         spriteComp.color = Color.red;
 
     }
-
-    //public void OnBattlerClicked(object obj, EventArgs e)
-    //{
-
-    //    Debug.Log($"This guy just got clicked, {BattleStats.BattlerDisplayName}");
-
-    //}
-
-
-
 
 }
