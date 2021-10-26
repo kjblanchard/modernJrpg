@@ -5,6 +5,7 @@ public class DamageComponent
 {
 
     public event DamageCausedEventHandler DamageCausedEvent;
+    public event DamageCausedEventHandler MpDamageCausedEvent;
 
     public event DeathEventHandler DeathCausedEvent;
 
@@ -39,9 +40,21 @@ public class DamageComponent
         OnDamageCaused(this,damageAmount);
     }
 
+    public void TakeMpDamage(float damage)
+    {
+        _battleStatsToReference.ApplyMpDamage((int) damage);
+        OnMpDamageCaused(this,(int)damage);
+
+    }
+
     public void OnDamageCaused(object sender, int e)
     {
         DamageCausedEvent?.Invoke(this, e);
+    }
+
+    public void OnMpDamageCaused(object sender, int e)
+    {
+        MpDamageCausedEvent?.Invoke(this,e);
     }
 
     public void OnDeath(object sender, EventArgs e)

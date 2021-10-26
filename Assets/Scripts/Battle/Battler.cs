@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
 public class Battler : MonoBehaviour
@@ -29,6 +31,12 @@ public class Battler : MonoBehaviour
     /// The battlers stats that should not be changed, this is assigned here for ENEMIES, so that we can assign their stats.  Probably move these to json eventually
     /// </summary>
     [SerializeField] private BattlerBaseStats _battlerBaseStats;
+
+    [SerializeField] private DOTweenAnimation _deathMoveTween;
+    [SerializeField] private DOTweenAnimation _deathColorTween;
+    [SerializeField] private DOTweenAnimation _deathFadeTween;
+
+
     private void Awake()
     {
         BattleStats = new BattleStats(_battlerBaseStats);
@@ -50,9 +58,16 @@ public class Battler : MonoBehaviour
 
     public void OnDeath(object obj, EventArgs e)
     {
+        SoundController.Instance.PlaySfxOneShot(SoundController.Sfx.BattleEnemyDeath);
+        _deathMoveTween.DORestart();
+        _deathColorTween.DORestart();
+        _deathMoveTween.DORestart();
 
-        spriteComp.color = Color.red;
+    }
 
+    private IEnumerator WaitForQuick()
+    {
+        yield return new WaitForSeconds(0.10f);
     }
 
 }

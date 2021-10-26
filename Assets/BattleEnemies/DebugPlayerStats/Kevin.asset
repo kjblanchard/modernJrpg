@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BattlerName: Kevin
   BattlerHp: 40
+  BattlerMp: 5
   BattlerStr: 1
   BattlerSpd: 5
   BattlerLvl: 5
@@ -21,3 +22,4 @@ MonoBehaviour:
   BattlerNameEnum: 1
   Abilities:
   - {fileID: 11400000, guid: 6e48d980b36182043bb93a5107c32073, type: 2}
+  - {fileID: 11400000, guid: 75b3fbe0692253e4999734aaf462589e, type: 2}

@@ -15,7 +15,7 @@ public class BattleNotificationsGui : MonoBehaviour
     [SerializeField] private GameObject _damageTextParent;
 
 
-    private Queue<TMP_Text> _damageTextQueue;
+    private Queue<BattleDamageText> _damageTextQueue;
 
 
     /// <summary>
@@ -23,11 +23,11 @@ public class BattleNotificationsGui : MonoBehaviour
     /// </summary>
     public void SpawnDamageTexts()
     {
-        _damageTextQueue = new Queue<TMP_Text>();
+        _damageTextQueue = new Queue<BattleDamageText>();
         for (int i = 0; i < 10; i++)
         {
             var instantiatedDamageText = Instantiate(_damageTextToSpawn, _damageTextParent.transform);
-            var instantiatedTmpText = instantiatedDamageText.GetComponent<TMP_Text>();
+            var instantiatedTmpText = instantiatedDamageText.GetComponent<BattleDamageText>();
             instantiatedTmpText.enabled = false;
             _damageTextQueue.Enqueue(instantiatedTmpText);
         }
@@ -37,7 +37,7 @@ public class BattleNotificationsGui : MonoBehaviour
     /// Gets a text from the tmp text queue for pooling
     /// </summary>
     /// <returns>A tmp text that can be used for displaying damage.</returns>
-    public TMP_Text GetTmpTextFromQueue()
+    public BattleDamageText GetTmpTextFromQueue()
     {
         return _damageTextQueue.Dequeue();
     }
@@ -46,7 +46,7 @@ public class BattleNotificationsGui : MonoBehaviour
     /// Puts the tmp text back into the queue
     /// </summary>
     /// <param name="textToReturn"></param>
-    public void ReturnDamageTextToQueue(TMP_Text textToReturn)
+    public void ReturnDamageTextToQueue(BattleDamageText textToReturn)
     {
         _damageTextQueue.Enqueue(textToReturn);
     }

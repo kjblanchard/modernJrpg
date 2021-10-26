@@ -20,6 +20,7 @@ public class PlayerHud : MonoBehaviour
 
             //SubscribeToBattlersDamageCausedEvent to be able to update the gui when this happens
             currentBattler.BattlerDamageComponent.DamageCausedEvent += OnDamageCaused;
+            currentBattler.BattlerDamageComponent.MpDamageCausedEvent += OnDamageCaused;
         }
     }
 
@@ -34,7 +35,7 @@ public class PlayerHud : MonoBehaviour
             }
             _playerHudItem.HpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentHp.ToString();
             _playerHudItem.NameText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerDisplayName;
-            _playerHudItem.MpText.text = "N/a";
+            _playerHudItem.MpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentMp.ToString();
         }
     }
 
@@ -45,8 +46,7 @@ public class PlayerHud : MonoBehaviour
             if (_playerHudItem.BattlerAssigned == null) continue;
             _playerHudItem.HpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentHp.ToString();
             _playerHudItem.NameText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerDisplayName;
-            _playerHudItem.MpText.text = "N/a";
-
+            _playerHudItem.MpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentMp.ToString();
         }
     }
 

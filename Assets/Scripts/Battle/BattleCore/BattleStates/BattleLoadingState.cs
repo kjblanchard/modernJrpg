@@ -172,22 +172,17 @@ public class BattleLoadingState : BattleState
             _allBattler.BattlerDamageComponent.DamageCausedEvent += (object obj, int e) =>
             {
                 var textToDisplay = _battleComponent.BattleGui.BattleNotifications.GetTmpTextFromQueue();
-                textToDisplay.text = e.ToString();
                 textToDisplay.transform.position =
                     Camera.main.WorldToScreenPoint(_allBattler.LocationForDamageDisplay.transform.position);
-                StartCoroutine(DisplayDamage(textToDisplay));
+                textToDisplay.PlayDamage(e.ToString());
+                textToDisplay.PutBackInQueue = () =>
+                {
+                    _battleComponent.BattleGui.BattleNotifications.ReturnDamageTextToQueue(textToDisplay);
+                };
             };
         }
     }
 
-    private IEnumerator DisplayDamage(TMP_Text textToDisplayOn)
-    {
-        textToDisplayOn.enabled = true;
-        yield return new WaitForSeconds(0.5f);
-        textToDisplayOn.enabled = false;
-        _battleComponent.BattleGui.BattleNotifications.ReturnDamageTextToQueue(textToDisplayOn);
-
-    }
     public void OnFadeOutComplete(object obj, EventArgs e)
     {
         BattleMusicHandler.StopBattleWin();

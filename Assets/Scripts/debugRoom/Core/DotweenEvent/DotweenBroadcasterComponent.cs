@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -16,7 +14,7 @@ public class DotweenBroadcasterComponent : MonoBehaviour
     public void Start()
     {
         DotweenAnimation.autoPlay = false;
-        DotweenAnimation.autoGenerate = false;
+        //DotweenAnimation.autoGenerate = false;
     }
 
     public void OnDotweenCompleteEvent()

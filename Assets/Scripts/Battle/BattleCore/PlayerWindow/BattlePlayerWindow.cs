@@ -104,31 +104,38 @@ public class BattlePlayerWindow : MonoBehaviour
     }
     private void OnPlayerAttackButtonHover(object obj, EventArgs e)
     {
-        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || BattleGui.IsAnimationPlaying)
             return;
 
     }
 
     private void OnPlayerAttackButtonPress(object obj, EventArgs e)
     {
-        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || BattleGui.IsAnimationPlaying)
             return;
 
-        _battleMagicWindow.ClosePlayerWindow();
+        if (_battleMagicWindow.IsOpen)
+        {
+            _battleMagicWindow.ClosePlayerWindow();
+            return;
+        }
         BattleState.SetAbility(null);
         _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
 
     }
     private void OnPlayerMagicButtonPress(object obj, EventArgs e)
     {
-        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
+        if (_battleStateMachine.CurrentBattleStateEnum == BattleStateMachine.BattleStates.PlayerTargetingState)
+            _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTurnState, new bool[1]);
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || _battleMagicWindow.IsOpen || BattleGui.IsAnimationPlaying)
             return;
         _battleMagicWindow.OpenPlayerWindow();
+
 
     }
     private void OnPlayerDefendButtonPress(object obj, EventArgs e)
     {
-        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState)
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || BattleGui.IsAnimationPlaying)
             return;
 
     }

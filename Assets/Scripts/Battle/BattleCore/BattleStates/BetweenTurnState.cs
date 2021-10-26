@@ -138,7 +138,6 @@ public class BetweenTurnState : BattleState
 
     public override void EndState()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void ResetState()

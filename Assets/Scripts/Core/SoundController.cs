@@ -81,6 +81,8 @@ public class SoundController : MonoBehaviour
 
     public enum Sfx
     {
+        Default,
+        BattleEnemyDeath,
 
     }
 

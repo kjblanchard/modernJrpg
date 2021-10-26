@@ -14,6 +14,8 @@ public class BattleGui : MonoBehaviour
     public BattleMagicWindow Player2MagicWindow => _playerMagicWindows[1];
     public BattleMagicWindow Player3MagicWindow => _playerMagicWindows[2];
 
+    public static bool IsAnimationPlaying { get; set; }
+
 
     public BattleNotificationsGui BattleNotifications => _battleNotificationsGui;
 

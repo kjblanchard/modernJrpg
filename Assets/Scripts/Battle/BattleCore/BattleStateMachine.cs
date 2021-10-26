@@ -38,6 +38,7 @@ public class BattleStateMachine : MonoBehaviour
     public void ChangeBattleState(BattleStates battleStateToChangeTo, bool[] startupBools = null)
     {
         if (!_battleStateDictionary.TryGetValue(battleStateToChangeTo, out var newBattleState)) return;
+        _currentBattleState?.EndState();
         _previousBattleState = _currentBattleState;
         _currentBattleState = newBattleState;
         CurrentBattleStateEnum = battleStateToChangeTo;

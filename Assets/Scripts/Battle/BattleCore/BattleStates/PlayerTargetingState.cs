@@ -32,7 +32,8 @@ public class PlayerTargetingState : BattleState
                     return;
                 _targetBattler = battler;
                 _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
-                _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
+                if (_battleComponent.BattleGui.Player1MagicWindow.IsOpen)
+                    _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
 
             };
             _playerClicks[i]._battleButtonBroadcaster.ButtonHoveredEvent += (object obj, EventArgs e) =>
@@ -59,7 +60,8 @@ public class PlayerTargetingState : BattleState
                     return;
                 _targetBattler = battler;
                 _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
-                _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
+                if (_battleComponent.BattleGui.Player1MagicWindow.IsOpen)
+                    _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
             };
             _enemyClicks[i]._battleButtonBroadcaster.ButtonHoveredEvent += (object obj, EventArgs e) =>
             {
@@ -85,7 +87,7 @@ public class PlayerTargetingState : BattleState
 
     public override void EndState()
     {
-        throw new System.NotImplementedException();
+        _battleComponent.BattleGui.BattleNotifications.EnableSelectATarget(true);
     }
 
     public override void ResetState()
