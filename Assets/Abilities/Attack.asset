@@ -16,5 +16,7 @@ MonoBehaviour:
   MpCost: 0
   AtkPowModifier: 1
   AtkBonusDamage: 0
+  StatusEffects: []
   Type: 0
-  AttackType: 0
+  AttackType: 1
+  TargetType: 1

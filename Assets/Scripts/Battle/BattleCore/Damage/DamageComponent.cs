@@ -31,6 +31,8 @@ public class DamageComponent
     public void TakeDamage(float damage)
     {
         var damageAmount = Mathf.RoundToInt(damage);
+        if(damageAmount <= 0)
+            return;
         var newHpAmount = _battleStatsToReference.ApplyDamage(damageAmount);
         if (newHpAmount == 0)
         {

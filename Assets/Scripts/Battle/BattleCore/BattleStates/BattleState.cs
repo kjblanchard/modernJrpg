@@ -27,4 +27,7 @@ public abstract class BattleState : MonoBehaviour
         _currentAbility = abilityToSetTo;
     }
 
+    public static bool IsCurrentBattlerAttacking = false;
+    public static bool IsCurrentBattlerDefending = false;
+
 }

@@ -163,6 +163,11 @@ MonoBehaviour:
   BattlerClickHandler: {fileID: 2144661977960941623}
   LocationForDamageDisplay: {fileID: 3600331905561712555}
   _battlerBaseStats: {fileID: 11400000, guid: 89638aec8037ad44d9685b7977709a55, type: 2}
+  _deathMoveTween: {fileID: 0}
+  _deathColorTween: {fileID: 0}
+  _deathFadeTween: {fileID: 0}
+  battlerAttackAbility: {fileID: 11400000, guid: 476f8a5be90ce7d4ba3dfb434d542bd4, type: 2}
+  battlerDefendAbility: {fileID: 11400000, guid: 1ad56e3545eed8d44a2a752044632d00, type: 2}
 --- !u!1 &8191955693626262899
 GameObject:
   m_ObjectHideFlags: 0

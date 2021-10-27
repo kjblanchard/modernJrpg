@@ -119,7 +119,8 @@ public class BattlePlayerWindow : MonoBehaviour
             _battleMagicWindow.ClosePlayerWindow();
             return;
         }
-        BattleState.SetAbility(null);
+        BattleState.IsCurrentBattlerAttacking = true;
+        
         _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
 
     }
@@ -137,6 +138,8 @@ public class BattlePlayerWindow : MonoBehaviour
     {
         if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || BattleGui.IsAnimationPlaying)
             return;
+        BattleState.IsCurrentBattlerDefending = true;
+        ClosePlayerWindow();
 
     }
 

@@ -13,6 +13,7 @@ public class Battler : MonoBehaviour
     [SerializeField] public BattleStats BattleStats { get; private set; }
 
     public DamageComponent BattlerDamageComponent { get; private set; }
+    public StatusEffectComponent StatusEffectComponent { get; private set; }
 
     [SerializeField] public SpriteRenderer spriteComp;
 
@@ -37,11 +38,16 @@ public class Battler : MonoBehaviour
     [SerializeField] private DOTweenAnimation _deathFadeTween;
 
 
+    [SerializeField] public Ability battlerAttackAbility;
+    [SerializeField] public Ability battlerDefendAbility;
+
+
     private void Awake()
     {
         BattleStats = new BattleStats(_battlerBaseStats);
         BattlerTimeManager = new BattlerTimeManager(BattleStats);
         BattlerDamageComponent = new DamageComponent(BattleStats);
+        StatusEffectComponent = new StatusEffectComponent(this);
 
         BattlerDamageComponent.DeathCausedEvent += OnDeath;
     }

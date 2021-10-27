@@ -295,6 +295,8 @@ MonoBehaviour:
   _deathMoveTween: {fileID: 5732903160338351777}
   _deathColorTween: {fileID: 1471233953536781251}
   _deathFadeTween: {fileID: 3080780454808788601}
+  battlerAttackAbility: {fileID: 11400000, guid: 476f8a5be90ce7d4ba3dfb434d542bd4, type: 2}
+  battlerDefendAbility: {fileID: 11400000, guid: 1ad56e3545eed8d44a2a752044632d00, type: 2}
 --- !u!1 &3757090737659783269
 GameObject:
   m_ObjectHideFlags: 0
