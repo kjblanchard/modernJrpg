@@ -4,14 +4,16 @@ public abstract class StatusEffect
     public event StatusEffectEndEventArgs StatusEffectEndEvent;
     public delegate void StatusEffectEndEventArgs(StatusEffect obj);
 
-    protected StatusEffect(BattleStats battlerStatsForReference, int initialLength)
+    protected StatusEffect(Battler battler, BattleStats battlerStatsForReference, int initialLength)
     {
+        _battlerToReference = battler;
         _battlerStatsToReference = battlerStatsForReference;
         statusInitialLength = initialLength;
         statusTurnsRemaining = statusInitialLength;
 
     }
 
+    public Battler _battlerToReference;
     public StatModifiers StatusEffectStatModifiers { get; private set; }
     private BattleStats _battlerStatsToReference;
 

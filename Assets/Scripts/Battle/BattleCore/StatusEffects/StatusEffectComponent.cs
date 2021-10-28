@@ -25,7 +25,7 @@ public class StatusEffectComponent
     {
         if (_statusEffectList.Any(x => x.StatusEffectName == statusEffectToAdd))
             return;
-        var instantiatedStatusEffect = SpawnStatusEffect(statusEffectToAdd, _battler.BattleStats);
+        var instantiatedStatusEffect = SpawnStatusEffect(statusEffectToAdd, _battler);
         instantiatedStatusEffect.StatusEffectEndEvent += OnStatusEffectEnd;
         _statusEffectList.Add(instantiatedStatusEffect);
     }
@@ -37,6 +37,14 @@ public class StatusEffectComponent
             _statusEffectList.Remove(x);
         });
         _statusEffectListToRemove.Clear();
+    }
+
+    public void ApplyAllPlayerStartStateStatus()
+    {
+        _statusEffectList.ForEach(statusEffect =>
+        {
+            statusEffect.PlayerStart();
+        });
     }
 
     public float ApplyBeforeDamageStatusEffects(int beginningDamage)
@@ -57,13 +65,13 @@ public class StatusEffectComponent
         });
     }
 
-    public static StatusEffect SpawnStatusEffect(StatusEffectList statusEffectToSpawn, BattleStats battleStats)
+    public static StatusEffect SpawnStatusEffect(StatusEffectList statusEffectToSpawn, Battler battler)
     {
         return statusEffectToSpawn switch
         {
             StatusEffectList.Default => null,
-            StatusEffectList.Poison => new Poison(battleStats),
-            StatusEffectList.Defend => new Defend(battleStats),
+            StatusEffectList.Poison => new Poison(battler, battler.BattleStats),
+            StatusEffectList.Defend => new Defend(battler, battler.BattleStats),
             _ => throw new ArgumentOutOfRangeException(nameof(statusEffectToSpawn), statusEffectToSpawn, null)
         };
     }

@@ -27,6 +27,9 @@ public class PlayerTurnState : BattleState
             return;
         }
         magicMenu.CheckForSufficientMana(_currentBattler.BattleStats.BattlerCurrentMp);
+        _currentBattler.StatusEffectComponent.ApplyAllPlayerStartStateStatus();
+
+
 
     }
 

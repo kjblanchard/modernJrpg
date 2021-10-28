@@ -1,7 +1,7 @@
 
 public class Defend : StatusEffect
 {
-    public Defend(BattleStats battlerStatsForReference) : base(battlerStatsForReference, 2)
+    public Defend(Battler battler,  BattleStats battlerStatsForReference) : base(battler, battlerStatsForReference, 2)
     {
     }
 
