@@ -44,10 +44,10 @@ public class Battler : MonoBehaviour
 
     private void Awake()
     {
-        BattleStats = new BattleStats(_battlerBaseStats);
+        StatusEffectComponent = new StatusEffectComponent(this);
+        BattleStats = new BattleStats(_battlerBaseStats, StatusEffectComponent);
         BattlerTimeManager = new BattlerTimeManager(BattleStats);
         BattlerDamageComponent = new DamageComponent(BattleStats);
-        StatusEffectComponent = new StatusEffectComponent(this);
 
         BattlerDamageComponent.DeathCausedEvent += OnDeath;
     }
@@ -69,11 +69,6 @@ public class Battler : MonoBehaviour
         _deathColorTween.DORestart();
         _deathMoveTween.DORestart();
 
-    }
-
-    private IEnumerator WaitForQuick()
-    {
-        yield return new WaitForSeconds(0.10f);
     }
 
 }

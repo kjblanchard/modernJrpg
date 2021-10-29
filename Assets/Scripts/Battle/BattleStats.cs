@@ -7,12 +7,13 @@ using UnityEngine;
 [System.Serializable]
 public class BattleStats
 {
-    public BattleStats(BattlerBaseStats battlersStats)
+    public BattleStats(BattlerBaseStats battlersStats, StatusEffectComponent statusEffectsToReference)
     {
         _theBattlersBaseBaseStats = battlersStats;
         BattlerGuid = Guid.NewGuid();
         BattlerCurrentHp = BattlerMaxHp;
         BattlerCurrentMp = BattlerMaxMp;
+        _statusEffectComponent = statusEffectsToReference;
     }
 
     private BattlerBaseStats _theBattlersBaseBaseStats;
@@ -33,7 +34,7 @@ public class BattleStats
     public int BattlerCurrentMp { get; private set; }
     public int BattlerMaxMp => _theBattlersBaseBaseStats.BattlerMp;
     public int BattlerMaxHp => _theBattlersBaseBaseStats.BattlerHp;
-    public int BattlerStr => _theBattlersBaseBaseStats.BattlerStr;
+    public int BattlerStr => _theBattlersBaseBaseStats.BattlerStr + _statusEffectComponent.StrModifier;
     public int BattlerSpd => _theBattlersBaseBaseStats.BattlerSpd;
     public int BattlerLvl => _theBattlersBaseBaseStats.BattlerLvl;
     public BattlerNames BattlerNameEnum => _theBattlersBaseBaseStats.BattlerNameEnum;
@@ -43,6 +44,7 @@ public class BattleStats
 
     public bool IsDead;
     private char _battlerNamePostFix;
+    private StatusEffectComponent _statusEffectComponent;
 
     /// <summary>
     /// The battlers GUID, this is generated to decipher between the battlers in game for any reason.  It changes every battle.
