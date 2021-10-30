@@ -95,6 +95,9 @@ public class BattlePlayerWindow : MonoBehaviour
     /// </summary>
     public void ClosePlayerWindow()
     {
+        if(!_isOpen)
+            return;
+        if(_battleMagicWindow)
         RewindAllButtons();
         DOTween.PlayBackwards(_playerWindowOpenRotate);
         DOTween.PlayBackwards(_playerWindowOpenScale);

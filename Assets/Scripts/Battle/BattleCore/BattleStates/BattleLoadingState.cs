@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -10,11 +8,12 @@ using UnityEngine;
 /// </summary>
 public class BattleLoadingState : BattleState
 {
+    private BattlerClickHandler[] _playerClicks;
+    private BattlerClickHandler[] _enemyClicks;
+
     private void Start()
     {
-        SubscribeToGuiFadeInEvent();
-        _battleComponent.BattleGui.BattleFadeOutEvent += OnFadeOutComplete;
-
+        SubscribeToGuiFadeEvents();
     }
 
     public override void StartState(params bool[] startupBools)
@@ -29,14 +28,8 @@ public class BattleLoadingState : BattleState
         InitializePlayerMagic(_battleComponent.BattleData.PlayerBattlers);
         InitializeGuiHuds(_battleComponent.BattleData.PlayerBattlers, _battleComponent.BattleData.EnemyBattlers);
         InitializeBattlerDamageDisplays(allBattlers);
-        InitializeBattlersClickHandlers();
+        LoadBattlersClickHandlers();
         StartBattleFadeIn();
-    }
-
-    private static void InitializeBattlersClickHandlers()
-    {
-        _battleComponent.BattleStateMachine.GetStateByBattleState<PlayerTargetingState>(BattleStateMachine.BattleStates
-            .PlayerTargetingState).LoadBattleClicks();
     }
 
     private void InitializeBattlerDamageDisplays(Battler[] allBattlers)
@@ -48,9 +41,10 @@ public class BattleLoadingState : BattleState
     /// <summary>
     /// Subscribes to the gui event for fading in, so that we can fire a function when it is complete.
     /// </summary>
-    private void SubscribeToGuiFadeInEvent()
+    private void SubscribeToGuiFadeEvents()
     {
         _battleComponent.BattleGui.BattleFadeInEvent += OnGuiFadeInComplete;
+        _battleComponent.BattleGui.BattleFadeOutEvent += OnFadeOutComplete;
     }
 
     /// <summary>
@@ -183,6 +177,96 @@ public class BattleLoadingState : BattleState
         }
     }
 
+    /// <summary>
+    /// Loads the players and enemies clicks to handle what happens when you click on them.
+    /// </summary>
+    private void LoadBattlersClickHandlers()
+    {
+        _playerClicks = InitializeClickArray(_battleComponent.BattleData.PlayerBattlers);
+        _enemyClicks = InitializeClickArray(_battleComponent.BattleData.EnemyBattlers);
+    }
+
+    /// <summary>
+    /// Fills the click handler with data based on the battlers passed in.
+    /// </summary>
+    /// <param name="battlersToCreateDataWith"></param>
+    /// <returns></returns>
+    private static BattlerClickHandler[] InitializeClickArray(Battler[] battlersToCreateDataWith)
+    {
+        var array = new BattlerClickHandler[battlersToCreateDataWith.Length];
+        for (var i = 0; i < battlersToCreateDataWith.Length; i++)
+        {
+            var battler = battlersToCreateDataWith[i];
+            if (battler == null) continue;
+            var battlerClick = array[i] = battler.BattlerClickHandler;
+            battlerClick._battleButtonBroadcaster.ButtonPressedEvent +=
+                GenerateButtonPressedFunction(battler);
+            battlerClick._battleButtonBroadcaster.ButtonHoveredEvent += GenerateButtonHoveredFunction(battler);
+            battlerClick._battleButtonBroadcaster.ButtonHoveredLeaveEvent +=
+                GenerateButtonHoverLeaveFunction(battler);
+        }
+        return array;
+    }
+
+    /// <summary>
+    /// Generates a function when the battler is clicked on.
+    /// </summary>
+    /// <param name="battlerClicked"></param>
+    /// <returns></returns>
+    private static BattleButtonBroadcaster.BattleButtonActionEventHandler GenerateButtonPressedFunction(Battler battlerClicked)
+    {
+        return
+            (obj, e) =>
+                {
+                    if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battlerClicked.BattleStats.IsDead)
+                        return;
+                    _targetBattler = battlerClicked;
+                    _battleComponent.BattleGui.ClosePlayerBattleWindow(_currentBattler);
+                    _battleComponent.BattleGui.ClosePlayerMagicWindow(_currentBattler);
+                };
+    }
+
+    /// <summary>
+    /// Generates a function for when the player is hovered.
+    /// </summary>
+    /// <param name="battlerClicked"></param>
+    /// <returns></returns>
+    private static BattleButtonBroadcaster.BattleButtonActionEventHandler GenerateButtonHoveredFunction(
+        Battler battlerClicked)
+    {
+        return
+           (obj, e) =>
+            {
+                if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battlerClicked.BattleStats.IsDead)
+                    return;
+                _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"{battlerClicked.BattleStats.BattlerDisplayName}");
+                battlerClicked.spriteComp.color = Color.yellow;
+            };
+    }
+
+    /// <summary>
+    /// Generates a function for when the battler isn't hovered anymore.
+    /// </summary>
+    /// <param name="battlerHovered"></param>
+    /// <returns></returns>
+    private static BattleButtonBroadcaster.BattleButtonActionEventHandler GenerateButtonHoverLeaveFunction(
+        Battler battlerHovered)
+    {
+        return
+           (obj, e) =>
+            {
+                if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battlerHovered.BattleStats.IsDead)
+                    return;
+                _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
+                battlerHovered.spriteComp.color = Color.white;
+            };
+    }
+
+    /// <summary>
+    /// Handles what happens when the fade out happens.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="e"></param>
     public void OnFadeOutComplete(object obj, EventArgs e)
     {
         BattleMusicHandler.StopBattleWin();

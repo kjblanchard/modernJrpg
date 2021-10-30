@@ -643,8 +643,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 482443532}
   m_HandleRect: {fileID: 482443531}
   m_Direction: 0
-  m_Value: -0.0000002147024
-  m_Size: 0.44418663
+  m_Value: -0.00000016102678
+  m_Size: 0.4441866
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3031,6 +3031,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   IsSelectedAnimation: {fileID: 815921230}
+  isPlayingSelectedAnimation: 0
 --- !u!114 &595175519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3640,12 +3641,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a4c44445a8eb5244a7066ff6196871c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openScaleTween: {fileID: 263049980}
-  openMoveTween: {fileID: 2055530651}
-  openRotateTween: {fileID: 110703244}
+  _whereToAttachButtons: {fileID: 1300728081}
+  _prefabToSpawn: {fileID: 5180853229165939175, guid: b4cd222ec7f27804ca7b0caad05070a3, type: 3}
+  _openScaleTween: {fileID: 263049980}
+  _openMoveTween: {fileID: 2055530651}
+  _openRotateTween: {fileID: 110703244}
   _playerMagicWindowOpenBroadcaster: {fileID: 263049979}
-  whereToAttachButtons: {fileID: 1300728081}
-  prefabToSpawn: {fileID: 5180853229165939175, guid: b4cd222ec7f27804ca7b0caad05070a3, type: 3}
 --- !u!1 &707969253
 GameObject:
   m_ObjectHideFlags: 0
@@ -6172,6 +6173,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   IsSelectedAnimation: {fileID: 1869276733}
+  isPlayingSelectedAnimation: 0
 --- !u!114 &1148809345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8382,6 +8384,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   IsSelectedAnimation: {fileID: 0}
+  isPlayingSelectedAnimation: 0
 --- !u!114 &1448900491
 MonoBehaviour:
   m_ObjectHideFlags: 0

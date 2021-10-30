@@ -5,36 +5,28 @@ using UnityEngine;
 
 public class BattleMagicWindow : MonoBehaviour
 {
-
-    [SerializeField]
-    private DOTweenAnimation openScaleTween;
-    [SerializeField]
-    private DOTweenAnimation openMoveTween;
-    [SerializeField]
-    private DOTweenAnimation openRotateTween;
-
     private static readonly Color32 blueColor = new Color32(169, 193, 243, 255);
     private static readonly Color32 grayColor = new Color32(166, 166, 166, 100);
+    [SerializeField]
+    private GameObject _whereToAttachButtons;
+    [SerializeField]
+    private GameObject _prefabToSpawn;
 
-    /// <summary>
-    /// This is for knowing when the tweens have finished playing for opening and closing the windows
-    /// </summary>
+    [SerializeField]
+    private DOTweenAnimation _openScaleTween;
+    [SerializeField]
+    private DOTweenAnimation _openMoveTween;
+    [SerializeField]
+    private DOTweenAnimation _openRotateTween;
     [SerializeField] private DotweenBroadcasterComponent _playerMagicWindowOpenBroadcaster;
-
-    private List<MagicButtonController> _magicBattleButtons = new List<MagicButtonController>();
-    public GameObject whereToAttachButtons;
-    public GameObject prefabToSpawn;
-
+    private readonly List<MagicButtonController> _magicBattleButtons = new List<MagicButtonController>();
     private bool _isOpen;
-
     private BattleStateMachine _battleStateMachine;
-
 
     private void Awake()
     {
         _playerMagicWindowOpenBroadcaster.DotweenCompleteEvent += OnPlayerWindowComplete;
         _playerMagicWindowOpenBroadcaster.DotweenRewindCompleteEvent += OnPlayerWindowCloseComplete;
-
     }
 
     private void Start()
@@ -46,7 +38,7 @@ public class BattleMagicWindow : MonoBehaviour
     {
         foreach (var ability in abilities)
         {
-            var spawnedAbilityPrefab = Instantiate(prefabToSpawn, whereToAttachButtons.transform);
+            var spawnedAbilityPrefab = Instantiate(_prefabToSpawn, _whereToAttachButtons.transform);
             if (!spawnedAbilityPrefab.TryGetComponent<MagicButtonController>(out var spawnedBattleButton))
             {
                 Destroy(spawnedBattleButton);
@@ -79,15 +71,15 @@ public class BattleMagicWindow : MonoBehaviour
         {
             if (manaAmount < battleButton.Ability.MpCost)
             {
-                if(battleButton.MagicNameText.color == grayColor)
-                   return; 
+                if (battleButton.MagicNameText.color == grayColor)
+                    return;
                 battleButton.MagicNameText.color = grayColor;
                 battleButton.MagicMpText.color = grayColor;
             }
             else
             {
-                if(battleButton.MagicMpText.color == Color.blue)
-                   return; 
+                if (battleButton.MagicMpText.color == Color.blue)
+                    return;
                 battleButton.MagicNameText.color = Color.white;
                 battleButton.MagicMpText.color = blueColor;
             }
@@ -99,12 +91,12 @@ public class BattleMagicWindow : MonoBehaviour
     /// </summary>
     public void OpenPlayerWindow()
     {
-        if(_isOpen)
+        if (_isOpen)
             return;
         DeselectAllBattleButtons();
-        openMoveTween.DORestart();
-        openScaleTween.DORestart();
-        openRotateTween.DORestart();
+        _openMoveTween.DORestart();
+        _openScaleTween.DORestart();
+        _openRotateTween.DORestart();
         BattleGui.IsAnimationPlaying = true;
     }
 
@@ -126,13 +118,15 @@ public class BattleMagicWindow : MonoBehaviour
     {
         _magicBattleButtons.ForEach(button =>
         {
-            button.SelectedText.enabled = false;
+            if (button.SelectedText.enabled)
+                button.SelectedText.enabled = false;
         });
     }
 
     public void SelectBattleButton(MagicButtonController buttonToEnable)
     {
-        buttonToEnable.SelectedText.enabled = true;
+        if (!buttonToEnable.SelectedText.enabled)
+            buttonToEnable.SelectedText.enabled = true;
     }
 
     /// <summary>
@@ -140,11 +134,11 @@ public class BattleMagicWindow : MonoBehaviour
     /// </summary>
     public void ClosePlayerWindow()
     {
-        if(!_isOpen)
+        if (!_isOpen)
             return;
-        openMoveTween.DOPlayBackwards();
-        openScaleTween.DOPlayBackwards();
-        openRotateTween.DOPlayBackwards();
+        _openMoveTween.DOPlayBackwards();
+        _openScaleTween.DOPlayBackwards();
+        _openRotateTween.DOPlayBackwards();
         BattleGui.IsAnimationPlaying = true;
     }
 }

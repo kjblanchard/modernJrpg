@@ -5,23 +5,15 @@ using UnityEngine;
 
 public class BattleGui : MonoBehaviour
 {
-    private const string _fadeInTweenId = "fadeIn";
-
-    public BattlePlayerWindow Player1Window => _playerWindows[0];
-    public BattlePlayerWindow Player2Window => _playerWindows[1];
-    public BattlePlayerWindow Player3Window => _playerWindows[2];
-    public BattleMagicWindow Player1MagicWindow => _playerMagicWindows[0];
-    public BattleMagicWindow Player2MagicWindow => _playerMagicWindows[1];
-    public BattleMagicWindow Player3MagicWindow => _playerMagicWindows[2];
-
     public static bool IsAnimationPlaying { get; set; }
-
-
+    public BattlePlayerWindow GetPlayerWindow(Battler battler) => _playerWindows[battler.BattleStats.BattlerNumber];
+    public BattleMagicWindow GetMagicWindow(Battler battler) => _playerMagicWindows[battler.BattleStats.BattlerNumber];
     public BattleNotificationsGui BattleNotifications => _battleNotificationsGui;
 
     [SerializeField] private PlayerHud _playerHudComponent;
     [SerializeField] private PlayerHud _enemyHudComponent;
     [SerializeField] private DotweenBroadcasterComponent _fadeInTweenBroadcasterComponent;
+    [SerializeField] private DOTweenAnimation _fadeInTween;
     [SerializeField] private TurnOrderGui _mainTurnOrderGui;
 
     [SerializeField] private BattlePlayerWindow[] _playerWindows;
@@ -39,6 +31,11 @@ public class BattleGui : MonoBehaviour
         _fadeInTweenBroadcasterComponent.DotweenCompleteEvent += OnBattleFadeInComplete;
         _fadeInTweenBroadcasterComponent.DotweenRewindCompleteEvent += OnBattleFadeOutComplete;
     }
+    public void ClosePlayerBattleWindow(Battler battler) =>
+        _playerWindows[battler.BattleStats.BattlerNumber].ClosePlayerWindow();
+
+    public void ClosePlayerMagicWindow(Battler battler) =>
+        _playerMagicWindows[battler.BattleStats.BattlerNumber].ClosePlayerWindow();
 
     /// <summary>
     /// Loads the battlers into the hud, and populates their stats into it initially for the battle start.
@@ -81,9 +78,9 @@ public class BattleGui : MonoBehaviour
         for (var i = 0; i < battlers.Length; i++)
         {
             var currentBattler = battlers[i];
-            if(currentBattler == null)
+            if (currentBattler == null)
                 continue;
-            _playerMagicWindows[i].LoadAbilitiesIntoButtons(currentBattler.BattleStats.Abilities,currentBattler);
+            _playerMagicWindows[i].LoadAbilitiesIntoButtons(currentBattler.BattleStats.Abilities, currentBattler);
         }
     }
 
@@ -92,7 +89,8 @@ public class BattleGui : MonoBehaviour
     /// </summary>
     public void StartFadeIn()
     {
-        DOTween.Restart(_fadeInTweenId);
+        _fadeInTween.DORestart();
+        //DOTween.Restart(_fadeInTweenId);
     }
 
     /// <summary>
@@ -101,7 +99,8 @@ public class BattleGui : MonoBehaviour
     public void StartFadeOut()
     {
         DOTween.timeScale = 3.0f;
-        DOTween.PlayBackwards(_fadeInTweenId);
+        _fadeInTween.DOPlayBackwards();
+        //DOTween.PlayBackwards(_fadeInTweenId);
     }
 
     /// <summary>
@@ -109,7 +108,7 @@ public class BattleGui : MonoBehaviour
     /// </summary>
     private void OnBattleFadeInComplete(object obj, EventArgs e)
     {
-        BattleFadeInEvent?.Invoke(this,EventArgs.Empty);
+        BattleFadeInEvent?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
@@ -120,6 +119,6 @@ public class BattleGui : MonoBehaviour
     private void OnBattleFadeOutComplete(object obj, EventArgs e)
     {
         DOTween.timeScale = 1.0f;
-        BattleFadeOutEvent?.Invoke(this,EventArgs.Empty);
+        BattleFadeOutEvent?.Invoke(this, EventArgs.Empty);
     }
 }
