@@ -57,6 +57,8 @@ public class BattleNotificationsGui : MonoBehaviour
     /// <param name="isEnabled"></param>
     public void EnableSelectATarget(bool isEnabled)
     {
+        if(_pleaseSelectATargetTmp.enabled == isEnabled)
+            return;
         _pleaseSelectATargetTmp.enabled = isEnabled;
     }
 

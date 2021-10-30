@@ -37,6 +37,8 @@ public class StatusEffectComponent
     /// </summary>
     private readonly List<StatusEffect> _statusEffectListToRemove = new List<StatusEffect>();
 
+    private bool _playerStartStatusTickedThisTurn = false;
+
     /// <summary>
     /// Checks to see if the status effect should be applied
     /// </summary>
@@ -89,6 +91,9 @@ public class StatusEffectComponent
     /// </summary>
     public void ApplyAllPlayerStartStateStatus()
     {
+        if(_playerStartStatusTickedThisTurn)
+            return;
+        _playerStartStatusTickedThisTurn = true;
         _statusEffectList.ForEach(statusEffect =>
         {
             statusEffect.PlayerStart();
@@ -111,6 +116,15 @@ public class StatusEffectComponent
     }
 
     /// <summary>
+    /// Applies the Player end state status effects and returns the values to false.
+    /// </summary>
+    public void EndTurn()
+    {
+        ApplyAllPlayerEndStateStatus();
+        _playerStartStatusTickedThisTurn = false;
+    }
+
+    /// <summary>
     /// Applies all of the player end status effects.
     /// </summary>
     public void ApplyAllPlayerEndStateStatus()
@@ -120,6 +134,7 @@ public class StatusEffectComponent
             statusEffect.PlayerEnd();
         });
     }
+
 
 
     /// <summary>

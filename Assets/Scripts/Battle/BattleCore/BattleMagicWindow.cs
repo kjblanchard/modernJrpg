@@ -5,10 +5,6 @@ using UnityEngine;
 
 public class BattleMagicWindow : MonoBehaviour
 {
-    //Tween names
-    private const string _playerWindowOpenScale = "player1MagicWindowOpenScaleTween";
-    private const string _playerWindowOpenMove = "player1MagicWindowOpenMoveTween";
-    private const string _playerWindowOpenRotate = "player1MagicWindowOpenRotateTween";
 
     [SerializeField]
     private DOTweenAnimation openScaleTween;
@@ -16,6 +12,7 @@ public class BattleMagicWindow : MonoBehaviour
     private DOTweenAnimation openMoveTween;
     [SerializeField]
     private DOTweenAnimation openRotateTween;
+
     /// <summary>
     /// This is for knowing when the tweens have finished playing for opening and closing the windows
     /// </summary>
@@ -25,7 +22,7 @@ public class BattleMagicWindow : MonoBehaviour
     public GameObject whereToAttachButtons;
     public GameObject prefabToSpawn;
 
-    public bool IsOpen;
+    private bool _isOpen;
 
     private BattleStateMachine _battleStateMachine;
 
@@ -59,8 +56,13 @@ public class BattleMagicWindow : MonoBehaviour
             spawnedBattleButton.MagicMpText.text = ability.MpCost.ToString();
             spawnedBattleButton.BattleButton.BattleButtonBroadcaster.ButtonPressedEvent += (object obj, EventArgs e) =>
             {
-                if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || battler.BattleStats.BattlerCurrentMp < ability.MpCost || !IsOpen || BattleGui.IsAnimationPlaying)
+                var currentBattleState = _battleStateMachine.CurrentBattleStateEnum;
+                if (currentBattleState != BattleStateMachine.BattleStates.PlayerTargetingState && currentBattleState != BattleStateMachine.BattleStates.PlayerTurnState)
                     return;
+                if (battler.BattleStats.BattlerCurrentMp < ability.MpCost || !_isOpen || BattleGui.IsAnimationPlaying)
+                    return;
+                DeselectAllBattleButtons();
+                SelectBattleButton(spawnedBattleButton);
                 BattleState.SetAbility(ability);
                 _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
             };
@@ -90,27 +92,40 @@ public class BattleMagicWindow : MonoBehaviour
     /// </summary>
     public void OpenPlayerWindow()
     {
+        if(_isOpen)
+            return;
+        DeselectAllBattleButtons();
         openMoveTween.DORestart();
         openScaleTween.DORestart();
         openRotateTween.DORestart();
-        //DOTween.Restart(_playerWindowOpenMove);
-        //DOTween.Restart(_playerWindowOpenScale);
-        //DOTween.Restart(_playerWindowOpenRotate);
         BattleGui.IsAnimationPlaying = true;
     }
 
     public void OnPlayerWindowComplete(object obj, EventArgs e)
     {
-        IsOpen = true;
+        _isOpen = true;
         BattleGui.IsAnimationPlaying = false;
 
     }
 
     public void OnPlayerWindowCloseComplete(object obj, EventArgs e)
     {
-        IsOpen = false;
+        _isOpen = false;
         BattleGui.IsAnimationPlaying = false;
 
+    }
+
+    public void DeselectAllBattleButtons()
+    {
+        _magicBattleButtons.ForEach(button =>
+        {
+            button.SelectedText.enabled = false;
+        });
+    }
+
+    public void SelectBattleButton(MagicButtonController buttonToEnable)
+    {
+        buttonToEnable.SelectedText.enabled = true;
     }
 
     /// <summary>
@@ -118,9 +133,11 @@ public class BattleMagicWindow : MonoBehaviour
     /// </summary>
     public void ClosePlayerWindow()
     {
-        DOTween.PlayBackwards(_playerWindowOpenRotate);
-        DOTween.PlayBackwards(_playerWindowOpenScale);
-        DOTween.PlayBackwards(_playerWindowOpenMove);
+        if(!_isOpen)
+            return;
+        openMoveTween.DOPlayBackwards();
+        openScaleTween.DOPlayBackwards();
+        openRotateTween.DOPlayBackwards();
         BattleGui.IsAnimationPlaying = true;
     }
 }

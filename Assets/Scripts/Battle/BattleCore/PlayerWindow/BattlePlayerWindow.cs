@@ -23,6 +23,10 @@ public class BattlePlayerWindow : MonoBehaviour
     /// </summary>
     private const int _defendButtonNum = 2;
 
+    public BattleButton AttackButton => _battleButtons[_attackButtonNum];
+    public BattleButton MagicButton => _battleButtons[_magicButtonNum];
+    public BattleButton DefendButton => _battleButtons[_defendButtonNum];
+
     /// <summary>
     /// This is for knowing when the tweens have finished playing for opening and closing the windows
     /// </summary>
@@ -39,6 +43,8 @@ public class BattlePlayerWindow : MonoBehaviour
     [SerializeField] private BattleStateMachine _battleStateMachine;
 
     [SerializeField] private BattleMagicWindow _battleMagicWindow;
+
+    private bool _isOpen;
 
 
     private void Awake()
@@ -76,6 +82,9 @@ public class BattlePlayerWindow : MonoBehaviour
     /// </summary>
     public void OpenPlayerWindow()
     {
+        if (_isOpen)
+            return;
+        _isOpen = true;
         DOTween.Restart(_playerWindowOpenMove);
         DOTween.Restart(_playerWindowOpenScale);
         DOTween.Restart(_playerWindowOpenRotate);
@@ -86,6 +95,7 @@ public class BattlePlayerWindow : MonoBehaviour
     /// </summary>
     public void ClosePlayerWindow()
     {
+        RewindAllButtons();
         DOTween.PlayBackwards(_playerWindowOpenRotate);
         DOTween.PlayBackwards(_playerWindowOpenScale);
         DOTween.PlayBackwards(_playerWindowOpenMove);
@@ -98,6 +108,7 @@ public class BattlePlayerWindow : MonoBehaviour
 
     private void OnPlayerWindowCloseComplete(object obj, EventArgs e)
     {
+        _isOpen = false;
         _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);
 
 
@@ -111,25 +122,36 @@ public class BattlePlayerWindow : MonoBehaviour
 
     private void OnPlayerAttackButtonPress(object obj, EventArgs e)
     {
-        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || BattleGui.IsAnimationPlaying)
+        var currentState = _battleStateMachine.CurrentBattleStateEnum;
+        if ((currentState != BattleStateMachine.BattleStates.PlayerTurnState && currentState != BattleStateMachine.BattleStates.PlayerTargetingState) || BattleGui.IsAnimationPlaying)
             return;
-
-        if (_battleMagicWindow.IsOpen)
+        if (currentState == BattleStateMachine.BattleStates.PlayerTargetingState)
         {
-            _battleMagicWindow.ClosePlayerWindow();
-            return;
+            if(BattleState.IsCurrentBattlerAttacking)
+                PlayButtonAndStopOthers(AttackButton);
+            else
+            {
+                RewindAllButtons();
+            }
+            _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTurnState);
+            //RewindAllButtons();
+            //return;
         }
+        _battleMagicWindow.ClosePlayerWindow();
         BattleState.IsCurrentBattlerAttacking = true;
-        
+        PlayButtonAndStopOthers(AttackButton);
         _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
 
     }
     private void OnPlayerMagicButtonPress(object obj, EventArgs e)
     {
         if (_battleStateMachine.CurrentBattleStateEnum == BattleStateMachine.BattleStates.PlayerTargetingState)
+        {
             _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTurnState, new bool[1]);
-        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || _battleMagicWindow.IsOpen || BattleGui.IsAnimationPlaying)
+        }
+        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || BattleGui.IsAnimationPlaying)
             return;
+        PlayButtonAndStopOthers(MagicButton);
         _battleMagicWindow.OpenPlayerWindow();
 
 
@@ -139,8 +161,31 @@ public class BattlePlayerWindow : MonoBehaviour
         if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || BattleGui.IsAnimationPlaying)
             return;
         BattleState.IsCurrentBattlerDefending = true;
+        _battleMagicWindow.ClosePlayerWindow();
         ClosePlayerWindow();
 
+    }
+
+    private void RewindAllButtons(BattleButton buttonYouWantToPlay = null)
+    {
+        foreach (var _battleButton in _battleButtons)
+        {
+            if (_battleButton.IsSelectedAnimation == null)
+                continue;
+            if ((buttonYouWantToPlay != null && buttonYouWantToPlay == _battleButton))
+                continue;
+            if (!_battleButton.isPlayingSelectedAnimation) continue;
+            _battleButton.isPlayingSelectedAnimation = false;
+            _battleButton.IsSelectedAnimation.DORewind();
+        }
+    }
+
+    private void PlayButtonAndStopOthers(BattleButton buttonYouWantToPlay)
+    {
+        RewindAllButtons(buttonYouWantToPlay);
+        if (buttonYouWantToPlay.isPlayingSelectedAnimation) return;
+        buttonYouWantToPlay.isPlayingSelectedAnimation = true;
+        buttonYouWantToPlay.IsSelectedAnimation.DORestart();
     }
 
 }

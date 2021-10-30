@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f981f67ac771794fbebfc20151330c7, type: 3}
   m_Name: GetBig
   m_EditorClassIdentifier: 
-  Name: 
+  Name: Get Big
   MpCost: 0
   AtkPowModifier: 0
   AtkBonusDamage: 0
-  StatusEffects: []
+  StatusEffects:
+  - StatusEffect: 3
+    StatusEffectChance: 100
   Type: 0
   AttackType: 0
   TargetType: 0

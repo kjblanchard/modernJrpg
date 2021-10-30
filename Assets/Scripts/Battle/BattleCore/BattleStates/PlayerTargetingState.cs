@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class PlayerTargetingState : BattleState
 {
@@ -32,8 +33,7 @@ public class PlayerTargetingState : BattleState
                     return;
                 _targetBattler = battler;
                 _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
-                if (_battleComponent.BattleGui.Player1MagicWindow.IsOpen)
-                    _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
+                _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
 
             };
             _playerClicks[i]._battleButtonBroadcaster.ButtonHoveredEvent += (object obj, EventArgs e) =>
@@ -41,12 +41,14 @@ public class PlayerTargetingState : BattleState
                 if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
                     return;
                 _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"{battler.BattleStats.BattlerDisplayName}");
+                battler.spriteComp.color = Color.yellow;
             };
             _playerClicks[i]._battleButtonBroadcaster.ButtonHoveredLeaveEvent += (object obj, EventArgs e) =>
             {
                 if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
                     return;
                 _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
+                battler.spriteComp.color = Color.white;
             };
         }
         for (var i = 0; i < _battleComponent.BattleData.EnemyBattlers.Length; i++)
@@ -60,20 +62,22 @@ public class PlayerTargetingState : BattleState
                     return;
                 _targetBattler = battler;
                 _battleComponent.BattleGui.Player1Window.ClosePlayerWindow();
-                if (_battleComponent.BattleGui.Player1MagicWindow.IsOpen)
-                    _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
+                _battleComponent.BattleGui.Player1MagicWindow.ClosePlayerWindow();
             };
             _enemyClicks[i]._battleButtonBroadcaster.ButtonHoveredEvent += (object obj, EventArgs e) =>
             {
                 if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
                     return;
                 _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"{battler.BattleStats.BattlerDisplayName}");
+                battler.spriteComp.color = Color.yellow;
+                
             };
             _enemyClicks[i]._battleButtonBroadcaster.ButtonHoveredLeaveEvent += (object obj, EventArgs e) =>
             {
                 if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battler.BattleStats.IsDead)
                     return;
                 _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
+                battler.spriteComp.color = Color.white;
             };
         }
 
@@ -87,7 +91,13 @@ public class PlayerTargetingState : BattleState
 
     public override void EndState()
     {
-        _battleComponent.BattleGui.BattleNotifications.EnableSelectATarget(true);
+        _battleComponent.BattleGui.BattleNotifications.EnableSelectATarget(false);
+        foreach (var _battleDataAllBattler in _battleComponent.BattleData.AllBattlers)
+        {
+            if((_battleDataAllBattler.BattleStats.IsDead || _battleDataAllBattler.spriteComp.color == Color.white))
+                continue;
+            _battleDataAllBattler.spriteComp.color = Color.white;
+        }
     }
 
     public override void ResetState()

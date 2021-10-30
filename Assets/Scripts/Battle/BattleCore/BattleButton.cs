@@ -1,3 +1,5 @@
+using DG.Tweening;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -8,6 +10,12 @@ using UnityEngine.UI;
 public class BattleButton : Button
 {
 
+    /// <summary>
+    /// You have to hit debug to be able to edit this.
+    /// </summary>
+    [SerializeField] public DOTweenAnimation IsSelectedAnimation;
+
+    public bool isPlayingSelectedAnimation = false;
     public BattleButtonBroadcaster BattleButtonBroadcaster = new BattleButtonBroadcaster();
 
 
@@ -20,5 +28,8 @@ public class BattleButton : Button
     {
         BattleButtonBroadcaster.OnButtonHovered();
     }
+
+
+
 
 }

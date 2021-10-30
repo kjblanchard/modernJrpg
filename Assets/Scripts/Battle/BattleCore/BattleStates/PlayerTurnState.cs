@@ -1,15 +1,12 @@
 
-using System.Collections;
-using System.Linq.Expressions;
 
 public class PlayerTurnState : BattleState
 {
     public override void StartState(params bool[] startupBools)
     {
-        if (startupBools != null)
-        {
-            return;
-        }
+        IsCurrentBattlerAttacking = false;
+        IsCurrentBattlerDefending = false;
+        //if (CheckToSeeIfWeAreComingBackIntoThisState(startupBools)) return;
         _battleComponent.BattleGui.Player1Window.OpenPlayerWindow();
         //Grey out magics that are unusable.
         var battlerNum = _currentBattler.BattleStats.BattlerNumber;
@@ -32,6 +29,12 @@ public class PlayerTurnState : BattleState
 
 
     }
+
+    private static bool CheckToSeeIfWeAreComingBackIntoThisState(bool[] startupBools)
+    {
+        return startupBools != null;
+    }
+
 
     public override void StateUpdate()
     {
