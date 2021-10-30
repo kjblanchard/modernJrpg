@@ -13,6 +13,9 @@ public class BattleMagicWindow : MonoBehaviour
     [SerializeField]
     private DOTweenAnimation openRotateTween;
 
+    private static readonly Color32 blueColor = new Color32(169, 193, 243, 255);
+    private static readonly Color32 grayColor = new Color32(166, 166, 166, 100);
+
     /// <summary>
     /// This is for knowing when the tweens have finished playing for opening and closing the windows
     /// </summary>
@@ -54,7 +57,7 @@ public class BattleMagicWindow : MonoBehaviour
             spawnedBattleButton.Ability = ability;
             spawnedBattleButton.MagicNameText.text = ability.Name;
             spawnedBattleButton.MagicMpText.text = ability.MpCost.ToString();
-            spawnedBattleButton.BattleButton.BattleButtonBroadcaster.ButtonPressedEvent += (object obj, EventArgs e) =>
+            spawnedBattleButton.BattleButton.BattleButtonBroadcaster.ButtonPressedEvent += (obj, e) =>
             {
                 var currentBattleState = _battleStateMachine.CurrentBattleStateEnum;
                 if (currentBattleState != BattleStateMachine.BattleStates.PlayerTargetingState && currentBattleState != BattleStateMachine.BattleStates.PlayerTurnState)
@@ -76,13 +79,17 @@ public class BattleMagicWindow : MonoBehaviour
         {
             if (manaAmount < battleButton.Ability.MpCost)
             {
-                battleButton.MagicNameText.color = Color.gray;
-                battleButton.MagicMpText.color = Color.gray;
+                if(battleButton.MagicNameText.color == grayColor)
+                   return; 
+                battleButton.MagicNameText.color = grayColor;
+                battleButton.MagicMpText.color = grayColor;
             }
             else
             {
+                if(battleButton.MagicMpText.color == Color.blue)
+                   return; 
                 battleButton.MagicNameText.color = Color.white;
-                battleButton.MagicMpText.color = Color.blue;
+                battleButton.MagicMpText.color = blueColor;
             }
 
         });

@@ -130,8 +130,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294930944
-  m_fontColor: {r: 0, g: 0.4457605, b: 1, a: 1}
+    rgba: 1688643238
+  m_fontColor: {r: 0.6509434, g: 0.6509434, b: 0.6509434, a: 0.39215687}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -311,6 +311,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  IsSelectedAnimation: {fileID: 0}
+  isPlayingSelectedAnimation: 0
 --- !u!1 &5180853230808972127
 GameObject:
   m_ObjectHideFlags: 0
