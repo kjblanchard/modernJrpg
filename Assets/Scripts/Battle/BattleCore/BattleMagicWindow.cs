@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
 {
-    private static readonly Color32 blueColor = new Color32(169, 193, 243, 255);
-    private static readonly Color32 grayColor = new Color32(166, 166, 166, 100);
+    private static readonly Color32 blueColor = new(169, 193, 243, 255);
+    private static readonly Color32 grayColor = new(166, 166, 166, 100);
     [SerializeField]
     private GameObject _whereToAttachButtons;
     [SerializeField]
@@ -145,7 +145,6 @@ public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
     {
         GuiLoadingEvent?.Invoke(obj, loadingArgs);
     }
-
 
     public Guid GuiLoadingId { get; set; } = Guid.NewGuid();
 }

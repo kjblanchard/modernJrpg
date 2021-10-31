@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerTargetingState : BattleState
 {
 
+
     public override void StartState(params bool[] startupBools)
     {
         _targetBattler = null;
@@ -17,10 +18,11 @@ public class PlayerTargetingState : BattleState
 
     public override void EndState()
     {
+
         _battleComponent.BattleGui.BattleNotifications.EnableSelectATarget(false);
         foreach (var _battleDataAllBattler in _battleComponent.BattleData.AllBattlers)
         {
-            if((_battleDataAllBattler.BattleStats.IsDead || _battleDataAllBattler.spriteComp.color == Color.white))
+            if ((_battleDataAllBattler.BattleStats.IsDead || _battleDataAllBattler.spriteComp.color == Color.white))
                 continue;
             _battleDataAllBattler.spriteComp.color = Color.white;
         }
@@ -31,5 +33,5 @@ public class PlayerTargetingState : BattleState
         throw new System.NotImplementedException();
     }
 
-
 }
+

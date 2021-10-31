@@ -43,8 +43,8 @@ public class BattleLoadingState : BattleState
     /// </summary>
     private void SubscribeToGuiFadeEvents()
     {
-        _battleComponent.BattleGui.BattleFadeInEvent += OnGuiFadeInComplete;
-        _battleComponent.BattleGui.BattleFadeOutEvent += OnFadeOutComplete;
+        _battleComponent.BattleGui.BattleTransitionComponent.BattleFadeInEvent += OnGuiFadeInComplete;
+        _battleComponent.BattleGui.BattleTransitionComponent.BattleFadeOutEvent += OnFadeOutComplete;
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public class BattleLoadingState : BattleState
     /// <param name="battlers"></param>
     private static void InitializeTurnOrderGui(Battler[] turnOrder)
     {
-        _battleComponent.BattleGui.LoadTurnOrderIntoGui(turnOrder);
+        _battleComponent.BattleGui.TurnOrder.UpdateBattlerNamesInTurnOrderGui(turnOrder);
     }
 
     /// <summary>
@@ -129,13 +129,21 @@ public class BattleLoadingState : BattleState
     /// </summary>
     private static void InitializeGuiHuds(Battler[] playerBattlers, Battler[] enemyBattlers)
     {
-        _battleComponent.BattleGui.LoadInitialPlayerHud(playerBattlers);
-        _battleComponent.BattleGui.LoadInitialEnemyHud(enemyBattlers);
+        _battleComponent.BattleGui.PlayerHud.LoadBattlersIntoHud(playerBattlers);
+        _battleComponent.BattleGui.EnemyHud.LoadBattlersIntoHud(enemyBattlers);
+        _battleComponent.BattleGui.PlayerHud.UpdatePlayerHud();
+        _battleComponent.BattleGui.EnemyHud.UpdatePlayerHud();
     }
 
     private static void InitializePlayerMagic(Battler[] playerBattlers)
     {
-        _battleComponent.BattleGui.LoadPlayersMagicIntoWindows(playerBattlers);
+
+        foreach (var currentBattler in playerBattlers)
+        {
+            if (currentBattler == null)
+                continue;
+            _battleComponent.BattleGui.GetMagicWindow(currentBattler).LoadAbilitiesIntoButtons(currentBattler.BattleStats.Abilities, currentBattler);
+        }
     }
 
 
@@ -144,7 +152,7 @@ public class BattleLoadingState : BattleState
     /// </summary>
     private static void StartBattleFadeIn()
     {
-        _battleComponent.BattleGui.StartFadeIn();
+        _battleComponent.BattleGui.BattleTransitionComponent.StartFadeIn();
     }
 
 
@@ -163,7 +171,7 @@ public class BattleLoadingState : BattleState
     {
         foreach (var _allBattler in allBattlers)
         {
-            _allBattler.BattlerDamageComponent.DamageCausedEvent += (object obj, int e) =>
+            _allBattler.BattlerDamageComponent.DamageCausedEvent += (obj, e) =>
             {
                 var textToDisplay = _battleComponent.BattleGui.BattleNotifications.GetTmpTextFromQueue();
                 textToDisplay.transform.position =
@@ -221,8 +229,8 @@ public class BattleLoadingState : BattleState
                     if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battlerClicked.BattleStats.IsDead)
                         return;
                     _targetBattler = battlerClicked;
-                    _battleComponent.BattleGui.ClosePlayerBattleWindow(_currentBattler);
-                    _battleComponent.BattleGui.ClosePlayerMagicWindow(_currentBattler);
+                    _battleComponent.BattleGui.GetPlayerWindow(_currentBattler).ClosePlayerWindow();
+                    _battleComponent.BattleGui.GetMagicWindow(_currentBattler).ClosePlayerWindow();
                 };
     }
 

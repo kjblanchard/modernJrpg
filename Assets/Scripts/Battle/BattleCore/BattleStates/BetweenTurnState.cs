@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class BetweenTurnState : BattleState
 {
-    /// <summary>
-    /// Enable debug mode if you want to see some output of the player turns, otherwise it is set to false here.
-    /// </summary>
-    private const bool _debugMode = false;
     public override void StartState(params bool[] startupBools)
     {
         if (CheckForWinCondition()) return;
@@ -21,7 +17,7 @@ public class BetweenTurnState : BattleState
         var allLiveBattlers = _battleComponent.BattleData.AllLiveBattlers;
         _currentBattler = nextBattler;
         var newBattlerTurnOrder = UpdateBattlerClocks(allLiveBattlers, timeToSubtract);
-        _battleComponent.BattleGui.LoadTurnOrderIntoGui(newBattlerTurnOrder);
+        _battleComponent.BattleGui.TurnOrder.UpdateBattlerNamesInTurnOrderGui(newBattlerTurnOrder);
         _battleComponent.BattleStateMachine.ChangeBattleState(_currentBattler.BattleStats.IsPlayer
             ? BattleStateMachine.BattleStates.PlayerTurnState
             : BattleStateMachine.BattleStates.EnemyTurnState);
@@ -119,12 +115,12 @@ public class BetweenTurnState : BattleState
         {
             _battler.BattlerTimeManager.SubtractBattleTime(timeToSubtract);
 
-            if (!_debugMode) continue;
-            var next5Turns = _battler.BattlerTimeManager.CurrentTurns.Take(5).ToList();
-            next5Turns.ForEach(i =>
-            {
-                Debug.Log($"The battler {_battler.BattleStats.BattlerDisplayName} and his speed time is {i}");
-            });
+            //if (!_debugMode) continue;
+            //var next5Turns = _battler.BattlerTimeManager.CurrentTurns.Take(5).ToList();
+            //next5Turns.ForEach(i =>
+            //{
+            //    Debug.Log($"The battler {_battler.BattleStats.BattlerDisplayName} and his speed time is {i}");
+            //});
         }
     }
 

@@ -14,7 +14,6 @@ public class DotweenBroadcasterComponent : MonoBehaviour
     public void Start()
     {
         DotweenAnimation.autoPlay = false;
-        //DotweenAnimation.autoGenerate = false;
     }
 
     public void OnDotweenCompleteEvent()

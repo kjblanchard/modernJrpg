@@ -22,23 +22,17 @@ public class PlayerHud : MonoBehaviour
             currentBattler.BattlerDamageComponent.DamageCausedEvent += OnDamageCaused;
             currentBattler.BattlerDamageComponent.MpDamageCausedEvent += OnDamageCaused;
         }
-    }
 
-    public void LoadInitialHudItems()
-    {
         foreach (var _playerHudItem in _playerHudItems)
         {
-            if (_playerHudItem.BattlerAssigned == null)
-            {
+            if(_playerHudItem.BattlerAssigned is null)
                 _playerHudItem.gameObject.SetActive(false);
-                continue;
-            }
-            _playerHudItem.HpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentHp.ToString();
-            _playerHudItem.NameText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerDisplayName;
-            _playerHudItem.MpText.text = _playerHudItem.BattlerAssigned.BattleStats.BattlerCurrentMp.ToString();
         }
     }
 
+    /// <summary>
+    /// Updates the elements in the hud.  Used when Information changes.
+    /// </summary>
     public void UpdatePlayerHud()
     {
         foreach (var _playerHudItem in _playerHudItems)
@@ -53,7 +47,6 @@ public class PlayerHud : MonoBehaviour
     private void OnDamageCaused(object obj, int e)
     {
         UpdatePlayerHud();
-
     }
 
 }

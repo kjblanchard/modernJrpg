@@ -10,8 +10,6 @@ public interface IGuiLoadingEvent
     public void OnGuiLoadingEvent(object obj, GuiLoadingEventArgs loadingArgs);
     public Guid GuiLoadingId { get; set; }
 
-
-
 }
 
 

@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class EnemyTurnState : BattleState
 {
-    // Start is called before the first frame update
     public override void StartState(params bool[] startupBools)
     {
         _currentBattler.StatusEffectComponent.ApplyAllPlayerStartStateStatus();
