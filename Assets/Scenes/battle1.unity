@@ -1342,6 +1342,7 @@ MonoBehaviour:
   _playerHudComponent: {fileID: 1103010184}
   _enemyHudComponent: {fileID: 242041091}
   _fadeInTweenBroadcasterComponent: {fileID: 1606930615}
+  _fadeInTween: {fileID: 1606930616}
   _mainTurnOrderGui: {fileID: 1693447057}
   _playerWindows:
   - {fileID: 177029002}
@@ -8888,7 +8889,7 @@ GameObject:
   - component: {fileID: 1606930616}
   - component: {fileID: 1606930615}
   m_Layer: 6
-  m_Name: FadeInTweener
+  m_Name: BattleFadeInTweener
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

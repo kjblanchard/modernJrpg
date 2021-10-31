@@ -1,11 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
 public class BattleGui : MonoBehaviour
 {
-    public static bool IsAnimationPlaying { get; set; }
+    /// <summary>
+    /// Tells if the gui is loading or not, useful for polling for animations and stuff.  This is powered by the events below and should subscribe to them.
+    /// </summary>
+    public static bool IsAnimationPlaying => _loadingDictionary.Count > 0;
+    /// <summary>
+    /// Used to tell if this thing is loading or not.
+    /// </summary>
+    private static readonly Dictionary<Guid, object> _loadingDictionary = new();
     public BattlePlayerWindow GetPlayerWindow(Battler battler) => _playerWindows[battler.BattleStats.BattlerNumber];
     public BattleMagicWindow GetMagicWindow(Battler battler) => _playerMagicWindows[battler.BattleStats.BattlerNumber];
     public BattleNotificationsGui BattleNotifications => _battleNotificationsGui;
@@ -21,6 +29,7 @@ public class BattleGui : MonoBehaviour
     [SerializeField] private BattleNotificationsGui _battleNotificationsGui;
 
 
+
     public event BattleGuiEventHandler BattleFadeInEvent;
     public event BattleGuiEventHandler BattleFadeOutEvent;
     public delegate void BattleGuiEventHandler(object sender, EventArgs e);
@@ -30,7 +39,23 @@ public class BattleGui : MonoBehaviour
     {
         _fadeInTweenBroadcasterComponent.DotweenCompleteEvent += OnBattleFadeInComplete;
         _fadeInTweenBroadcasterComponent.DotweenRewindCompleteEvent += OnBattleFadeOutComplete;
+
+        foreach (var _playerMagicWindow in _playerMagicWindows)
+        {
+            if (_playerMagicWindow is not null)
+                _playerMagicWindow.GuiLoadingEvent += OnGuiLoadingEvent;
+        }
+
     }
+
+    public void OnGuiLoadingEvent(object obj, GuiLoadingEventArgs e)
+    {
+        if (e.IsLoading)
+            _loadingDictionary.Add(e.Id, obj);
+        else
+            _loadingDictionary.Remove(e.Id);
+    }
+
     public void ClosePlayerBattleWindow(Battler battler) =>
         _playerWindows[battler.BattleStats.BattlerNumber].ClosePlayerWindow();
 

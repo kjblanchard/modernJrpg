@@ -95,10 +95,10 @@ public class BattlePlayerWindow : MonoBehaviour
     /// </summary>
     public void ClosePlayerWindow()
     {
-        if(!_isOpen)
+        if (!_isOpen)
             return;
-        if(_battleMagicWindow)
-        RewindAllButtons();
+        if (_battleMagicWindow)
+            RewindAllButtons();
         DOTween.PlayBackwards(_playerWindowOpenRotate);
         DOTween.PlayBackwards(_playerWindowOpenScale);
         DOTween.PlayBackwards(_playerWindowOpenMove);
@@ -118,8 +118,7 @@ public class BattlePlayerWindow : MonoBehaviour
     }
     private void OnPlayerAttackButtonHover(object obj, EventArgs e)
     {
-        if (_battleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTurnState || BattleGui.IsAnimationPlaying)
-            return;
+        return;
 
     }
 
@@ -130,7 +129,7 @@ public class BattlePlayerWindow : MonoBehaviour
             return;
         if (currentState == BattleStateMachine.BattleStates.PlayerTargetingState)
         {
-            if(BattleState.IsCurrentBattlerAttacking)
+            if (BattleState.IsCurrentBattlerAttacking)
                 PlayButtonAndStopOthers(AttackButton);
             else
             {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class BattleMagicWindow : MonoBehaviour
+public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
 {
     private static readonly Color32 blueColor = new Color32(169, 193, 243, 255);
     private static readonly Color32 grayColor = new Color32(166, 166, 166, 100);
@@ -97,21 +97,19 @@ public class BattleMagicWindow : MonoBehaviour
         _openMoveTween.DORestart();
         _openScaleTween.DORestart();
         _openRotateTween.DORestart();
-        BattleGui.IsAnimationPlaying = true;
+        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId,true));
     }
 
     public void OnPlayerWindowComplete(object obj, EventArgs e)
     {
         _isOpen = true;
-        BattleGui.IsAnimationPlaying = false;
-
+        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId,false));
     }
 
     public void OnPlayerWindowCloseComplete(object obj, EventArgs e)
     {
         _isOpen = false;
-        BattleGui.IsAnimationPlaying = false;
-
+        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId,false));
     }
 
     public void DeselectAllBattleButtons()
@@ -139,6 +137,15 @@ public class BattleMagicWindow : MonoBehaviour
         _openMoveTween.DOPlayBackwards();
         _openScaleTween.DOPlayBackwards();
         _openRotateTween.DOPlayBackwards();
-        BattleGui.IsAnimationPlaying = true;
+        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId,true));
     }
+
+    public event IGuiLoadingEvent.GuiLoadingEventHandler GuiLoadingEvent;
+    public void OnGuiLoadingEvent(object obj, GuiLoadingEventArgs loadingArgs)
+    {
+        GuiLoadingEvent?.Invoke(obj, loadingArgs);
+    }
+
+
+    public Guid GuiLoadingId { get; set; } = Guid.NewGuid();
 }
