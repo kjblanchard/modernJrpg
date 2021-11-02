@@ -21,7 +21,8 @@ public class BattleEndState : BattleState
     {
         if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum !=
             BattleStateMachine.BattleStates.BattleEndState) return;
-        _battleComponent.BattleGui.BattleTransitionComponent.StartFadeOut();
+        _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BattleRewardState);
+        //_battleComponent.BattleGui.BattleTransitionComponent.StartFadeOut();
     }
 
     public override void StateUpdate()

@@ -15,6 +15,7 @@ public class SoundController : MonoBehaviour
     private readonly Dictionary<Bgm, EventInstance> _loadedBattleMusic = new Dictionary<Bgm, EventInstance>();
     private EventInstance _currentPlayingEventInstance;
 
+
     private const string _bgmBus = "bus:/bgm";
 
     private void Awake()
@@ -54,15 +55,16 @@ public class SoundController : MonoBehaviour
     {
         if (!_loadedBattleMusic.TryGetValue(bgmToPlay, out var bgmEventInstance)) return;
         bgmEventInstance.start();
-        bgmEventInstance.release();
+        //bgmEventInstance.release();
         _currentPlayingEventInstance = bgmEventInstance;
     }
 
-    public void StopBgm(Bgm bgmToPlay)
+    public void StopBgm(Bgm bgmToPlay, bool destroyAfter = true)
     {
         if (!_loadedBattleMusic.TryGetValue(bgmToPlay, out var bgmEventInstance)) return;
         bgmEventInstance.stop(STOP_MODE.ALLOWFADEOUT);
-        _loadedBattleMusic.Remove(bgmToPlay);
+        if (destroyAfter)
+            _loadedBattleMusic.Remove(bgmToPlay);
     }
 
     public void PlaySfxOneShot(Sfx sfxToPlay)
@@ -76,6 +78,7 @@ public class SoundController : MonoBehaviour
         DebugRoom,
         Battle1,
         BattleWin,
+        BattleRewardGaining,
 
     }
 
@@ -83,6 +86,8 @@ public class SoundController : MonoBehaviour
     {
         Default,
         BattleEnemyDeath,
+        LevelUp
+
 
     }
 

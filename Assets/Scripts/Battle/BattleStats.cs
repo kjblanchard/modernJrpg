@@ -15,6 +15,13 @@ public class BattleStats
         BattlerCurrentMp = BattlerMaxMp;
         _statusEffectComponent = statusEffectsToReference;
     }
+    public BattleStats(BattlerBaseStats battlersStats)
+    {
+        _theBattlersBaseBaseStats = battlersStats;
+        BattlerGuid = Guid.NewGuid();
+        BattlerCurrentHp = BattlerMaxHp;
+        BattlerCurrentMp = BattlerMaxMp;
+    }
 
     private BattlerBaseStats _theBattlersBaseBaseStats;
 
@@ -36,11 +43,16 @@ public class BattleStats
     public int BattlerMaxHp => _theBattlersBaseBaseStats.BattlerHp;
     public int BattlerStr => _theBattlersBaseBaseStats.BattlerStr + _statusEffectComponent.StrModifier;
     public int BattlerSpd => _theBattlersBaseBaseStats.BattlerSpd;
-    public int BattlerLvl => _theBattlersBaseBaseStats.BattlerLvl;
+    public int BattlerLvl { get; set; } = 1;
+    public int BattlerTotalExp { get; set; } = 0;
+    public int BattlerExpToNextLevel => ExpRequiredForNextLevel - BattlerTotalExp;
+    public int BattlerCurrentExpThisLevel => BattlerTotalExp - _theBattlersBaseBaseStats.ExpRequired[BattlerLvl - 1];
     public BattlerNames BattlerNameEnum => _theBattlersBaseBaseStats.BattlerNameEnum;
     public bool IsPlayer => _theBattlersBaseBaseStats.IsPlayer;
     public int BattlerMp => 999;
     public Ability[] Abilities => _theBattlersBaseBaseStats.Abilities;
+
+    public int ExpRequiredForNextLevel => _theBattlersBaseBaseStats.ExpRequired[BattlerLvl];
 
     public bool IsDead;
     private char _battlerNamePostFix;
@@ -73,13 +85,13 @@ public class BattleStats
     /// <returns></returns>
     public int ApplyDamage(int damageToGive)
     {
-        return BattlerCurrentHp = Mathf.Clamp(BattlerCurrentHp - damageToGive ,0, BattlerMaxHp);
+        return BattlerCurrentHp = Mathf.Clamp(BattlerCurrentHp - damageToGive, 0, BattlerMaxHp);
     }
 
     public int ApplyMpDamage(int damageToGive)
     {
 
-        return BattlerCurrentMp = Mathf.Clamp(BattlerCurrentMp - damageToGive ,0, BattlerMaxMp);
+        return BattlerCurrentMp = Mathf.Clamp(BattlerCurrentMp - damageToGive, 0, BattlerMaxMp);
     }
 
 }
