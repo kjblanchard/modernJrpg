@@ -10,6 +10,7 @@ public class PlayerResult : MonoBehaviour
     [SerializeField] private DOTweenAnimation expBarColorTween;
     [SerializeField] private DOTweenAnimation expBarColorLevelUpTween;
     [SerializeField] private Image _playerImage;
+    [SerializeField] private Image _playerPortraitColor;
     [SerializeField] private TMP_Text _playerNameText;
     [SerializeField] private TMP_Text _playerLevelText;
     [SerializeField] private TMP_Text _playerTotalExpText;
@@ -45,6 +46,8 @@ public class PlayerResult : MonoBehaviour
         _playerExpSlider.maxValue = battlerToLoad.BattlerExpToNextLevel;
         _playerExpSlider.value = battlerToLoad.BattlerCurrentExpThisLevel;
         _expToGive = expGained;
+        _playerImage.sprite = battlerToLoad.BattlerPortrait;
+        _playerPortraitColor.color = battlerToLoad.PortraitColor;
         _playerExpGainText.text = _expToGive.ToString();
 
     }

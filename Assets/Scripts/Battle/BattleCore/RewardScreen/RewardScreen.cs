@@ -14,9 +14,9 @@ public class RewardScreen : BattleState
     public GameObject ResultGameObjectPrefab;
     public GameObject PrefabSpawnLocation;
     public BattlerBaseStats[] BattlersToLoad;
-    public int ExpGained;
     public Canvas rewardScreenCanvas;
     private bool isLoaded = false;
+    private int _expGained;
 
 
     public bool isCurrentlyPlayingGainingSound = false;
@@ -24,7 +24,8 @@ public class RewardScreen : BattleState
 
     public override void StartState(params bool[] startupBools)
     {
-        SoundController.Instance.LoadBgm(SoundController.Bgm.BattleRewardGaining);
+        _expGained = _battleComponent.BattleData.EnemyBattlers.ToList()
+            .Sum(battler => battler.BattleStats.BattlerExpReward);
 
         foreach (var _battlerBaseStats in BattlersToLoad)
         {
@@ -32,7 +33,7 @@ public class RewardScreen : BattleState
             var spawnedPrefab = Instantiate(ResultGameObjectPrefab, PrefabSpawnLocation.transform);
             var spawnedPlayerResulg = spawnedPrefab.GetComponent<PlayerResult>();
             var battleStats = new BattleStats(_battlerBaseStats);
-            spawnedPlayerResulg.LoadBattlerIntoPlayerResult(battleStats, ExpGained);
+            spawnedPlayerResulg.LoadBattlerIntoPlayerResult(battleStats, _expGained);
             PlayerClickEvent += spawnedPlayerResulg.OnPlayerClickEvent;
             playerResults.Add(spawnedPlayerResulg);
         }

@@ -4,6 +4,7 @@ public class BattleMusicHandler
     public static void LoadBattleMusic()
     {
         SoundController.Instance.LoadBgm(SoundController.Bgm.BattleWin);
+        SoundController.Instance.LoadBgm(SoundController.Bgm.BattleRewardGaining);
     }
 
     public static void StopBattleMusic()

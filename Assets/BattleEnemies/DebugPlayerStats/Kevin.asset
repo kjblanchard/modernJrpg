@@ -17,7 +17,6 @@ MonoBehaviour:
   BattlerMp: 5
   BattlerStr: 1
   BattlerSpd: 5
-  BattlerLvl: 5
   IsPlayer: 1
   BattlerNameEnum: 1
   Abilities:
@@ -25,4 +24,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75b3fbe0692253e4999734aaf462589e, type: 2}
   - {fileID: 11400000, guid: a04f997a53d66f8458928bc78345ed37, type: 2}
   - {fileID: 11400000, guid: 71369acb7eeaca145ab8d759b69e6f7c, type: 2}
+  Exp: 0
+  CharPortrait: {fileID: -1653701774, guid: cf566286124350e459850962d7b37738, type: 3}
+  CharColor:
+    serializedVersion: 2
+    rgba: 3367895281
   ExpRequired: 000000000a0000001400000046000000

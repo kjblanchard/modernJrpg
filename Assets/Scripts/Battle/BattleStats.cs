@@ -50,7 +50,10 @@ public class BattleStats
     public BattlerNames BattlerNameEnum => _theBattlersBaseBaseStats.BattlerNameEnum;
     public bool IsPlayer => _theBattlersBaseBaseStats.IsPlayer;
     public int BattlerMp => 999;
+    public Color32 PortraitColor => _theBattlersBaseBaseStats.CharColor;
+    public Sprite BattlerPortrait => _theBattlersBaseBaseStats.CharPortrait;
     public Ability[] Abilities => _theBattlersBaseBaseStats.Abilities;
+    public int BattlerExpReward => _theBattlersBaseBaseStats.Exp;
 
     public int ExpRequiredForNextLevel => _theBattlersBaseBaseStats.ExpRequired[BattlerLvl];
 

@@ -14,8 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BattlerName: Circle
   BattlerHp: 5
+  BattlerMp: 0
   BattlerStr: 2
   BattlerSpd: 2
-  BattlerLvl: 2
   IsPlayer: 0
   BattlerNameEnum: 5
+  Abilities: []
+  Exp: 7
+  CharPortrait: {fileID: 0}
+  ExpRequired: 

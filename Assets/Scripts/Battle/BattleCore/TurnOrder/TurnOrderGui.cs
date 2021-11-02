@@ -12,7 +12,8 @@ public class TurnOrderGui : MonoBehaviour
     public void UpdateBattlerNamesInTurnOrderGui(Battler[] battlers)
     {
         var battlerNames = battlers.ToList().Select(battler => battler.BattleStats.BattlerDisplayName).ToArray();
-        InitializeTurnOrderTexts(battlerNames);
+        var battlerColors = battlers.ToList().Select(battler => battler.BattleStats.PortraitColor).ToArray();
+        InitializeTurnOrderTexts(battlerNames,battlerColors);
 
     }
 
@@ -20,11 +21,12 @@ public class TurnOrderGui : MonoBehaviour
     /// Modifies the text displayed For the turn order UI when it changes
     /// </summary>
     /// <param name="namesToInput">The array of names that are going to be input</param>
-    private void InitializeTurnOrderTexts(string[] namesToInput)
+    private void InitializeTurnOrderTexts(string[] namesToInput, Color32[] textColor)
     {
         for (var i = 0; i < namesToInput.Length; i++)
         {
             turnOrderTmpTexts[i].text = namesToInput[i];
+            turnOrderTmpTexts[i].color = textColor[i];
         }
     }
 }
