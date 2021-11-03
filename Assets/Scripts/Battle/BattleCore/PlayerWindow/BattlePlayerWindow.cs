@@ -5,6 +5,9 @@ using UnityEngine;
 public class BattlePlayerWindow : MonoBehaviour
 {
 
+    public void DisplayCanvas(bool isEnabled) => _canvas.enabled = isEnabled;
+    [SerializeField] private Canvas _canvas;
+
     //Tween names
     private const string _playerWindowOpenScale = "player1WindowOpenScaleTween";
     private const string _playerWindowOpenMove = "player1WindowOpenMoveTween";

@@ -26,6 +26,24 @@ public class BattleGui : MonoBehaviour
     [SerializeField] private BattleNotificationsGui _battleNotificationsGui;
     [SerializeField] private BattleGuiTransitionComponent _battleGuiTransitionComponent;
 
+    public void DisableAllCanvasForRewardScreen()
+    {
+        _playerHudComponent.DisplayCanvas(false);
+        _enemyHudComponent.DisplayCanvas(false);
+        _mainTurnOrderGui.DisplayCanvas(false);
+        foreach (var _battlePlayerWindow in _playerWindows)
+        {
+            _battlePlayerWindow?.DisplayCanvas(false);
+        }
+        foreach (var _playerMagicWindow in _playerMagicWindows)
+        {
+            _playerMagicWindow?.DisplayCanvas(false);
+        }
+        _battleNotificationsGui.DisplayCanvas(false);
+    }
+
+
+
     private void Awake()
     {
         SubscribeMagicWindowsToGuiLoadingEvents();

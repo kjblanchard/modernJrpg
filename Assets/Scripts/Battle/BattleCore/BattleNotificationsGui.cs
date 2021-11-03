@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class BattleNotificationsGui : MonoBehaviour
 {
+    public void DisplayCanvas(bool isEnabled) => _canvas.enabled = isEnabled;
+    [SerializeField] private Canvas _canvas;
 
     [SerializeField] private TMP_Text _pleaseSelectATargetTmp;
     [SerializeField] private TMP_Text _battleNotificationTmp;

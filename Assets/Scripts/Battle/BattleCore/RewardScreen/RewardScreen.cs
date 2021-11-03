@@ -37,6 +37,7 @@ public class RewardScreen : BattleState
             PlayerClickEvent += spawnedPlayerResulg.OnPlayerClickEvent;
             playerResults.Add(spawnedPlayerResulg);
         }
+        _battleComponent.BattleGui.DisableAllCanvasForRewardScreen();
 
         rewardScreenCanvas.enabled = true;
         playerResults.ForEach(playerResult => playerResult.isLoaded = true);

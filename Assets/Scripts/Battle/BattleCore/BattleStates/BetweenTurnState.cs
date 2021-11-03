@@ -17,7 +17,7 @@ public class BetweenTurnState : BattleState
         var allLiveBattlers = _battleComponent.BattleData.AllLiveBattlers;
         _currentBattler = nextBattler;
         var newBattlerTurnOrder = UpdateBattlerClocks(allLiveBattlers, timeToSubtract);
-        _battleComponent.BattleGui.TurnOrder.UpdateBattlerNamesInTurnOrderGui(newBattlerTurnOrder);
+        _battleComponent.BattleGui.TurnOrder.UpdateBattlerPicturesInTurnOrderGui(newBattlerTurnOrder);
         _battleComponent.BattleStateMachine.ChangeBattleState(_currentBattler.BattleStats.IsPlayer
             ? BattleStateMachine.BattleStates.PlayerTurnState
             : BattleStateMachine.BattleStates.EnemyTurnState);

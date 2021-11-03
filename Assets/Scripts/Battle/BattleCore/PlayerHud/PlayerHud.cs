@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerHud : MonoBehaviour
 {
+    public void DisplayCanvas(bool isEnabled) => _canvas.enabled = isEnabled;
+    [SerializeField] private Canvas _canvas;
     [SerializeField] private PlayerHudItem[] _playerHudItems;
 
 

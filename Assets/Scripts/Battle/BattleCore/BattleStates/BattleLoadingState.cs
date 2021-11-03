@@ -121,7 +121,7 @@ public class BattleLoadingState : BattleState
     /// <param name="battlers"></param>
     private static void InitializeTurnOrderGui(Battler[] turnOrder)
     {
-        _battleComponent.BattleGui.TurnOrder.UpdateBattlerNamesInTurnOrderGui(turnOrder);
+        _battleComponent.BattleGui.TurnOrder.UpdateBattlerPicturesInTurnOrderGui(turnOrder);
     }
 
     /// <summary>

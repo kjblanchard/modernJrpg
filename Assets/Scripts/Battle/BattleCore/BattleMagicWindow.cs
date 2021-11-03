@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
 {
+    public void DisplayCanvas(bool isEnabled) => _canvas.enabled = isEnabled;
+    [SerializeField] private Canvas _canvas;
     private static readonly Color32 blueColor = new(169, 193, 243, 255);
     private static readonly Color32 grayColor = new(166, 166, 166, 100);
     [SerializeField]

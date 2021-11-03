@@ -22,4 +22,7 @@ MonoBehaviour:
   Abilities: []
   Exp: 7
   CharPortrait: {fileID: 0}
+  CharColor:
+    serializedVersion: 2
+    rgba: 3355443455
   ExpRequired: 
