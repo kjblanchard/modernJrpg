@@ -12,6 +12,7 @@ public class BattlerBaseStats : ScriptableObject
     public bool IsPlayer = false;
     public BattlerNames BattlerNameEnum;
     public Ability[] Abilities;
+    public BattlerGambit[] Gambits;
     public int Exp;
     public Sprite CharPortrait;
     public Color32 CharColor = new(255, 0, 0,200);

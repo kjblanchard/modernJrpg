@@ -16,6 +16,7 @@ public class BattleGui : MonoBehaviour
     public PlayerHud EnemyHud => _enemyHudComponent;
     public TurnOrderGui TurnOrder => _mainTurnOrderGui;
     public BattleGuiTransitionComponent BattleTransitionComponent => _battleGuiTransitionComponent;
+    public BattleRewardScreen BattleRewardScreen => _battleRewardScreen;
 
     private static readonly Dictionary<Guid, object> _loadingDictionary = new();
     [SerializeField] private PlayerHud _playerHudComponent;
@@ -25,6 +26,7 @@ public class BattleGui : MonoBehaviour
     [SerializeField] private BattleMagicWindow[] _playerMagicWindows;
     [SerializeField] private BattleNotificationsGui _battleNotificationsGui;
     [SerializeField] private BattleGuiTransitionComponent _battleGuiTransitionComponent;
+    [SerializeField] private BattleRewardScreen _battleRewardScreen;
 
     public void DisableAllCanvasForRewardScreen()
     {

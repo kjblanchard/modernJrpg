@@ -15,6 +15,13 @@ public class StatusEffectComponent
         _battler = battlerToReference;
     }
 
+    public bool HasStatus(StatusEffectList statusToCheckFor) 
+    {
+
+       var hi = _statusEffectList.Any(status => status.StatusEffectName == statusToCheckFor);
+       return  _statusEffectList.Any(status => status.StatusEffectName == statusToCheckFor);
+    }
+
     /// <summary>
     /// The str modifier from all of the status effects
     /// </summary>

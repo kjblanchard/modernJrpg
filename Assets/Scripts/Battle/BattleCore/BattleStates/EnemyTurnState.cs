@@ -11,8 +11,12 @@ public class EnemyTurnState : BattleState
             _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState);
             return;
         }
-        _targetBattler = _battleComponent.BattleData.PlayerBattlers[0];
-        _currentAbility = _battleComponent.BattleData.GetAbilityByName(Ability.AbilityName.BaseAttack);
+
+        var AttackAndTarget =
+            _currentBattler.BattlerGambitComponent.ChooseAction(_battleComponent.BattleData.EnemyBattlers,
+                _battleComponent.BattleData.PlayerBattlers, _currentBattler);
+        _targetBattler = AttackAndTarget.Item1;
+        _currentAbility = AttackAndTarget.Item2;
         StartCoroutine(DisplayBattleMessageCo());
     }
 

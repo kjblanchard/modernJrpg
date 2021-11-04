@@ -23,11 +23,21 @@ public class PlayerHud : MonoBehaviour
             //SubscribeToBattlersDamageCausedEvent to be able to update the gui when this happens
             currentBattler.BattlerDamageComponent.DamageCausedEvent += OnDamageCaused;
             currentBattler.BattlerDamageComponent.MpDamageCausedEvent += OnDamageCaused;
+
+            if (currentBattler.BattleStats.IsPlayer)
+            {
+                _playerHudItems[i].GambitBattleButton.BattleButtonBroadcaster.ButtonPressedEvent += (sender, args) =>
+                {
+                    currentBattler.BattlerGambitComponent.isGambitsEnabled =
+                        !currentBattler.BattlerGambitComponent.isGambitsEnabled;
+                };
+
+            }
         }
 
         foreach (var _playerHudItem in _playerHudItems)
         {
-            if(_playerHudItem.BattlerAssigned is null)
+            if (_playerHudItem.BattlerAssigned is null)
                 _playerHudItem.gameObject.SetActive(false);
         }
     }

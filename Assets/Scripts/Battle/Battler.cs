@@ -14,6 +14,7 @@ public class Battler : MonoBehaviour
 
     public DamageComponent BattlerDamageComponent { get; private set; }
     public StatusEffectComponent StatusEffectComponent { get; private set; }
+    public BattlerGambitComponent BattlerGambitComponent { get; private set; }
 
     [SerializeField] public SpriteRenderer spriteComp;
 
@@ -48,6 +49,7 @@ public class Battler : MonoBehaviour
         BattleStats = new BattleStats(_battlerBaseStats, StatusEffectComponent);
         BattlerTimeManager = new BattlerTimeManager(BattleStats);
         BattlerDamageComponent = new DamageComponent(BattleStats);
+        BattlerGambitComponent = new BattlerGambitComponent(_battlerBaseStats.Gambits);
 
         BattlerDamageComponent.DeathCausedEvent += OnDeath;
     }

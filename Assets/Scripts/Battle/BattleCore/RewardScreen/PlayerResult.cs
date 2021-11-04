@@ -7,6 +7,10 @@ using UnityEngine.UI;
 
 public class PlayerResult : MonoBehaviour
 {
+    public bool IsLoaded = false;
+    public bool IsFinished;
+    public bool IsCurrentlyGainingExp => _expGainingCoroutine is not null;
+
     [SerializeField] private DOTweenAnimation expBarColorTween;
     [SerializeField] private DOTweenAnimation expBarColorLevelUpTween;
     [SerializeField] private Image _playerImage;
@@ -29,12 +33,7 @@ public class PlayerResult : MonoBehaviour
     private int _expToGive;
     private WaitForSeconds defaultWaitTimeInstance = new(_defaultWaitTime);
     private WaitForSeconds defaultLevelUpInstance = new(_defaultLevelUpWaitTime);
-
-    private bool isInitiated = false;
-    public bool isFinished = false;
-    //private int _expGained;
-    public bool isLoaded = false;
-    public bool IsCurrentlyGainingExp => _expGainingCoroutine is not null;
+    private bool _isInitiated;
 
     public void LoadBattlerIntoPlayerResult(BattleStats battlerToLoad, int expGained)
     {
@@ -55,11 +54,11 @@ public class PlayerResult : MonoBehaviour
 
     public void OnPlayerClickEvent(object obj, EventArgs e)
     {
-        if(!isLoaded)
+        if (!IsLoaded)
             return;
-        if (!isInitiated)
+        if (!_isInitiated)
         {
-            isInitiated = true;
+            _isInitiated = true;
             StartExpGain(_expToGive);
         }
         else
@@ -92,7 +91,7 @@ public class PlayerResult : MonoBehaviour
         expBarColorTween.DOKill();
         _playerExpSlider.gameObject.transform.Find("Fill Area").Find("Fill").GetComponent<Image>().color = purpleColor;
         _expGainingCoroutine = null;
-        isFinished = true;
+        IsFinished = true;
 
 
     }
@@ -124,7 +123,6 @@ public class PlayerResult : MonoBehaviour
         yield return defaultLevelUpInstance;
         _playerBattleStats.BattlerLvl++;
         UpdateExpText();
-        //_playerExpToNextLevelText.text = _playerBattleStats.BattlerExpToNextLevel.ToString();
         expBarColorLevelUpTween.DORewind();
         expBarColorTween.DORewind();
         _playerExpSlider.maxValue = _playerBattleStats.BattlerExpToNextLevel;

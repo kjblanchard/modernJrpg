@@ -12,6 +12,8 @@ public class PlayerHudItem : MonoBehaviour
     public Battler BattlerAssigned;
     public int ButtonNumber;
 
+    public BattleButton GambitBattleButton;
+
 
 
 }
