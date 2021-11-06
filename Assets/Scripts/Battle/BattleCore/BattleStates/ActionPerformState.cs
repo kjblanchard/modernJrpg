@@ -57,8 +57,8 @@ public class ActionPerformState : BattleState
     /// </summary>
     private static void TickCurrentBattlersStatusEffects()
     {
-        _currentBattler.StatusEffectComponent.ApplyAllPlayerEndStateStatus();
-        _currentBattler.StatusEffectComponent.RemoveStaleStatusEffects();
+        _currentBattler.StatusEffectComponent.EndTurn();
+        //_currentBattler.StatusEffectComponent.RemoveStaleStatusEffects();
     }
 
 

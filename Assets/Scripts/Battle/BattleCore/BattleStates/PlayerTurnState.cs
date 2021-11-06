@@ -8,9 +8,10 @@ public class PlayerTurnState : BattleState
     {
         if (_currentBattler.BattlerGambitComponent.isGambitsEnabled)
         {
-            var targetAndAbility = _currentBattler.BattlerGambitComponent.ChooseAction(_battleComponent.BattleData.EnemyBattlers,_battleComponent.BattleData.PlayerBattlers, _currentBattler);
+            var targetAndAbility = _currentBattler.BattlerGambitComponent.ChooseAction(_battleComponent.BattleData.EnemyBattlers, _battleComponent.BattleData.PlayerBattlers, _currentBattler);
             _targetBattler = targetAndAbility.Item1;
             _currentAbility = targetAndAbility.Item2;
+            _currentBattler.StatusEffectComponent.ApplyAllPlayerStartStateStatus();
             StartCoroutine(DisplayBattleMessageCo());
             return;
 

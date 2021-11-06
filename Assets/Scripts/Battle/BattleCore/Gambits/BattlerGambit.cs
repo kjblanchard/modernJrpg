@@ -9,9 +9,15 @@ public class BattlerGambit
     public GambitTarget ConstraintTarget;
     public GambitCondition ConstraintCondition;
     public int ConstraintValue;
-    public Ability AbilityToPerform;
+    public AbilityAndWeight[] AbilityToPerform;
     public StatusEffectList StatusEffectToCheckForConstraint;
 }
+    [System.Serializable]
+    public class AbilityAndWeight
+    {
+        public Ability Ability;
+        public int Weight = 100;
+    }
 
 [System.Serializable]
 public enum GambitTarget
@@ -27,7 +33,7 @@ public enum GambitCondition
     Default,
     None,
     HpNot100,
-    LeastHp,
+    LeastHpPercent,
     HpGreater,
     HpLess ,
     MpGreater,

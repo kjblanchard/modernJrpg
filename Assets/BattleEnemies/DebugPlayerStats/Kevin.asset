@@ -31,7 +31,9 @@ MonoBehaviour:
     ConstraintTarget: 0
     ConstraintCondition: 0
     ConstraintValue: 0
-    AbilityToPerform: {fileID: 11400000, guid: 71369acb7eeaca145ab8d759b69e6f7c, type: 2}
+    AbilityToPerform:
+    - Ability: {fileID: 11400000, guid: 71369acb7eeaca145ab8d759b69e6f7c, type: 2}
+      Weight: 0
     StatusEffectToCheckForConstraint: 3
   - ConditionTarget: 2
     Condition: 3
@@ -39,7 +41,9 @@ MonoBehaviour:
     ConstraintTarget: 3
     ConstraintCondition: 6
     ConstraintValue: 4
-    AbilityToPerform: {fileID: 11400000, guid: 6e48d980b36182043bb93a5107c32073, type: 2}
+    AbilityToPerform:
+    - Ability: {fileID: 11400000, guid: 6e48d980b36182043bb93a5107c32073, type: 2}
+      Weight: 0
     StatusEffectToCheckForConstraint: 0
   - ConditionTarget: 2
     Condition: 3
@@ -47,7 +51,9 @@ MonoBehaviour:
     ConstraintTarget: 0
     ConstraintCondition: 0
     ConstraintValue: 0
-    AbilityToPerform: {fileID: 11400000, guid: 476f8a5be90ce7d4ba3dfb434d542bd4, type: 2}
+    AbilityToPerform:
+    - Ability: {fileID: 11400000, guid: 476f8a5be90ce7d4ba3dfb434d542bd4, type: 2}
+      Weight: 0
     StatusEffectToCheckForConstraint: 0
   Exp: 0
   CharPortrait: {fileID: -1653701774, guid: cf566286124350e459850962d7b37738, type: 3}

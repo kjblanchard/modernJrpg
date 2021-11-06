@@ -38,6 +38,8 @@ public class BattleStats
     public int BattlerNumber { get; private set; }
 
     public int BattlerCurrentHp { get; private set; }
+    public int BattlerCurrentHpPercent => BattlerCurrentHp / BattlerMaxHp * 100;
+    public int BattlerCurrentMpPercent => BattlerCurrentMp / BattlerMaxMp * 100;
     public int BattlerCurrentMp { get; private set; }
     public int BattlerMaxMp => _theBattlersBaseBaseStats.BattlerMp;
     public int BattlerMaxHp => _theBattlersBaseBaseStats.BattlerHp;

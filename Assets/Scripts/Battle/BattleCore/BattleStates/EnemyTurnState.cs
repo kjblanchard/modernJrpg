@@ -36,7 +36,7 @@ public class EnemyTurnState : BattleState
 
     private static IEnumerator DisplayBattleMessageCo()
     {
-        _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"The enemy {_currentBattler.BattleStats.BattlerDisplayName} attacks {_targetBattler.BattleStats.BattlerDisplayName}");
+        _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"The enemy {_currentBattler.BattleStats.BattlerDisplayName} attacks {_targetBattler.BattleStats.BattlerDisplayName} with {_currentAbility.Name}");
         yield return new WaitForSeconds(1);
         _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
         _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.ActionPerformState);

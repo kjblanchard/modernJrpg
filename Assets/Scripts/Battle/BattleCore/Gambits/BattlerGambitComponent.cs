@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,110 +15,117 @@ public class BattlerGambitComponent : MonoBehaviour
 
     public Tuple<Battler, Ability> ChooseAction(Battler[] enemyBattlers, Battler[] playerBattlers, Battler currentBattler)
     {
-        Battler targetBattler;
-        Ability ability;
-
-        foreach (var _battlerGambit in _battlerGambits)
-        {
-            Battler[] targetBattlers = _battlerGambit.ConditionTarget switch
-            {
-                GambitTarget.Default => throw new Exception("Borked"),
-                GambitTarget.Players => playerBattlers,
-                GambitTarget.Enemies => enemyBattlers,
-                GambitTarget.Self => new[]{currentBattler},
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            foreach (var _targetBattler in targetBattlers)
-            {
-                List<Battler> livingBattlers;
-                int randomNumber;
-
-                switch (_battlerGambit.Condition)
-                {
-                    case GambitCondition.Default:
-                        throw new Exception("Borked");
-                    case GambitCondition.HpGreater:
-                        if (_targetBattler.BattleStats.BattlerCurrentHp >= _battlerGambit.ConditionValue)
-                        {
-                            return new Tuple<Battler, Ability>(_targetBattler, _battlerGambit.AbilityToPerform);
-                        }
-                        break;
-                    case GambitCondition.HpLess:
-                        break;
-                    case GambitCondition.MpGreater:
-                        if (currentBattler.BattleStats.BattlerCurrentMp > _battlerGambit.ConditionValue &&
-                            CheckIfMpIsAvailable(currentBattler.BattleStats.BattlerCurrentMp,
-                                _battlerGambit.AbilityToPerform.MpCost))
-                            return new Tuple<Battler, Ability>(_targetBattler, _battlerGambit.AbilityToPerform);
-                        continue;
-                    case GambitCondition.MpLess:
-                        break;
-                    case GambitCondition.Random:
-                        livingBattlers = targetBattlers.Where(battler =>
-                            battler is not null && battler.BattleStats.IsDead == false).ToList();
-                        randomNumber = Random.Range(0, livingBattlers.Count() - 1);
-                        return new Tuple<Battler, Ability>(livingBattlers[randomNumber],
-                            _battlerGambit.AbilityToPerform);
-                    case GambitCondition.IsDead:
-                        break;
-                    case GambitCondition.None:
-                        break;
-                    case GambitCondition.HpNot100:
-                        break;
-                    case GambitCondition.LeastHp:
-                        livingBattlers = targetBattlers.Where(battler =>
-                            battler is not null && battler.BattleStats.IsDead == false).ToList();
-                        var potentialTarget = livingBattlers.Where(battler =>
-                           battler.BattleStats.BattlerCurrentHp < battler.BattleStats.BattlerMaxHp);
-                        switch (potentialTarget.Count())
-                        {
-                            case 0:
-                                randomNumber = Random.Range(0, livingBattlers.Count() - 1);
-                                if (CheckIfMpIsAvailable(currentBattler.BattleStats.BattlerCurrentMp, _battlerGambit.AbilityToPerform.MpCost) && CheckConstraint(_battlerGambit.ConstraintCondition, _battlerGambit.ConstraintValue, currentBattler))
-                                    return new Tuple<Battler, Ability>(livingBattlers[randomNumber],
-                                        _battlerGambit.AbilityToPerform);
-                                continue;
-                            case 1:
-                                if (CheckIfMpIsAvailable(currentBattler.BattleStats.BattlerCurrentMp, _battlerGambit.AbilityToPerform.MpCost) && CheckConstraint(_battlerGambit.ConstraintCondition, _battlerGambit.ConstraintValue, currentBattler))
-                                    return new Tuple<Battler, Ability>(potentialTarget.First(),
-                                        _battlerGambit.AbilityToPerform);
-                                continue;
-                            default:
-                                var target = potentialTarget
-                                    .OrderByDescending(battler => battler.BattleStats.BattlerCurrentHp).First();
-                                if (CheckIfMpIsAvailable(currentBattler.BattleStats.BattlerCurrentMp, _battlerGambit.AbilityToPerform.MpCost) && CheckConstraint(_battlerGambit.ConstraintCondition, _battlerGambit.ConstraintValue, currentBattler))
-                                    return new Tuple<Battler, Ability>(target, _battlerGambit.AbilityToPerform);
-                                continue;
-                        }
-
-                    case GambitCondition.StatusEffectNotExist:
-                        if (!_targetBattler.StatusEffectComponent.HasStatus(_battlerGambit
-                            .StatusEffectToCheckForConstraint) && CheckIfMpIsAvailable(currentBattler.BattleStats.BattlerCurrentMp,_battlerGambit.AbilityToPerform.MpCost) && CheckConstraint(_battlerGambit.ConstraintCondition, _battlerGambit.ConstraintValue, currentBattler))
-                            return new Tuple<Battler, Ability>(_targetBattler, _battlerGambit.AbilityToPerform);
-                        continue;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-            }
-        }
-
-        return null;
+        return (
+        from battlerGambit in _battlerGambits
+        let targetBattlers = GetPotentialTargetsBasedOnGambitTarget(battlerGambit.ConditionTarget, enemyBattlers, playerBattlers, currentBattler)
+        let potentialBattler = GetTargetBasedOnGambitCondition(battlerGambit, targetBattlers)
+        let abilityToUse = ChooseAbilityFromAbilities(battlerGambit.AbilityToPerform,currentBattler)
+        where potentialBattler is not null
+        where CheckIfMpIsAvailable(currentBattler.BattleStats.BattlerCurrentMp, abilityToUse.MpCost)
+        where CheckConstraint(battlerGambit.ConstraintCondition, battlerGambit.ConstraintValue, GetPotentialTargetsBasedOnGambitTarget(battlerGambit.ConstraintTarget, enemyBattlers, playerBattlers, currentBattler))
+        select new Tuple<Battler, Ability>(potentialBattler, abilityToUse)).FirstOrDefault();
 
     }
 
-    private bool CheckConstraint(GambitCondition constraintToCheckFor, int value, Battler constraintTarget)
+    private Ability ChooseAbilityFromAbilities(AbilityAndWeight[] abilitiesForThisGambit, Battler currentBattler)
+    {
+        if (abilitiesForThisGambit.Length == 1)
+            return abilitiesForThisGambit[0].Ability;
+        var usableAbilityList =
+            abilitiesForThisGambit.Where(ability => ability.Ability.MpCost <= currentBattler.BattleStats.BattlerCurrentMp).OrderByDescending(ability => ability.Weight);
+        if (usableAbilityList is null)
+            throw new Exception("You need an ability in the list that can be used at all times");
+
+        var totalAbilityWeight = usableAbilityList.Sum(ability => ability.Weight);
+        var randomNumber = Random.Range(0, totalAbilityWeight);
+        var currentCounter = 0;
+        foreach (var _abilityAndWeight in usableAbilityList)
+        {
+            var totalWeight = currentCounter + _abilityAndWeight.Weight;
+            if (randomNumber <= totalWeight)
+                return _abilityAndWeight.Ability;
+            currentCounter += _abilityAndWeight.Weight;
+        }
+
+        throw new Exception("Something happened here and you didn't match in the foreach");
+    }
+    private Battler[] GetPotentialTargetsBasedOnGambitTarget(GambitTarget targetToGet, Battler[] enemyBattlers, Battler[] playerBattlers, Battler currentBattler)
+    {
+        return targetToGet switch
+        {
+            GambitTarget.Default => null,
+            GambitTarget.Players => playerBattlers,
+            GambitTarget.Enemies => enemyBattlers,
+            GambitTarget.Self => new[] { currentBattler },
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+    private Battler GetTargetBasedOnGambitCondition(BattlerGambit battlerGambit, Battler[] conditionTarget)
+    {
+        return battlerGambit.Condition switch
+        {
+            GambitCondition.Default => null,
+            GambitCondition.None => null,
+            GambitCondition.HpNot100 => null,
+            GambitCondition.LeastHpPercent => LeastHp(conditionTarget),
+            GambitCondition.HpGreater => CheckHpGreater(conditionTarget, battlerGambit.ConditionValue),
+            GambitCondition.HpLess => null,
+            GambitCondition.MpGreater => null,
+            GambitCondition.MpLess => null,
+            GambitCondition.Random => CheckRandom(conditionTarget, battlerGambit.ConditionValue),
+            GambitCondition.IsDead => null,
+            GambitCondition.StatusEffectNotExist => CheckStatusEffectNotExist(conditionTarget, battlerGambit.StatusEffectToCheckForConstraint),
+            _ => throw new ArgumentOutOfRangeException("Ugh")
+        };
+    }
+
+    /// <summary>
+    /// Checks the array of battlers based on the value thrown in.  Returns enemies HP percent that is greater than the value, and orders them by the lowest and returns that one.
+    /// </summary>
+    /// <param name="battlersToCheck"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    private Battler CheckHpGreater(Battler[] battlersToCheck, int value)
+    {
+        return battlersToCheck
+            .Where(battler => !battler.BattleStats.IsDead && battler.BattleStats.BattlerCurrentHp >= value)
+            .OrderByDescending(battler => battler.BattleStats.BattlerCurrentHpPercent)
+            .FirstOrDefault();
+    }
+
+    private Battler CheckRandom(Battler[] battlersToCheck, int value)
+    {
+
+        var livingBattlers = battlersToCheck.Where(battler =>
+            battler is not null && battler.BattleStats.IsDead == false).ToArray();
+        var randomNumber = Random.Range(0, livingBattlers.Count() - 1);
+        return livingBattlers[randomNumber];
+    }
+
+    private Battler LeastHp(Battler[] battlersToCheck)
+    {
+        return battlersToCheck.Where(battler => !battler.BattleStats.IsDead)
+            .OrderByDescending(battler => battler.BattleStats.BattlerCurrentHpPercent).FirstOrDefault();
+    }
+
+    private Battler CheckStatusEffectNotExist(Battler[] battlersToCheck, StatusEffectList statusToCheckFor)
+    {
+        return battlersToCheck
+            .FirstOrDefault(battler => !battler.StatusEffectComponent.HasStatus(statusToCheckFor));
+    }
+
+    private bool CheckConstraint(GambitCondition constraintToCheckFor, int value, Battler[] constraintTarget)
     {
         return constraintToCheckFor switch
         {
             GambitCondition.Default => true,
             GambitCondition.None => true,
             GambitCondition.HpNot100 => throw new Exception("Not in"),
-            GambitCondition.LeastHp => throw new Exception("Not in"),
+            GambitCondition.LeastHpPercent => throw new Exception("Not in"),
             GambitCondition.HpGreater => throw new Exception("Not in"),
             GambitCondition.HpLess => throw new Exception("Not in"),
-            GambitCondition.MpGreater => constraintTarget.BattleStats.BattlerCurrentMp >= value,
+            GambitCondition.MpGreater => constraintTarget.Any(battler => battler.BattleStats.BattlerCurrentMp >= value),
             GambitCondition.MpLess => throw new Exception("Not in"),
             GambitCondition.Random => throw new Exception("Not in"),
             GambitCondition.IsDead => throw new Exception("Not in"),

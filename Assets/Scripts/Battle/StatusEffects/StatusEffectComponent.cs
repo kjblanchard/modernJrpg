@@ -84,7 +84,7 @@ public class StatusEffectComponent
     /// <summary>
     /// Gets rid of all of the status effects that are expired
     /// </summary>
-    public void RemoveStaleStatusEffects()
+    private void RemoveStaleStatusEffects()
     {
         _statusEffectListToRemove.ForEach(x =>
         {
@@ -103,6 +103,7 @@ public class StatusEffectComponent
         _playerStartStatusTickedThisTurn = true;
         _statusEffectList.ForEach(statusEffect =>
         {
+            Debug.Log(statusEffect.StatusEffectName.ToString());
             statusEffect.PlayerStart();
         });
     }
@@ -129,12 +130,13 @@ public class StatusEffectComponent
     {
         ApplyAllPlayerEndStateStatus();
         _playerStartStatusTickedThisTurn = false;
+        RemoveStaleStatusEffects();
     }
 
     /// <summary>
     /// Applies all of the player end status effects.
     /// </summary>
-    public void ApplyAllPlayerEndStateStatus()
+    private void ApplyAllPlayerEndStateStatus()
     {
         _statusEffectList.ForEach(statusEffect =>
         {
