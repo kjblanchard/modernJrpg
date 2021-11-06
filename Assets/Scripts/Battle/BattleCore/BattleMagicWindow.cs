@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
@@ -21,9 +22,25 @@ public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
     [SerializeField]
     private DOTweenAnimation _openRotateTween;
     [SerializeField] private DotweenBroadcasterComponent _playerMagicWindowOpenBroadcaster;
-    private readonly List<MagicButtonController> _magicBattleButtons = new List<MagicButtonController>();
+    private readonly List<MagicButtonController> _magicBattleButtons = new();
     private bool _isOpen;
+
     private BattleStateMachine _battleStateMachine;
+    private BattleGui _battleGui;
+    private void ShowCurrentSelectedButtonDescription()
+    {
+
+        var selectedButton = _magicBattleButtons.Where(button => button.BattleButton.IsSelected).FirstOrDefault();
+        if(selectedButton is not null)
+        {
+            _battleGui.BattleNotifications.DisplayBattleNotification(selectedButton.Ability.Description);
+        }
+        else
+        {
+            _battleGui.BattleNotifications.DisableBattleNotification();
+        }
+
+    }
 
     private void Awake()
     {
@@ -34,6 +51,7 @@ public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
     private void Start()
     {
         _battleStateMachine = FindObjectOfType<BattleStateMachine>();
+        _battleGui = FindObjectOfType<BattleGui>();
     }
 
     public void LoadAbilitiesIntoButtons(Ability[] abilities, Battler battler)
@@ -61,7 +79,28 @@ public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
                 DeselectAllBattleButtons();
                 SelectBattleButton(spawnedBattleButton);
                 BattleState.SetAbility(ability);
+                _battleGui.BattleNotifications.DisplayBattleNotification(spawnedBattleButton.Ability.Description);
                 _battleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.PlayerTargetingState);
+            };
+            spawnedBattleButton.BattleButton.BattleButtonBroadcaster.ButtonHoveredEvent += (sender, args) =>
+            {
+                var currentBattleState = _battleStateMachine.CurrentBattleStateEnum;
+                if (currentBattleState != BattleStateMachine.BattleStates.PlayerTargetingState &&
+                    currentBattleState != BattleStateMachine.BattleStates.PlayerTurnState)
+                    return;
+                if (!_isOpen || BattleGui.IsAnimationPlaying)
+                    return;
+                _battleGui.BattleNotifications.DisplayBattleNotification(spawnedBattleButton.Ability.Description);
+            };
+            spawnedBattleButton.BattleButton.BattleButtonBroadcaster.ButtonHoveredLeaveEvent += (sender, args) =>
+            {
+                var currentBattleState = _battleStateMachine.CurrentBattleStateEnum;
+                if (currentBattleState != BattleStateMachine.BattleStates.PlayerTargetingState &&
+                    currentBattleState != BattleStateMachine.BattleStates.PlayerTurnState)
+                    return;
+                if (!_isOpen || BattleGui.IsAnimationPlaying)
+                    return;
+                ShowCurrentSelectedButtonDescription();
             };
             _magicBattleButtons.Add(spawnedBattleButton);
         }
@@ -99,34 +138,36 @@ public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
         _openMoveTween.DORestart();
         _openScaleTween.DORestart();
         _openRotateTween.DORestart();
-        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId,true));
+        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId, true));
     }
 
     public void OnPlayerWindowComplete(object obj, EventArgs e)
     {
         _isOpen = true;
-        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId,false));
+        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId, false));
     }
 
     public void OnPlayerWindowCloseComplete(object obj, EventArgs e)
     {
         _isOpen = false;
-        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId,false));
+        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId, false));
     }
 
     public void DeselectAllBattleButtons()
     {
         _magicBattleButtons.ForEach(button =>
         {
-            if (button.SelectedText.enabled)
-                button.SelectedText.enabled = false;
+            if (!button.BattleButton.IsSelected) return;
+            button.SelectedText.enabled = false;
+            button.BattleButton.IsSelected = false;
         });
     }
 
     public void SelectBattleButton(MagicButtonController buttonToEnable)
     {
-        if (!buttonToEnable.SelectedText.enabled)
-            buttonToEnable.SelectedText.enabled = true;
+        if (buttonToEnable.BattleButton.IsSelected) return;
+        buttonToEnable.SelectedText.enabled = true;
+        buttonToEnable.BattleButton.IsSelected = true;
     }
 
     /// <summary>
@@ -139,7 +180,8 @@ public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
         _openMoveTween.DOPlayBackwards();
         _openScaleTween.DOPlayBackwards();
         _openRotateTween.DOPlayBackwards();
-        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId,true));
+        _battleGui.BattleNotifications.DisableBattleNotification();
+        OnGuiLoadingEvent(this, new GuiLoadingEventArgs(GuiLoadingId, true));
     }
 
     public event IGuiLoadingEvent.GuiLoadingEventHandler GuiLoadingEvent;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ public class BattleLoadingState : BattleState
         BattleMusicHandler.LoadBattleMusic();
         PopulateBattleDataFromPersistentData();
         var allBattlers = InstantiateBattlers();
+        _battleComponent.BattleGui.BattleNotifications.SpawnNameTexts(allBattlers.Length);
         CorrectDuplicateEnemyNames(allBattlers.ToList());
         CalculateInitialTurnsForBattlers(allBattlers);
         var initialTurnOrder = CreateInitialTurnOrder(allBattlers);
@@ -31,6 +33,7 @@ public class BattleLoadingState : BattleState
         LoadBattlersClickHandlers();
         StartBattleFadeIn();
     }
+
 
     private void InitializeBattlerDamageDisplays(Battler[] allBattlers)
     {
@@ -237,18 +240,18 @@ public class BattleLoadingState : BattleState
     /// <summary>
     /// Generates a function for when the player is hovered.
     /// </summary>
-    /// <param name="battlerClicked"></param>
+    /// <param name="battlerHovered"></param>
     /// <returns></returns>
     private static BattleButtonBroadcaster.BattleButtonActionEventHandler GenerateButtonHoveredFunction(
-        Battler battlerClicked)
+        Battler battlerHovered)
     {
         return
            (obj, e) =>
             {
-                if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battlerClicked.BattleStats.IsDead)
+                if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battlerHovered.BattleStats.IsDead)
                     return;
-                _battleComponent.BattleGui.BattleNotifications.DisplayBattleNotification($"{battlerClicked.BattleStats.BattlerDisplayName}");
-                battlerClicked.spriteComp.color = Color.yellow;
+                DisplayCharacterName(battlerHovered);
+                battlerHovered.spriteComp.color = Color.yellow;
             };
     }
 
@@ -265,9 +268,36 @@ public class BattleLoadingState : BattleState
             {
                 if (_battleComponent.BattleStateMachine.CurrentBattleStateEnum != BattleStateMachine.BattleStates.PlayerTargetingState || battlerHovered.BattleStats.IsDead)
                     return;
-                _battleComponent.BattleGui.BattleNotifications.DisableBattleNotification();
+                HideCharacterName(battlerHovered);
                 battlerHovered.spriteComp.color = Color.white;
             };
+    }
+
+    private static void DisplayCharacterName(Battler battlerNameToDisplay)
+    {
+        battlerNameToDisplay.battlerNameDisplay ??=
+            _battleComponent.BattleGui.BattleNotifications.GetBattlerNameTextFromQueue();
+        battlerNameToDisplay.battlerNameDisplay.text = battlerNameToDisplay.BattleStats.BattlerDisplayName;
+
+        battlerNameToDisplay.battlerNameDisplay.color = DetermineWhichColorToDisplay(battlerNameToDisplay);
+        battlerNameToDisplay.battlerNameDisplay.transform.position =
+            Camera.main.WorldToScreenPoint(battlerNameToDisplay.LocationForNameDisplay.position);
+        battlerNameToDisplay.battlerNameDisplay.enabled = true;
+    }
+
+    private static void HideCharacterName(Battler battlernameToHide)
+    {
+        battlernameToHide.battlerNameDisplay.enabled = false;
+    }
+
+    private static Color DetermineWhichColorToDisplay(Battler battler)
+    {
+        return battler.BattleStats.BattlerCurrentHpPercent() switch
+        {
+            >= 50 => Color.green,
+            > 25 => Color.yellow,
+            _ => Color.red
+        };
     }
 
     /// <summary>

@@ -6,12 +6,13 @@ using UnityEngine;
 public class Ability : ScriptableObject
 {
 
-    public Guid Id = new Guid();
+    public Guid Id = new();
     public string Name;
     public int MpCost;
     public float AtkPowModifier;
     public int AtkBonusDamage;
     public StatusEffectAndChance[] StatusEffects;
+    public string Description;
     public AbilityType Type;
     public AbilityAtkType AttackType;
     public TargetingType TargetType;

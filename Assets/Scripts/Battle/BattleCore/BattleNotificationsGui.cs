@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The notifications gui that will show notifications in the GUI for the player such as damage numbers or helping text
@@ -10,14 +11,21 @@ public class BattleNotificationsGui : MonoBehaviour
     public void DisplayCanvas(bool isEnabled) => _canvas.enabled = isEnabled;
     [SerializeField] private Canvas _canvas;
 
+    [SerializeField] private Image _backgroundImage;
+
     [SerializeField] private TMP_Text _pleaseSelectATargetTmp;
     [SerializeField] private TMP_Text _battleNotificationTmp;
 
     [SerializeField] private GameObject _damageTextToSpawn;
     [SerializeField] private GameObject _damageTextParent;
 
+    [SerializeField] private GameObject _battlerNameDisplayPrefab;
+    [SerializeField] private GameObject _battlerNameTextParent;
+
+
 
     private Queue<BattleDamageText> _damageTextQueue;
+    private Queue<TMP_Text> _displayNameQueue;
 
 
     /// <summary>
@@ -34,6 +42,23 @@ public class BattleNotificationsGui : MonoBehaviour
             _damageTextQueue.Enqueue(instantiatedTmpText);
         }
     }
+    /// <summary>
+    /// This is used to spawn the texts that will be used in battle for displaying damage numbers.
+    /// </summary>
+    public void SpawnNameTexts(int numberToSpawn)
+    {
+        _displayNameQueue = new Queue<TMP_Text>();
+        for (int i = 0; i < numberToSpawn; i++)
+        {
+            var instantiatedDamageText = Instantiate(_battlerNameDisplayPrefab, _battlerNameTextParent.transform);
+            var instantiatedTmpText = instantiatedDamageText.GetComponent<TMP_Text>();
+            instantiatedTmpText.enabled = false;
+            _displayNameQueue.Enqueue(instantiatedTmpText);
+        }
+    }
+
+    public TMP_Text GetBattlerNameTextFromQueue() => _displayNameQueue.Dequeue();
+    public void ReturnBattlerNameFromQueue(TMP_Text returningTmp) => _displayNameQueue.Enqueue(returningTmp);
 
     /// <summary>
     /// Gets a text from the tmp text queue for pooling
@@ -72,6 +97,7 @@ public class BattleNotificationsGui : MonoBehaviour
     {
         _battleNotificationTmp.text = textToDisplay;
         _battleNotificationTmp.enabled = true;
+        _backgroundImage.enabled = true;
 
     }
 
@@ -80,6 +106,7 @@ public class BattleNotificationsGui : MonoBehaviour
     /// </summary>
     public void DisableBattleNotification()
     {
+        _backgroundImage.enabled = false;
         _battleNotificationTmp.enabled = false;
     }
 

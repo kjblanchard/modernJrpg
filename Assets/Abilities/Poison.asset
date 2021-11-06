@@ -19,6 +19,7 @@ MonoBehaviour:
   StatusEffects:
   - StatusEffect: 1
     StatusEffectChance: 100
+  Description: Causes damage every turn.  Stackable.
   Type: 0
   AttackType: 0
   TargetType: 0

@@ -90,7 +90,7 @@ public class BattlerGambitComponent : MonoBehaviour
     {
         return battlersToCheck
             .Where(battler => !battler.BattleStats.IsDead && battler.BattleStats.BattlerCurrentHp >= value)
-            .OrderByDescending(battler => battler.BattleStats.BattlerCurrentHpPercent)
+            .OrderByDescending(battler => battler.BattleStats.BattlerCurrentHpPercent())
             .FirstOrDefault();
     }
 
@@ -106,7 +106,7 @@ public class BattlerGambitComponent : MonoBehaviour
     private Battler LeastHp(Battler[] battlersToCheck)
     {
         return battlersToCheck.Where(battler => !battler.BattleStats.IsDead)
-            .OrderByDescending(battler => battler.BattleStats.BattlerCurrentHpPercent).FirstOrDefault();
+            .OrderByDescending(battler => battler.BattleStats.BattlerCurrentHpPercent()).FirstOrDefault();
     }
 
     private Battler CheckStatusEffectNotExist(Battler[] battlersToCheck, StatusEffectList statusToCheckFor)

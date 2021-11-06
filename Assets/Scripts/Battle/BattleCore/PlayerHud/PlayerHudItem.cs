@@ -12,7 +12,9 @@ public class PlayerHudItem : MonoBehaviour
     public Battler BattlerAssigned;
     public int ButtonNumber;
 
-    public BattleButton GambitBattleButton;
+    public Dropdown GambitDropdown;
+
+    //public BattleButton GambitBattleButton;
 
 
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHud : MonoBehaviour
 {
@@ -26,11 +27,10 @@ public class PlayerHud : MonoBehaviour
 
             if (currentBattler.BattleStats.IsPlayer)
             {
-                _playerHudItems[i].GambitBattleButton.BattleButtonBroadcaster.ButtonPressedEvent += (sender, args) =>
+                _playerHudItems[i].GambitDropdown.onValueChanged.AddListener((num) =>
                 {
-                    currentBattler.BattlerGambitComponent.isGambitsEnabled =
-                        !currentBattler.BattlerGambitComponent.isGambitsEnabled;
-                };
+                    currentBattler.BattlerGambitComponent.isGambitsEnabled = num > 0;
+                });  
 
             }
         }

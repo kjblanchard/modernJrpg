@@ -10,6 +10,8 @@ using UnityEngine.UI;
 public class BattleButton : Button
 {
 
+    public bool IsSelected;
+
     /// <summary>
     /// You have to hit debug to be able to edit this.
     /// </summary>
@@ -27,6 +29,12 @@ public class BattleButton : Button
     public override void OnPointerEnter(PointerEventData eventData)
     {
         BattleButtonBroadcaster.OnButtonHovered();
+    }
+
+    public override void OnPointerExit(PointerEventData eventData)
+    {
+        BattleButtonBroadcaster.OnButtonHoverLeave();
+        //base.OnPointerExit(eventData);
     }
 
 

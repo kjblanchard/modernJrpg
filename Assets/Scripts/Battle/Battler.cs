@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 
 public class Battler : MonoBehaviour
@@ -27,6 +28,9 @@ public class Battler : MonoBehaviour
     public BattlerClickHandler BattlerClickHandler;
 
     [SerializeField] public Transform LocationForDamageDisplay;
+    public TMP_Text battlerNameDisplay;
+    
+    [SerializeField] public Transform LocationForNameDisplay;
 
 
     /// <summary>

@@ -25,6 +25,7 @@ public class PlayerTargetingState : BattleState
             if ((_battleDataAllBattler.BattleStats.IsDead || _battleDataAllBattler.spriteComp.color == Color.white))
                 continue;
             _battleDataAllBattler.spriteComp.color = Color.white;
+            _battleDataAllBattler.battlerNameDisplay.enabled = false;
         }
     }
 
