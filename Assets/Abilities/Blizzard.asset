@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Ice I
   MpCost: 5
-  AtkPowModifier: 1.5
+  AtkPowModifier: 2
   AtkBonusDamage: 3
   StatusEffects: []
-  Description: Basic Ice atk.  1.5x atk & +3 dmg
+  Description: Basic Ice atk.  2x atk & +3 dmg
   Type: 1
   AttackType: 2
   TargetType: 1

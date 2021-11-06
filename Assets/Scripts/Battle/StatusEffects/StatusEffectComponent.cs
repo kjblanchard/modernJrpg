@@ -101,11 +101,7 @@ public class StatusEffectComponent
         if(_playerStartStatusTickedThisTurn)
             return;
         _playerStartStatusTickedThisTurn = true;
-        _statusEffectList.ForEach(statusEffect =>
-        {
-            Debug.Log(statusEffect.StatusEffectName.ToString());
-            statusEffect.PlayerStart();
-        });
+        _statusEffectList.ForEach(statusEffect => statusEffect.PlayerStart());
     }
 
     /// <summary>

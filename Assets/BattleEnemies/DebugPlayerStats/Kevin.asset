@@ -25,12 +25,32 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a04f997a53d66f8458928bc78345ed37, type: 2}
   - {fileID: 11400000, guid: 71369acb7eeaca145ab8d759b69e6f7c, type: 2}
   Gambits:
-  - ConditionTarget: 3
-    Condition: 10
+  - ConditionTarget: 2
+    Condition: 5
+    ConditionValue: 1
+    ConstraintTarget: 0
+    ConstraintCondition: 0
+    ConstraintValue: 0
+    AbilityToPerform:
+    - Ability: {fileID: 11400000, guid: 476f8a5be90ce7d4ba3dfb434d542bd4, type: 2}
+      Weight: 0
+    StatusEffectToCheckForConstraint: 0
+  - ConditionTarget: 2
+    Condition: 11
     ConditionValue: 0
     ConstraintTarget: 0
     ConstraintCondition: 0
     ConstraintValue: 0
+    AbilityToPerform:
+    - Ability: {fileID: 11400000, guid: 75b3fbe0692253e4999734aaf462589e, type: 2}
+      Weight: 0
+    StatusEffectToCheckForConstraint: 0
+  - ConditionTarget: 3
+    Condition: 10
+    ConditionValue: 0
+    ConstraintTarget: 2
+    ConstraintCondition: 12
+    ConstraintValue: 2
     AbilityToPerform:
     - Ability: {fileID: 11400000, guid: 71369acb7eeaca145ab8d759b69e6f7c, type: 2}
       Weight: 0
@@ -38,9 +58,9 @@ MonoBehaviour:
   - ConditionTarget: 2
     Condition: 3
     ConditionValue: 0
-    ConstraintTarget: 3
-    ConstraintCondition: 6
-    ConstraintValue: 4
+    ConstraintTarget: 0
+    ConstraintCondition: 0
+    ConstraintValue: 0
     AbilityToPerform:
     - Ability: {fileID: 11400000, guid: 6e48d980b36182043bb93a5107c32073, type: 2}
       Weight: 0

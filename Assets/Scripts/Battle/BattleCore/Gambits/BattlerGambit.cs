@@ -41,6 +41,8 @@ public enum GambitCondition
     Random,
     IsDead,
     StatusEffectNotExist,
+    SingleTarget,
+    TargetNumGreaterThan,
 
 }
 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Circle
   m_EditorClassIdentifier: 
   BattlerName: Circle
-  BattlerHp: 5
+  BattlerHp: 8
   BattlerMp: 4
   BattlerStr: 2
   BattlerSpd: 2

@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
-using UnityEditor;
-using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class BattlerGambitComponent : MonoBehaviour
+public class BattlerGambitComponent 
 {
     private BattlerGambit[] _battlerGambits;
     public bool isGambitsEnabled = false;
@@ -70,15 +68,30 @@ public class BattlerGambitComponent : MonoBehaviour
             GambitCondition.HpNot100 => null,
             GambitCondition.LeastHpPercent => LeastHp(conditionTarget),
             GambitCondition.HpGreater => CheckHpGreater(conditionTarget, battlerGambit.ConditionValue),
-            GambitCondition.HpLess => null,
+            GambitCondition.HpLess => CheckHpLess(conditionTarget, battlerGambit.ConditionValue),
             GambitCondition.MpGreater => null,
             GambitCondition.MpLess => null,
             GambitCondition.Random => CheckRandom(conditionTarget, battlerGambit.ConditionValue),
             GambitCondition.IsDead => null,
             GambitCondition.StatusEffectNotExist => CheckStatusEffectNotExist(conditionTarget, battlerGambit.StatusEffectToCheckForConstraint),
+            GambitCondition.SingleTarget => CheckSingleTarget(conditionTarget),
+            GambitCondition.TargetNumGreaterThan => null,
             _ => throw new ArgumentOutOfRangeException("Ugh")
         };
     }
+
+    private Battler CheckHpLess(Battler[] battlersToCheck, int value)
+    {
+        return battlersToCheck
+            .FirstOrDefault(battler => !battler.BattleStats.IsDead && battler.BattleStats.BattlerCurrentHp <= value);
+    }
+
+    private Battler CheckSingleTarget(Battler[] battlersToCheck)
+    {
+        return battlersToCheck.Length == 1 ? battlersToCheck.FirstOrDefault() : null;
+    }
+
+    
 
     /// <summary>
     /// Checks the array of battlers based on the value thrown in.  Returns enemies HP percent that is greater than the value, and orders them by the lowest and returns that one.
@@ -130,6 +143,8 @@ public class BattlerGambitComponent : MonoBehaviour
             GambitCondition.Random => throw new Exception("Not in"),
             GambitCondition.IsDead => throw new Exception("Not in"),
             GambitCondition.StatusEffectNotExist => throw new Exception("Not in"),
+            GambitCondition.SingleTarget => constraintTarget.Length == 1,
+            GambitCondition.TargetNumGreaterThan => constraintTarget.Count(target => !target.BattleStats.IsDead) >= value,
             _ => throw new ArgumentOutOfRangeException(nameof(constraintToCheckFor), constraintToCheckFor, null)
         };
     }
