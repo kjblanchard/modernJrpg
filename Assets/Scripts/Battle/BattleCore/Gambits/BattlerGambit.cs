@@ -11,6 +11,17 @@ public class BattlerGambit
     public int ConstraintValue;
     public AbilityAndWeight[] AbilityToPerform;
     public StatusEffectList StatusEffectToCheckForConstraint;
+
+    public BattlerGambit(bool isPlayer, Ability battlersAttackAbility)
+    {
+        ConditionTarget = (isPlayer) ? GambitTarget.Enemies : GambitTarget.Players;
+        Condition = GambitCondition.Random;
+        AbilityToPerform = new[]
+        {
+            (new AbilityAndWeight{Ability = battlersAttackAbility, Weight = 100})
+        };
+
+    }
 }
     [System.Serializable]
     public class AbilityAndWeight
@@ -28,6 +39,7 @@ public enum GambitTarget
     Self,
 }
 
+[System.Serializable]
 public enum GambitCondition
 {
     Default,

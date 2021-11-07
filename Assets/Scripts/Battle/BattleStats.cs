@@ -95,8 +95,10 @@ public class BattleStats
 
     public int ApplyMpDamage(int damageToGive)
     {
+        var currentMp = BattlerCurrentMp;
+        BattlerCurrentMp = BattlerCurrentMp = Mathf.Clamp(BattlerCurrentMp - damageToGive, 0, BattlerMaxMp);
+        return -(BattlerCurrentMp - currentMp);
 
-        return BattlerCurrentMp = Mathf.Clamp(BattlerCurrentMp - damageToGive, 0, BattlerMaxMp);
     }
 
 }

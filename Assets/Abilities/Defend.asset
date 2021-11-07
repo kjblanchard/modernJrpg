@@ -19,6 +19,8 @@ MonoBehaviour:
   StatusEffects:
   - StatusEffect: 2
     StatusEffectChance: 100
-  Type: 0
-  AttackType: 0
+  Description: 
+  SortType: 0
+  DamageType: 0
+  SkillType: 2
   TargetType: 5

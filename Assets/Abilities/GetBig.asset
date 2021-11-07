@@ -20,6 +20,7 @@ MonoBehaviour:
   - StatusEffect: 3
     StatusEffectChance: 100
   Description: Dmg+3 for 3 turns.
-  Type: 0
-  AttackType: 0
-  TargetType: 0
+  SortType: 0
+  DamageType: 0
+  SkillType: 2
+  TargetType: 1

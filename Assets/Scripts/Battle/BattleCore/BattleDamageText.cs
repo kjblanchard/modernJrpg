@@ -18,9 +18,10 @@ public class BattleDamageText : MonoBehaviour
     {
         _fadeBroadcasterComponent.DotweenCompleteEvent += OnDamageFadeComplete;
     }
-    public void PlayDamage(string displayText)
+    public void PlayDamage(string displayText, Color colorToDisplay)
     {
         textToDisplay.text = displayText;
+        textToDisplay.color = colorToDisplay;
         scaleAnim.DORestart();
         fadeAnim.DORestart();
         moveAnim.DORestart();
@@ -37,6 +38,7 @@ public class BattleDamageText : MonoBehaviour
     }
 
     public Action PutBackInQueue;
+
 
 
 

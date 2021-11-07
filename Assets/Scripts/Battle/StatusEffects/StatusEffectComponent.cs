@@ -158,6 +158,7 @@ public class StatusEffectComponent
             StatusEffectList.Poison => new Poison(battler),
             StatusEffectList.Defend => new Defend(battler),
             StatusEffectList.GetBig => new GetBig(battler),
+            StatusEffectList.MpSteal => new MpSteal(battler),
             _ => throw new ArgumentOutOfRangeException(nameof(statusEffectToSpawn), statusEffectToSpawn, null)
         };
     }
@@ -172,4 +173,5 @@ public enum StatusEffectList
     Poison,
     Defend,
     GetBig,
+    MpSteal,
 }

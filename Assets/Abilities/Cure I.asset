@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f981f67ac771794fbebfc20151330c7, type: 3}
-  m_Name: Blizzard
+  m_Name: Cure I
   m_EditorClassIdentifier: 
-  Name: Ice I
-  MpCost: 5
-  AtkPowModifier: 2
-  AtkBonusDamage: 3
+  Name: Cure I
+  MpCost: 1
+  AtkPowModifier: 1.5
+  AtkBonusDamage: 2
   StatusEffects: []
-  Description: Basic Ice atk.  2x atk & +3 dmg
+  Description: Heals for 1.5xAtk +2
   SortType: 0
   DamageType: 0
-  SkillType: 1
+  SkillType: 3
   TargetType: 1

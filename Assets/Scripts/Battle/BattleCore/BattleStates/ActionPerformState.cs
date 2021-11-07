@@ -11,6 +11,7 @@ public class ActionPerformState : BattleState
             _targetBattler.StatusEffectComponent.ApplyBeforeDamageStatusEffects(damageToCause);
         _targetBattler.BattlerDamageComponent.TakeDamage(damageToCauseAfterTargetStatusEffects);
         _currentBattler.BattlerDamageComponent.TakeMpDamage(_currentAbility.MpCost);
+        ApplyOnDamageStatusEffect((int)damageToCauseAfterTargetStatusEffects);
         ApplyStatusEffectsToTarget();
         TickCurrentBattlersStatusEffects();
         _battleComponent.BattleStateMachine.ChangeBattleState(BattleStateMachine.BattleStates.BetweenTurnState);
@@ -36,6 +37,19 @@ public class ActionPerformState : BattleState
         if (!IsCurrentBattlerAttacking)
             return;
         _currentAbility = _currentBattler.battlerAttackAbility;
+    }
+
+    private static void ApplyOnDamageStatusEffect(int damage)
+    {
+        foreach (var _currentAbilityStatusEffect in _currentAbility.StatusEffects)
+        {
+            var shouldStatusEffectBeApplied =
+                StatusEffectComponent.ShouldStatusEffectBeApplied(_currentAbilityStatusEffect.StatusEffectChance);
+            if (!shouldStatusEffectBeApplied) continue;
+            var tempStatus =
+                StatusEffectComponent.SpawnStatusEffect(_currentAbilityStatusEffect.StatusEffect, _currentBattler);
+            tempStatus.OnDamageGiven(damage);
+        }
     }
 
     /// <summary>

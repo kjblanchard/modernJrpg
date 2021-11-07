@@ -67,6 +67,11 @@ public abstract class StatusEffect
 
     }
 
+    public virtual void OnDamageGiven(int damageGiven)
+    {
+
+    }
+
     /// <summary>
     /// Fire the event to get rid of the status effect.
     /// </summary>
@@ -75,6 +80,7 @@ public abstract class StatusEffect
     {
         StatusEffectEndEvent?.Invoke(this);
     }
+
 
     /// <summary>
     /// Stat modifiers that is used by the status effects.

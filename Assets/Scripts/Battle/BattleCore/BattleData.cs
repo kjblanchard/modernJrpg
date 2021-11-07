@@ -15,7 +15,7 @@ public class BattleData : MonoBehaviour
     public Battler[] AllLiveBattlers => EnemyBattlers.Where(x => !x.BattleStats.IsDead).Concat(PlayerBattlers)
         .Where(x => x != null && !x.BattleStats.IsDead).ToArray();
 
-    public Ability GetAbilityByName(Ability.AbilityName ability) => _abilityDatabase.GetAbility(ability);
+    //public Ability GetAbilityByName(Ability.AbilityName ability) => _abilityDatabase.GetAbility(ability);
 
 
     /// <summary>

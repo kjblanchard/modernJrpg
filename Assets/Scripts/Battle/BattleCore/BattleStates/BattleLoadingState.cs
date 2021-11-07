@@ -179,13 +179,44 @@ public class BattleLoadingState : BattleState
                 var textToDisplay = _battleComponent.BattleGui.BattleNotifications.GetTmpTextFromQueue();
                 textToDisplay.transform.position =
                     Camera.main.WorldToScreenPoint(_allBattler.LocationForDamageDisplay.transform.position);
-                textToDisplay.PlayDamage(e.ToString());
+                var color = DetermineColorForDamageDisplay(e);
+                e = (e > 0) ? e : -e;
+                textToDisplay.PlayDamage(e.ToString(), color);
                 textToDisplay.PutBackInQueue = () =>
                 {
                     _battleComponent.BattleGui.BattleNotifications.ReturnDamageTextToQueue(textToDisplay);
                 };
             };
+
+            _allBattler.BattlerDamageComponent.MpDamageCausedEvent += ((sender, i) =>
+            {
+                if(i >= 0)
+                    return;
+                var textToDisplay = _battleComponent.BattleGui.BattleNotifications.GetTmpTextFromQueue();
+                textToDisplay.transform.position =
+                    Camera.main.WorldToScreenPoint(_allBattler.LocationForDamageDisplay.transform.position);
+                var color = Color.blue;
+                i = -i;
+                textToDisplay.PlayDamage(i.ToString(), color);
+                textToDisplay.PutBackInQueue = () =>
+                {
+                    _battleComponent.BattleGui.BattleNotifications.ReturnDamageTextToQueue(textToDisplay);
+                };
+                
+
+            });
         }
+    }
+
+    private Color DetermineColorForDamageDisplay(int damageGiven)
+    {
+        return damageGiven switch
+        {
+            > 0 => Color.red,
+            < 0 => Color.green,
+            _ => Color.clear
+
+        };
     }
 
     /// <summary>
@@ -294,7 +325,7 @@ public class BattleLoadingState : BattleState
     {
         return battler.BattleStats.BattlerCurrentHpPercent() switch
         {
-            >= 50 => Color.green,
+            > 50 => Color.green,
             > 25 => Color.yellow,
             _ => Color.red
         };

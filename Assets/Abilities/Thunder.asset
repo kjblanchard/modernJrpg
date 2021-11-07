@@ -18,6 +18,7 @@ MonoBehaviour:
   AtkBonusDamage: 3
   StatusEffects: []
   Description: Basic lightning. +3 dmg.
-  Type: 1
-  AttackType: 2
-  TargetType: 0
+  SortType: 0
+  DamageType: 0
+  SkillType: 1
+  TargetType: 1

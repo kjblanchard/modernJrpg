@@ -17,6 +17,8 @@ MonoBehaviour:
   AtkPowModifier: 1
   AtkBonusDamage: 0
   StatusEffects: []
-  Type: 0
-  AttackType: 1
+  Description: 
+  SortType: 0
+  DamageType: 0
+  SkillType: 1
   TargetType: 1

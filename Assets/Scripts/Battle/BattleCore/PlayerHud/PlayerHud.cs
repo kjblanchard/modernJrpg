@@ -29,8 +29,10 @@ public class PlayerHud : MonoBehaviour
             {
                 _playerHudItems[i].GambitDropdown.onValueChanged.AddListener((num) =>
                 {
-                    currentBattler.BattlerGambitComponent.isGambitsEnabled = num > 0;
-                });  
+                    currentBattler.BattlerGambitComponent.IsGambitsEnabled = num > 0;
+                    if (num > 0)
+                        currentBattler.BattlerGambitComponent.GambitGroupChosen = num - 1;
+                });
 
             }
         }

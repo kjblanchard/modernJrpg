@@ -14,8 +14,6 @@ public class PlayerHudItem : MonoBehaviour
 
     public Dropdown GambitDropdown;
 
-    //public BattleButton GambitBattleButton;
-
 
 
 }

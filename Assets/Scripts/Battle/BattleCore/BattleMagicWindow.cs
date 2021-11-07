@@ -62,7 +62,7 @@ public class BattleMagicWindow : MonoBehaviour, IGuiLoadingEvent
             if (!spawnedAbilityPrefab.TryGetComponent<MagicButtonController>(out var spawnedBattleButton))
             {
                 Destroy(spawnedBattleButton);
-                DebugLogger.SendDebugMessage($"The spawned ability {ability.Name} with type {ability.Type} didn't have a magic controller");
+                DebugLogger.SendDebugMessage($"The spawned ability {ability.Name} with type {ability.SortType} didn't have a magic controller");
                 continue;
             }
 

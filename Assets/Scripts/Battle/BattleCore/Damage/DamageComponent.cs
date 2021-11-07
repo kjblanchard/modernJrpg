@@ -24,14 +24,14 @@ public class DamageComponent
 
     public float GiveDamage(BattleStats targetBattler, Ability ability)
     {
-        return DamageCalculator.CalculateAttackDamage(_battleStatsToReference, targetBattler, ability);
+        return DamageCalculator.CalculateDamge(_battleStatsToReference, targetBattler, ability);
 
     }
 
     public void TakeDamage(float damage)
     {
         var damageAmount = Mathf.RoundToInt(damage);
-        if(damageAmount <= 0)
+        if(damageAmount == 0)
             return;
         var newHpAmount = _battleStatsToReference.ApplyDamage(damageAmount);
         if (newHpAmount == 0)
@@ -44,8 +44,8 @@ public class DamageComponent
 
     public void TakeMpDamage(float damage)
     {
-        _battleStatsToReference.ApplyMpDamage((int) damage);
-        OnMpDamageCaused(this,(int)damage);
+        var mpDamageCaused = _battleStatsToReference.ApplyMpDamage((int) damage);
+        OnMpDamageCaused(this,(int)mpDamageCaused);
 
     }
 

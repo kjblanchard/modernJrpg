@@ -13,8 +13,11 @@ public class Ability : ScriptableObject
     public int AtkBonusDamage;
     public StatusEffectAndChance[] StatusEffects;
     public string Description;
-    public AbilityType Type;
-    public AbilityAtkType AttackType;
+
+    public AbilityName AbilityNameEnum;
+    public AbilitySortType SortType;
+    public AbilityDamageType DamageType;
+    public AbilityType SkillType;
     public TargetingType TargetType;
 
 
@@ -22,18 +25,23 @@ public class Ability : ScriptableObject
     {
         Default,
         BaseAttack,
-        Thunder,
-        Defend
+        BaseDefend,
     }
 
-    public enum AbilityType
+    /// <summary>
+    /// This is how the ability will be sorted into the player window.
+    /// </summary>
+    public enum AbilitySortType
     {
         Default,
         Magic,
         Skill
     }
 
-    public enum AbilityAtkType
+    /// <summary>
+    /// This is how the calculation for the ability is going to be done
+    /// </summary>
+    public enum AbilityDamageType
     {
         Default,
         Physical,
@@ -41,6 +49,20 @@ public class Ability : ScriptableObject
         Neutral
     }
 
+    /// <summary>
+    /// This is how the ability's damage is calculated.
+    /// </summary>
+    public enum AbilityType
+    {
+        Default,
+        Attacking,
+        Buff,
+        Healing,
+    }
+
+    /// <summary>
+    /// This is how the ability will target the enemies
+    /// </summary>
     public enum TargetingType
     {
         Default,

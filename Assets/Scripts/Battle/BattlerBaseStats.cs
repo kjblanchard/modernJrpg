@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/Battle/BattlerStats", order = 1)]
@@ -13,11 +14,18 @@ public class BattlerBaseStats : ScriptableObject
     public BattlerNames BattlerNameEnum;
 
     public Ability[] Abilities;
-    public BattlerGambit[] Gambits;
+
+    public MultiDimensionalGambits[] GambitGroups = new MultiDimensionalGambits[3];
     public int Exp;
     public Sprite CharPortrait;
     public Color32 CharColor = new(255, 0, 0,200);
 
     public int[] ExpRequired;
+
+    [System.Serializable]
+    public class MultiDimensionalGambits
+    {
+        public List<BattlerGambit> BattlerGambits;
+    }
 
 }

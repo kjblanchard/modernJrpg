@@ -53,7 +53,7 @@ public class Battler : MonoBehaviour
         BattleStats = new BattleStats(_battlerBaseStats, StatusEffectComponent);
         BattlerTimeManager = new BattlerTimeManager(BattleStats);
         BattlerDamageComponent = new DamageComponent(BattleStats);
-        BattlerGambitComponent = new BattlerGambitComponent(_battlerBaseStats.Gambits);
+        BattlerGambitComponent = new BattlerGambitComponent(_battlerBaseStats.GambitGroups, this);
 
         BattlerDamageComponent.DeathCausedEvent += OnDeath;
     }

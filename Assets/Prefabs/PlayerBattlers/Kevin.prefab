@@ -172,7 +172,7 @@ MonoBehaviour:
   _deathMoveTween: {fileID: 0}
   _deathColorTween: {fileID: 0}
   _deathFadeTween: {fileID: 0}
-  battlerAttackAbility: {fileID: 11400000, guid: 476f8a5be90ce7d4ba3dfb434d542bd4, type: 2}
+  battlerAttackAbility: {fileID: 11400000, guid: ced26e3f378745645ab70b6dd67c7cb2, type: 2}
   battlerDefendAbility: {fileID: 11400000, guid: 1ad56e3545eed8d44a2a752044632d00, type: 2}
 --- !u!1 &5368357554078444153
 GameObject:

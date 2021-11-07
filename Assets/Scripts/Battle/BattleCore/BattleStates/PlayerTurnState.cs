@@ -6,7 +6,7 @@ public class PlayerTurnState : BattleState
     //public bool isGambitEnabled = true;
     public override void StartState(params bool[] startupBools)
     {
-        if (_currentBattler.BattlerGambitComponent.isGambitsEnabled)
+        if (_currentBattler.BattlerGambitComponent.IsGambitsEnabled)
         {
             var targetAndAbility = _currentBattler.BattlerGambitComponent.ChooseAction(_battleComponent.BattleData.EnemyBattlers, _battleComponent.BattleData.PlayerBattlers, _currentBattler);
             _targetBattler = targetAndAbility.Item1;

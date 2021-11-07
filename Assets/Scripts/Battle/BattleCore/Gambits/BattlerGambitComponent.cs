@@ -1,34 +1,44 @@
 using System;
 using System.Linq;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class BattlerGambitComponent 
+public class BattlerGambitComponent
 {
-    private BattlerGambit[] _battlerGambits;
-    public bool isGambitsEnabled = false;
-    public BattlerGambitComponent(BattlerGambit[] battlerGambits)
+    private BattlerBaseStats.MultiDimensionalGambits[] _battlerGambitGroups;
+    public bool IsGambitsEnabled = false;
+    public int GambitGroupChosen;
+    public BattlerGambitComponent(BattlerBaseStats.MultiDimensionalGambits[] battlerGambitGroups, Battler battler)
     {
-        _battlerGambits = battlerGambits;
+        _battlerGambitGroups = battlerGambitGroups;
+
+        foreach (var _multiDimensionalGambits in _battlerGambitGroups)
+        {
+            _multiDimensionalGambits.BattlerGambits.Add(new BattlerGambit(battler.BattleStats.IsPlayer, battler.battlerAttackAbility));
+        }
     }
 
     public Tuple<Battler, Ability> ChooseAction(Battler[] enemyBattlers, Battler[] playerBattlers, Battler currentBattler)
     {
         return (
-        from battlerGambit in _battlerGambits
-        let targetBattlers = GetPotentialTargetsBasedOnGambitTarget(battlerGambit.ConditionTarget, enemyBattlers, playerBattlers, currentBattler)
-        let potentialBattler = GetTargetBasedOnGambitCondition(battlerGambit, targetBattlers)
-        let abilityToUse = ChooseAbilityFromAbilities(battlerGambit.AbilityToPerform,currentBattler)
-        where potentialBattler is not null
-        where CheckIfMpIsAvailable(currentBattler.BattleStats.BattlerCurrentMp, abilityToUse.MpCost)
-        where CheckConstraint(battlerGambit.ConstraintCondition, battlerGambit.ConstraintValue, GetPotentialTargetsBasedOnGambitTarget(battlerGambit.ConstraintTarget, enemyBattlers, playerBattlers, currentBattler))
-        select new Tuple<Battler, Ability>(potentialBattler, abilityToUse)).FirstOrDefault();
+            from battlerGambit in _battlerGambitGroups[GambitGroupChosen].BattlerGambits
+            let targetBattlers = GetPotentialTargetsBasedOnGambitTarget(battlerGambit.ConditionTarget, enemyBattlers, playerBattlers, currentBattler)
+            let potentialBattler = GetTargetBasedOnGambitCondition(battlerGambit, targetBattlers)
+            let abilityToUse = ChooseAbilityFromAbilities(battlerGambit.AbilityToPerform, currentBattler)
+            where potentialBattler is not null
+            where CheckIfMpIsAvailable(currentBattler.BattleStats.BattlerCurrentMp, abilityToUse.MpCost)
+            where CheckConstraint(battlerGambit.ConstraintCondition, battlerGambit.ConstraintValue, GetPotentialTargetsBasedOnGambitTarget(battlerGambit.ConstraintTarget, enemyBattlers, playerBattlers, currentBattler))
+            select new Tuple<Battler, Ability>(potentialBattler, abilityToUse)).FirstOrDefault();
 
     }
 
     private Ability ChooseAbilityFromAbilities(AbilityAndWeight[] abilitiesForThisGambit, Battler currentBattler)
     {
         if (abilitiesForThisGambit.Length == 1)
-            return abilitiesForThisGambit[0].Ability;
+            if (abilitiesForThisGambit[0].Ability.AbilityNameEnum == Ability.AbilityName.BaseAttack)
+                return currentBattler.battlerAttackAbility;
+            else
+                return abilitiesForThisGambit[0].Ability;
         var usableAbilityList =
             abilitiesForThisGambit.Where(ability => ability.Ability.MpCost <= currentBattler.BattleStats.BattlerCurrentMp).OrderByDescending(ability => ability.Weight);
         if (usableAbilityList is null)
@@ -41,7 +51,10 @@ public class BattlerGambitComponent
         {
             var totalWeight = currentCounter + _abilityAndWeight.Weight;
             if (randomNumber <= totalWeight)
-                return _abilityAndWeight.Ability;
+                if (_abilityAndWeight.Ability.AbilityNameEnum == Ability.AbilityName.BaseAttack)
+                    return currentBattler.battlerAttackAbility;
+                else
+                    return _abilityAndWeight.Ability;
             currentCounter += _abilityAndWeight.Weight;
         }
 
@@ -88,10 +101,11 @@ public class BattlerGambitComponent
 
     private Battler CheckSingleTarget(Battler[] battlersToCheck)
     {
-        return battlersToCheck.Length == 1 ? battlersToCheck.FirstOrDefault() : null;
+        var liveBattlers = battlersToCheck.Where(battler => !battler.BattleStats.IsDead);
+        return liveBattlers.Count() == 1 ? liveBattlers.FirstOrDefault() : null;
     }
 
-    
+
 
     /// <summary>
     /// Checks the array of battlers based on the value thrown in.  Returns enemies HP percent that is greater than the value, and orders them by the lowest and returns that one.
